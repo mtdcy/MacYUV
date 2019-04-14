@@ -3,26 +3,47 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		5750AACC22634CC800A956D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5750AACB22634CC800A956D9 /* AppDelegate.swift */; };
 		5750AACE22634CC800A956D9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5750AACD22634CC800A956D9 /* ViewController.swift */; };
-		5750AAD022634CC800A956D9 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5750AACF22634CC800A956D9 /* Document.swift */; };
 		5750AAD222634CC800A956D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5750AAD122634CC800A956D9 /* Assets.xcassets */; };
 		5750AAD522634CC800A956D9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5750AAD322634CC800A956D9 /* Main.storyboard */; };
+		5750AAE022634CE600A956D9 /* ABE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5750AADE22634CE600A956D9 /* ABE.framework */; };
+		5750AAE122634CE600A956D9 /* MediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5750AADF22634CE600A956D9 /* MediaFramework.framework */; };
+		5750AAE322634CF700A956D9 /* ABE.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 5750AADE22634CE600A956D9 /* ABE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5750AAE422634CF700A956D9 /* MediaFramework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 5750AADF22634CE600A956D9 /* MediaFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		5750AAE222634CEE00A956D9 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5750AAE322634CF700A956D9 /* ABE.framework in Copy Frameworks */,
+				5750AAE422634CF700A956D9 /* MediaFramework.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		5750AAC822634CC800A956D9 /* YUVViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YUVViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5750AAC822634CC800A956D9 /* YUV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YUV.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5750AACB22634CC800A956D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5750AACD22634CC800A956D9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		5750AACF22634CC800A956D9 /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		5750AAD122634CC800A956D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5750AAD422634CC800A956D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5750AAD622634CC800A956D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5750AAD722634CC800A956D9 /* YUVViewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = YUVViewer.entitlements; sourceTree = "<group>"; };
+		5750AADE22634CE600A956D9 /* ABE.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ABE.framework; path = ../../Library/Frameworks/ABE.framework; sourceTree = "<group>"; };
+		5750AADF22634CE600A956D9 /* MediaFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaFramework.framework; path = ../../Library/Frameworks/MediaFramework.framework; sourceTree = "<group>"; };
+		5750AAE522634EEC00A956D9 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
+		5750AAE62263BCEA00A956D9 /* YUV.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = YUV.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,6 +51,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5750AAE022634CE600A956D9 /* ABE.framework in Frameworks */,
+				5750AAE122634CE600A956D9 /* MediaFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -39,15 +62,17 @@
 		5750AABF22634CC800A956D9 = {
 			isa = PBXGroup;
 			children = (
+				5750AAE62263BCEA00A956D9 /* YUV.entitlements */,
 				5750AACA22634CC800A956D9 /* YUVViewer */,
 				5750AAC922634CC800A956D9 /* Products */,
+				5750AADD22634CE600A956D9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		5750AAC922634CC800A956D9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5750AAC822634CC800A956D9 /* YUVViewer.app */,
+				5750AAC822634CC800A956D9 /* YUV.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -57,7 +82,7 @@
 			children = (
 				5750AACB22634CC800A956D9 /* AppDelegate.swift */,
 				5750AACD22634CC800A956D9 /* ViewController.swift */,
-				5750AACF22634CC800A956D9 /* Document.swift */,
+				5750AAE522634EEC00A956D9 /* Header.h */,
 				5750AAD122634CC800A956D9 /* Assets.xcassets */,
 				5750AAD322634CC800A956D9 /* Main.storyboard */,
 				5750AAD622634CC800A956D9 /* Info.plist */,
@@ -66,24 +91,34 @@
 			path = YUVViewer;
 			sourceTree = "<group>";
 		};
+		5750AADD22634CE600A956D9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5750AADE22634CE600A956D9 /* ABE.framework */,
+				5750AADF22634CE600A956D9 /* MediaFramework.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5750AAC722634CC800A956D9 /* YUVViewer */ = {
+		5750AAC722634CC800A956D9 /* YUV */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5750AADA22634CC800A956D9 /* Build configuration list for PBXNativeTarget "YUVViewer" */;
+			buildConfigurationList = 5750AADA22634CC800A956D9 /* Build configuration list for PBXNativeTarget "YUV" */;
 			buildPhases = (
 				5750AAC422634CC800A956D9 /* Sources */,
 				5750AAC522634CC800A956D9 /* Frameworks */,
 				5750AAC622634CC800A956D9 /* Resources */,
+				5750AAE222634CEE00A956D9 /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = YUVViewer;
+			name = YUV;
 			productName = YUVViewer;
-			productReference = 5750AAC822634CC800A956D9 /* YUVViewer.app */;
+			productReference = 5750AAC822634CC800A956D9 /* YUV.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -98,11 +133,16 @@
 				TargetAttributes = {
 					5750AAC722634CC800A956D9 = {
 						CreatedOnToolsVersion = 10.2;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
-			buildConfigurationList = 5750AAC322634CC800A956D9 /* Build configuration list for PBXProject "YUVViewer" */;
-			compatibilityVersion = "Xcode 9.3";
+			buildConfigurationList = 5750AAC322634CC800A956D9 /* Build configuration list for PBXProject "YUV" */;
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -114,7 +154,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5750AAC722634CC800A956D9 /* YUVViewer */,
+				5750AAC722634CC800A956D9 /* YUV */,
 			);
 		};
 /* End PBXProject section */
@@ -138,7 +178,6 @@
 			files = (
 				5750AACE22634CC800A956D9 /* ViewController.swift in Sources */,
 				5750AACC22634CC800A956D9 /* AppDelegate.swift in Sources */,
-				5750AAD022634CC800A956D9 /* Document.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,7 +246,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -262,7 +301,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -275,17 +314,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = YUVViewer/YUVViewer.entitlements;
+				CODE_SIGN_ENTITLEMENTS = YUV.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 9FY6WA76LN;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+				);
 				INFOPLIST_FILE = YUVViewer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mtdcy.YUVViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = YUVViewer/Header.h;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -294,17 +339,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = YUVViewer/YUVViewer.entitlements;
+				CODE_SIGN_ENTITLEMENTS = YUV.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 9FY6WA76LN;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+				);
 				INFOPLIST_FILE = YUVViewer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mtdcy.YUVViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = YUVViewer/Header.h;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -312,7 +363,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		5750AAC322634CC800A956D9 /* Build configuration list for PBXProject "YUVViewer" */ = {
+		5750AAC322634CC800A956D9 /* Build configuration list for PBXProject "YUV" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5750AAD822634CC800A956D9 /* Debug */,
@@ -321,7 +372,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5750AADA22634CC800A956D9 /* Build configuration list for PBXNativeTarget "YUVViewer" */ = {
+		5750AADA22634CC800A956D9 /* Build configuration list for PBXNativeTarget "YUV" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5750AADB22634CC800A956D9 /* Debug */,
