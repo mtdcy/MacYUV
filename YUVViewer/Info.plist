@@ -9,18 +9,18 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>yuv,rgb,raw</string>
+				<string>yuv</string>
+				<string>rgb</string>
+				<string>raw</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string></string>
 			<key>CFBundleTypeName</key>
-			<string>yuv&amp;rgb</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>????</string>
-			</array>
+			<string>yuv</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSTypeIsPackage</key>
+			<integer>1</integer>
 			<key>NSDocumentClass</key>
 			<string>NSDocument</string>
 		</dict>
