@@ -11,7 +11,6 @@ import Cocoa
 class ViewController: NSViewController {
     
     @IBOutlet weak var openGLView: NSOpenGLView!
-    @IBOutlet weak var mItemView: NSPopUpButton!
     
     @IBOutlet weak var mWidth: NSTextField!
     @IBOutlet weak var mHeight: NSTextField!
@@ -21,16 +20,84 @@ class ViewController: NSViewController {
     @IBOutlet weak var mHeightDisplay: NSTextField!
     
     @IBOutlet weak var mRectCheck: NSButton!
+    var isRectEnabled : Bool {
+        get {
+            return mRectCheck.state == NSControl.StateValue.on
+        }
+        set {
+            mRectCheck.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
+            mTop.isEnabled              = newValue
+            mLeft.isEnabled             = newValue
+            mWidthDisplay.isEnabled     = newValue
+            mHeightDisplay.isEnabled    = newValue
+        }
+    }
     
     @IBOutlet weak var mPropertyView: NSBox!
     
-    let mYUVs : [ePixelFormat] = [
+    // yuv formats
+    @IBOutlet weak var mYUVCheck: NSButton!
+    @IBOutlet weak var mYUVItems: NSPopUpButton!
+    @IBOutlet weak var mUVSwap: NSButton!
+    @IBOutlet weak var mUVInterlaced: NSButton!
+    
+    let YUVs : [ePixelFormat] = [
         kPixelFormatYUV420P,
         kPixelFormatYUV422P,
         kPixelFormatYUV444P,
         kPixelFormatNV12,
-        kPixelFormatNV21
+        kPixelFormatNV21,
+        kPixelFormatYUYV422,
+        kPixelFormatYUV444,
     ]
+    
+    var isYUV : Bool {
+        get {
+            return mYUVCheck.state == NSControl.StateValue.on
+        }
+        set {
+            mYUVCheck.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
+            mYUVItems.isEnabled = newValue
+            mUVSwap.isEnabled = newValue
+            mUVInterlaced.isEnabled = newValue
+        }
+    }
+    
+    var isUVSwap : Bool {
+        return mUVSwap.state == NSControl.StateValue.on
+    }
+    
+    var isUVInterlaced : Bool {
+        return mUVInterlaced.state == NSControl.StateValue.on
+    }
+    
+    // rgb formats
+    @IBOutlet weak var mRGBCheck: NSButton!
+    @IBOutlet weak var mRGBItems: NSPopUpButton!
+    
+    let RGBs = [
+        kPixelFormatRGB565,
+        kPixelFormatRGB888,
+        kPixelFormatRGBA,
+        kPixelFormatARGB,
+    ]
+    
+    var isRGB : Bool {
+        get {
+            return mRGBCheck.state == NSControl.StateValue.on
+        }
+        set {
+            mRGBCheck.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
+            mRGBItems.isEnabled = newValue
+        }
+    }
+    
+    // both yuv & rgb
+    @IBOutlet weak var mBytesReverse: NSButton!
+    
+    var isBytesReverse : Bool {
+        return mBytesReverse.state == NSControl.StateValue.on
+    }
     
     var mReader : YUVReader = YUVReader()
     var mMediaOut : MediaOutRef?
@@ -43,7 +110,7 @@ class ViewController: NSViewController {
         openGLView.prepareOpenGL()
         
         // set default value
-        mReader.setFormat(pixel: kPixelFormatNV12, width: 800, height: 480)
+        mReader.setFormat(pixel: kPixelFormatNV12, width: 176, height: 144)
         let imageFormat = mReader.imageFormat
         mWidth.intValue = imageFormat.pointee.width
         mHeight.intValue = imageFormat.pointee.height
@@ -52,13 +119,21 @@ class ViewController: NSViewController {
         mWidthDisplay.intValue = imageFormat.pointee.rect.w
         mHeightDisplay.intValue = imageFormat.pointee.rect.h
         
-        mItemView.removeAllItems()
-        for yuv in mYUVs {
+        mYUVItems.removeAllItems()
+        for yuv in YUVs {
             let string = GetPixelFormatString(yuv)!
-            mItemView.addItem(withTitle: String.init(cString: string))
+            mYUVItems.addItem(withTitle: String.init(cString: string))
         }
-        
+        mRGBItems.removeAllItems()
+        for rgb in RGBs {
+            let string = GetPixelFormatString(rgb)!
+            mRGBItems.addItem(withTitle: String.init(cString: string))
+        }
+
         mPropertyView.isHidden = true
+        isYUV = true
+        isRGB = false
+        isRectEnabled = false
     }
 
     override var representedObject: Any? {
@@ -67,9 +142,8 @@ class ViewController: NSViewController {
         }
     }
     
-    
     func drawImage() {
-        let pixel = mYUVs[mItemView.indexOfSelectedItem]
+        let pixel = YUVs[mYUVItems.indexOfSelectedItem]
         let width = mWidth.intValue
         let height = mHeight.intValue
         validateRect(width: width, height: height)
@@ -95,6 +169,11 @@ class ViewController: NSViewController {
         if (mMediaOut == nil) {
             mMediaOut = MediaOutCreateForImage(mReader.imageFormat, nil)
             assert(mMediaOut != nil)
+            // TODO: using ColorConvertor if format is not accept by MediaOut
+        }
+        
+        if (isUVSwap) {
+            ImageFrameSwapUVChroma(image)
         }
         
         MediaOutWrite(mMediaOut, image)
@@ -142,11 +221,16 @@ class ViewController: NSViewController {
     
     @IBAction func onFormatChanged(_ sender: Any) {
         NSLog("onFormatChanged")
+        // format changed, release MediaOut
+        if (mMediaOut != nil) {
+            SharedObjectRelease(mMediaOut)
+            mMediaOut = nil
+        }
         drawImage()
     }
     
     func validateRect(width : Int32, height : Int32) {
-        if (mRectCheck.state == NSControl.StateValue.on) {
+        if (isRectEnabled == true) {
             // just valid the values
             if (mTop.intValue > height) {
                 mTop.intValue = height
@@ -168,19 +252,35 @@ class ViewController: NSViewController {
         }
     }
     
-    @IBAction func onRectCheck(_ sender: Any) {
-        print("onRectCheck ", mRectCheck.state)
+    @IBAction func onRectCheck(_ sender: Any?) {
+        print("onRectCheck <- ", sender as Any)
+        isRectEnabled = mRectCheck.state == NSControl.StateValue.on
+    }
+    
+    @IBAction func onYUVCheck(_ sender: Any) {
+        print("onYUVCheck <- ", sender as Any)
+        isYUV = mYUVCheck.state == NSControl.StateValue.on
+        isRGB = !isYUV
+    }
+    
+    @IBAction func onRGBCheck(_ sender: Any) {
+        print("onRGBCheck <- ", sender as Any)
+        isRGB = mRGBCheck.state == NSControl.StateValue.on
+        isYUV = !isRGB
+    }
+    
+    override func mouseDown(with event: NSEvent) {
         
-        if (mRectCheck.state == NSControl.StateValue.on) {
-            mTop.isEnabled = true
-            mLeft.isEnabled = true
-            mWidthDisplay.isEnabled = true
-            mHeightDisplay.isEnabled = true
+        // FIXME: this test is not working
+        guard mPropertyView.hitTest(event.tilt) == nil else {
+            NSLog("mouse inside property view")
+            return
+        }
+        
+        if (mPropertyView.isHidden == true) {
+            mPropertyView.isHidden = false
         } else {
-            mTop.isEnabled = false
-            mLeft.isEnabled = false
-            mWidthDisplay.isEnabled = false
-            mHeightDisplay.isEnabled = false
+            mPropertyView.isHidden = true
         }
     }
 }
