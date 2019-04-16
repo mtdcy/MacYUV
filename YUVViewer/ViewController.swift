@@ -271,9 +271,8 @@ class ViewController: NSViewController {
     
     override func mouseDown(with event: NSEvent) {
         
-        // FIXME: this test is not working
-        guard mPropertyView.hitTest(event.tilt) == nil else {
-            NSLog("mouse inside property view")
+        guard mPropertyView.hitTest(event.locationInWindow) == nil else {
+            NSLog("mouse hit property view")
             return
         }
         
