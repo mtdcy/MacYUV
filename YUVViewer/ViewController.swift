@@ -48,7 +48,7 @@ class ViewController: NSViewController {
         kPixelFormatYUV444P,
         kPixelFormatNV12,
         kPixelFormatNV21,
-        kPixelFormatYUYV422,
+        //kPixelFormatYUYV422,
         kPixelFormatYUV444,
     ]
     
@@ -60,7 +60,8 @@ class ViewController: NSViewController {
             mYUVCheck.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
             mYUVItems.isEnabled = newValue
             mUVSwap.isEnabled = newValue
-            mUVInterlaced.isEnabled = newValue
+            //mUVInterlaced.isEnabled = newValue
+            mUVInterlaced.isHidden = true
         }
     }
     
