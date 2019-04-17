@@ -248,7 +248,7 @@ class ViewController: NSViewController {
         
     }
     
-    @IBAction func onFormatChanged(_ sender: Any) {
+    @IBAction func onFormatChanged(_ sender: Any?) {
         NSLog("onFormatChanged")
         // format changed, release MediaOut
         if (mMediaOut != nil) {
@@ -281,23 +281,24 @@ class ViewController: NSViewController {
         }
     }
     
-    @IBAction func onRectCheck(_ sender: Any?) {
-        print("onRectCheck <- ", sender as Any)
+    @IBAction func onRectCheck(_ sender: Any) {
+        print("onRectCheck <- ", sender)
         isRectEnabled = mRectCheck.state == NSControl.StateValue.on
+        onFormatChanged(nil)
     }
     
     @IBAction func onYUVCheck(_ sender: Any) {
         print("onYUVCheck <- ", sender as Any)
         isYUV = mYUVCheck.state == NSControl.StateValue.on
         isRGB = !isYUV
-        drawImage()
+        onFormatChanged(nil)
     }
     
     @IBAction func onRGBCheck(_ sender: Any) {
         print("onRGBCheck <- ", sender as Any)
         isRGB = mRGBCheck.state == NSControl.StateValue.on
         isYUV = !isRGB
-        drawImage()
+        onFormatChanged(nil)
     }
     
     override func mouseDown(with event: NSEvent) {
