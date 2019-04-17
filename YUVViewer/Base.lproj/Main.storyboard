@@ -574,10 +574,10 @@
                         </subviews>
                     </view>
                     <connections>
-                        <outlet property="OpenGLView" destination="SO0-GO-UMg" id="QJj-HW-oA7"/>
                         <outlet property="mHeight" destination="Uli-BL-VSg" id="FoM-uP-na1"/>
                         <outlet property="mHeightDisplay" destination="t9Z-2U-aJ7" id="uBM-Tn-Rpa"/>
                         <outlet property="mLeft" destination="mBW-0h-Zte" id="0mr-BR-b2o"/>
+                        <outlet property="mOpenGLView" destination="SO0-GO-UMg" id="JiQ-NX-Xar"/>
                         <outlet property="mPropertyView" destination="yyU-4c-mO4" id="HgJ-xu-3zV"/>
                         <outlet property="mRGBCheck" destination="TWP-ab-UQP" id="zSb-gS-slh"/>
                         <outlet property="mRGBItems" destination="WNP-SU-LYp" id="si1-OE-4lN"/>
@@ -590,7 +590,6 @@
                         <outlet property="mWidthDisplay" destination="yzJ-UG-kuw" id="Fhs-jX-PZF"/>
                         <outlet property="mYUVCheck" destination="sVg-32-nTM" id="9pk-bl-2wh"/>
                         <outlet property="mYUVItems" destination="ORp-SL-vO7" id="hPb-iS-pWA"/>
-                        <outlet property="openGLView" destination="SO0-GO-UMg" id="0pW-R4-RxQ"/>
                     </connections>
                 </viewController>
                 <customObject id="2Tp-Fl-jBw" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

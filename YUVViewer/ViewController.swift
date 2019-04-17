@@ -11,7 +11,7 @@ import Cocoa
 // https://www.darktable.org/2017/01/rawsamples-ch-replacement/
 class ViewController: NSViewController {
     
-    @IBOutlet weak var openGLView: NSOpenGLView!
+    @IBOutlet weak var mOpenGLView: NSOpenGLView!
     
     @IBOutlet weak var mWidth: NSTextField!
     @IBOutlet weak var mHeight: NSTextField!
@@ -48,7 +48,8 @@ class ViewController: NSViewController {
         kPixelFormatYUV444P,
         kPixelFormatNV12,
         kPixelFormatNV21,
-        //kPixelFormatYUYV422,
+        kPixelFormatYUYV422,
+        kPixelFormatYVYU422,
         kPixelFormatYUV444,
     ]
     
@@ -118,8 +119,8 @@ class ViewController: NSViewController {
         super.viewDidLoad()
 
         // setup OpenGL Context
-        NSLog("OpenGLContext: %@", openGLView.openGLContext!)
-        openGLView.prepareOpenGL()
+        NSLog("OpenGLContext: %@", mOpenGLView.openGLContext!)
+        mOpenGLView.prepareOpenGL()
         
         // set default value
         mReader.setFormat(pixel: kPixelFormatNV12, width: 176, height: 144)
@@ -177,20 +178,40 @@ class ViewController: NSViewController {
         mReader.setFormat(pixel: pixel, width: width, height: height)
         mReader.setRect(x: x, y: y, w: w, h: h)
         
-        let image = mReader.readFrame()
-        
-        guard image != nil else {
-            NSLog("generate image failed")
-            return
+        var alt : Bool = false
+        if (mMediaOut == nil) {
+            mMediaOut = MediaOutCreateForImage(mReader.imageFormat, nil)
         }
         
         if (mMediaOut == nil) {
-            mMediaOut = MediaOutCreateForImage(mReader.imageFormat, nil)
-            assert(mMediaOut != nil)
-            // TODO: using ColorConvertor if format is not accept by MediaOut
+            NSLog("using alt format")
+            let imageFormat = UnsafeMutablePointer<ImageFormat>.allocate(capacity: 1)
+            imageFormat.pointee.format = GetPixelFormatPlanar(mReader.imageFormat.pointee.format)
+            imageFormat.pointee.width  = mReader.imageFormat.pointee.width
+            imageFormat.pointee.height = mReader.imageFormat.pointee.height
+            mMediaOut = MediaOutCreateForImage(imageFormat, nil)
+            imageFormat.deallocate()
+            alt = true
+        }
+        
+        guard mMediaOut != nil else {
+            NSLog("create MediaOut failed")
+            return;
+        }
+        
+        let image = mReader.readFrame()
+        guard image != nil else {
+            NSLog("read image failed")
+            return
+        }
+        
+        if (alt) {
+            NSLog("alt image @ planarization")
+            ImageFramePlanarization(image)
         }
         
         if (isYUV && isUVSwap) {
+            NSLog("swap uv")
             if (ImageFrameSwapUVChroma(image) != kMediaNoError) {
                 NSLog("swap UV chroma failed")
                 isUVSwap = false
@@ -198,6 +219,7 @@ class ViewController: NSViewController {
         }
         
         if (isReverseBytes) {
+            NSLog("reverse bytes")
             if (ImageFrameReverseBytes(image) != kMediaNoError) {
                 NSLog("reverse bytes failed")
                 isReverseBytes = false
@@ -205,7 +227,6 @@ class ViewController: NSViewController {
         }
         
         MediaOutWrite(mMediaOut, image)
-        NSLog("image ref %d", SharedObjectGetRetainCount(image))
         SharedObjectRelease(image)
     }
     
