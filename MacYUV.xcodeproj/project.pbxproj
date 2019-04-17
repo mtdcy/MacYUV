@@ -34,7 +34,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5750AAC822634CC800A956D9 /* YUV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YUV.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5750AAC822634CC800A956D9 /* MacYUV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacYUV.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5750AACB22634CC800A956D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5750AACD22634CC800A956D9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		5750AAD122634CC800A956D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -74,7 +74,7 @@
 		5750AAC922634CC800A956D9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5750AAC822634CC800A956D9 /* YUV.app */,
+				5750AAC822634CC800A956D9 /* MacYUV.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -106,9 +106,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5750AAC722634CC800A956D9 /* YUV */ = {
+		5750AAC722634CC800A956D9 /* MacYUV */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5750AADA22634CC800A956D9 /* Build configuration list for PBXNativeTarget "YUV" */;
+			buildConfigurationList = 5750AADA22634CC800A956D9 /* Build configuration list for PBXNativeTarget "MacYUV" */;
 			buildPhases = (
 				5750AAC422634CC800A956D9 /* Sources */,
 				5750AAC522634CC800A956D9 /* Frameworks */,
@@ -119,9 +119,9 @@
 			);
 			dependencies = (
 			);
-			name = YUV;
+			name = MacYUV;
 			productName = YUVViewer;
-			productReference = 5750AAC822634CC800A956D9 /* YUV.app */;
+			productReference = 5750AAC822634CC800A956D9 /* MacYUV.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -144,7 +144,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 5750AAC322634CC800A956D9 /* Build configuration list for PBXProject "YUV" */;
+			buildConfigurationList = 5750AAC322634CC800A956D9 /* Build configuration list for PBXProject "MacYUV" */;
 			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -157,7 +157,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5750AAC722634CC800A956D9 /* YUV */,
+				5750AAC722634CC800A956D9 /* MacYUV */,
 			);
 		};
 /* End PBXProject section */
@@ -333,7 +333,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				OTHER_CODE_SIGN_FLAGS = "--deep";
-				PRODUCT_BUNDLE_IDENTIFIER = com.mtdcy.YUVViewer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mtdcy.yuv;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = YUVViewer/Header.h;
 				SWIFT_VERSION = 5.0;
@@ -359,7 +359,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				OTHER_CODE_SIGN_FLAGS = "--deep";
-				PRODUCT_BUNDLE_IDENTIFIER = com.mtdcy.YUVViewer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mtdcy.yuv;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = YUVViewer/Header.h;
 				SWIFT_VERSION = 5.0;
@@ -369,7 +369,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		5750AAC322634CC800A956D9 /* Build configuration list for PBXProject "YUV" */ = {
+		5750AAC322634CC800A956D9 /* Build configuration list for PBXProject "MacYUV" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5750AAD822634CC800A956D9 /* Debug */,
@@ -378,7 +378,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5750AADA22634CC800A956D9 /* Build configuration list for PBXNativeTarget "YUV" */ = {
+		5750AADA22634CC800A956D9 /* Build configuration list for PBXNativeTarget "MacYUV" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5750AADB22634CC800A956D9 /* Debug */,

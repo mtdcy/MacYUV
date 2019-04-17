@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/chenfang/Projects/YUVViewer/YUV.xcodeproj">
+      location = "self:/Users/chenfang/Projects/MacYUV/MacYUV.xcodeproj">
    </FileRef>
 </Workspace>
