@@ -12,7 +12,6 @@
 				<string>yuv</string>
 				<string>rgb</string>
 				<string>raw</string>
-				<string>bmp</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string></string>

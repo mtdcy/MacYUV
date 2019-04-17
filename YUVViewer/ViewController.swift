@@ -113,9 +113,6 @@ class ViewController: NSViewController {
     }
     
     @IBOutlet weak var mInfoText: NSTextField!
-    func info(line : String) -> Void {
-        mInfoText.stringValue += line + "\n"
-    }
     
     var mReader : YUVReader = YUVReader()
     var mMediaOut : MediaOutRef?
@@ -152,6 +149,17 @@ class ViewController: NSViewController {
         isYUV = true
         isRGB = false
         isRectEnabled = false
+        
+        openFile()
+    }
+    
+    override func viewWillDisappear() {
+        closeFile()
+        
+        NSLog("View Will Disappear")
+        super.viewWillDisappear()
+        
+        NSApplication.shared.terminate(self)
     }
 
     override var representedObject: Any? {
@@ -243,6 +251,7 @@ class ViewController: NSViewController {
     
     public func openFile(url : String) {
         NSLog("url = %@", url)
+        closeFile()
         
         mPropertyView.isHidden = false
         
@@ -253,7 +262,6 @@ class ViewController: NSViewController {
     
     func openFile() {
         NSLog("Open File...")
-        closeFile()
         
         let url = NSDocumentController.shared.urlsFromRunningOpenPanel()
         if (url != nil) {
@@ -274,12 +282,16 @@ class ViewController: NSViewController {
     }
 
     @IBAction func open(sender : Any?) {
-        close(sender: nil)
         openFile()
     }
     
     @IBAction func close(sender : Any?) {
-        
+        self.view.window?.performClose(nil)
+    }
+    
+    // move window by background
+    override func mouseDragged(with event: NSEvent) {
+        self.view.window?.performDrag(with: event)
     }
     
     @IBAction func onFormatChanged(_ sender: Any?) {
