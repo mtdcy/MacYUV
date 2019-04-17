@@ -571,11 +571,21 @@
                                 <color key="fillColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <size key="contentViewMargins" width="8" height="8"/>
                             </box>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U5s-LZ-h4g">
+                                <rect key="frame" x="478" y="448" width="324" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="truncatingHead" selectable="YES" enabled="NO" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" id="1S8-ck-Jb2">
+                                    <font key="font" metaFont="system" size="12"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                     </view>
                     <connections>
                         <outlet property="mHeight" destination="Uli-BL-VSg" id="FoM-uP-na1"/>
                         <outlet property="mHeightDisplay" destination="t9Z-2U-aJ7" id="uBM-Tn-Rpa"/>
+                        <outlet property="mInfoText" destination="U5s-LZ-h4g" id="htd-00-SyO"/>
                         <outlet property="mLeft" destination="mBW-0h-Zte" id="0mr-BR-b2o"/>
                         <outlet property="mOpenGLView" destination="SO0-GO-UMg" id="JiQ-NX-Xar"/>
                         <outlet property="mPropertyView" destination="yyU-4c-mO4" id="HgJ-xu-3zV"/>

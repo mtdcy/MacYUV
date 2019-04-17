@@ -112,6 +112,11 @@ class ViewController: NSViewController {
         }
     }
     
+    @IBOutlet weak var mInfoText: NSTextField!
+    func info(line : String) -> Void {
+        mInfoText.stringValue += line + "\n"
+    }
+    
     var mReader : YUVReader = YUVReader()
     var mMediaOut : MediaOutRef?
 
@@ -156,6 +161,8 @@ class ViewController: NSViewController {
     }
     
     func drawImage() {
+        var desc : String = "pixel"
+        
         var pixel = kPixelFormatUnknown;
         if (isYUV) {
             pixel = YUVs[mYUVItems.indexOfSelectedItem]
@@ -172,9 +179,9 @@ class ViewController: NSViewController {
         let w = mWidthDisplay.intValue
         let h = mHeightDisplay.intValue
         
-        NSLog("pixel %s: %d x %d [%d, %d, %d, %d]",
-              GetPixelFormatString(pixel),
-              width, height, x, y, w, h)
+        desc += String.init(format: " %s: %d x %d [%d, %d, %d, %d]",
+                            GetPixelFormatString(pixel), width, height, x, y, w, h)
+        
         mReader.setFormat(pixel: pixel, width: width, height: height)
         mReader.setRect(x: x, y: y, w: w, h: h)
         
@@ -205,29 +212,33 @@ class ViewController: NSViewController {
             return
         }
         
+        desc += "\n"
+        if (isReverseBytes) {
+            if (ImageFrameReverseBytes(image) != kMediaNoError) {
+                NSLog("reverse bytes failed")
+                isReverseBytes = false
+            } else {
+                desc += " reverse bytes."
+            }
+        }
+        
         if (alt) {
             NSLog("alt image @ planarization")
             ImageFramePlanarization(image)
         }
         
         if (isYUV && isUVSwap) {
-            NSLog("swap uv")
             if (ImageFrameSwapUVChroma(image) != kMediaNoError) {
                 NSLog("swap UV chroma failed")
                 isUVSwap = false
-            }
-        }
-        
-        if (isReverseBytes) {
-            NSLog("reverse bytes")
-            if (ImageFrameReverseBytes(image) != kMediaNoError) {
-                NSLog("reverse bytes failed")
-                isReverseBytes = false
+            } else {
+                desc += " swap u/v."
             }
         }
         
         MediaOutWrite(mMediaOut, image)
         SharedObjectRelease(image)
+        mInfoText.stringValue = desc
     }
     
     public func openFile(url : String) {
@@ -259,6 +270,7 @@ class ViewController: NSViewController {
         }
         
         mReader.close()
+        mInfoText.stringValue = ""
     }
 
     @IBAction func open(sender : Any?) {
@@ -332,8 +344,10 @@ class ViewController: NSViewController {
         
         if (mPropertyView.isHidden == true) {
             mPropertyView.isHidden = false
+            mInfoText.isHidden = false
         } else {
             mPropertyView.isHidden = true
+            mInfoText.isHidden = true
         }
     }
 }
