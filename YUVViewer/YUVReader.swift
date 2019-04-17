@@ -78,6 +78,7 @@ class YUVReader : NSObject {
         let bytes = frameBytes
         let data = ContentObjectRead(mContent, bytes)
         let image = ImageFrameGenerate(mImageFormat, data)
+        SharedObjectRelease(data)
         return image
     }
 }

@@ -8,6 +8,7 @@
 
 import Cocoa
 
+// https://www.darktable.org/2017/01/rawsamples-ch-replacement/
 class ViewController: NSViewController {
     
     @IBOutlet weak var openGLView: NSOpenGLView!
@@ -64,7 +65,12 @@ class ViewController: NSViewController {
     }
     
     var isUVSwap : Bool {
-        return mUVSwap.state == NSControl.StateValue.on
+        get {
+            return mUVSwap.state == NSControl.StateValue.on
+        }
+        set {
+            mUVSwap.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
+        }
     }
     
     var isUVInterlaced : Bool {
@@ -93,10 +99,15 @@ class ViewController: NSViewController {
     }
     
     // both yuv & rgb
-    @IBOutlet weak var mBytesReverse: NSButton!
+    @IBOutlet weak var mReverseBytes : NSButton!
     
-    var isBytesReverse : Bool {
-        return mBytesReverse.state == NSControl.StateValue.on
+    var isReverseBytes : Bool {
+        get {
+            return mReverseBytes.state == NSControl.StateValue.on
+        }
+        set {
+            mReverseBytes.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
+        }
     }
     
     var mReader : YUVReader = YUVReader()
@@ -143,7 +154,13 @@ class ViewController: NSViewController {
     }
     
     func drawImage() {
-        let pixel = YUVs[mYUVItems.indexOfSelectedItem]
+        var pixel = kPixelFormatUnknown;
+        if (isYUV) {
+            pixel = YUVs[mYUVItems.indexOfSelectedItem]
+        } else if (isRGB) {
+            pixel = RGBs[mRGBItems.indexOfSelectedItem]
+        }
+        
         let width = mWidth.intValue
         let height = mHeight.intValue
         validateRect(width: width, height: height)
@@ -172,11 +189,23 @@ class ViewController: NSViewController {
             // TODO: using ColorConvertor if format is not accept by MediaOut
         }
         
-        if (isUVSwap) {
-            ImageFrameSwapUVChroma(image)
+        if (isYUV && isUVSwap) {
+            if (ImageFrameSwapUVChroma(image) != kMediaNoError) {
+                NSLog("swap UV chroma failed")
+                isUVSwap = false
+            }
+        }
+        
+        if (isReverseBytes) {
+            if (ImageFrameReverseBytes(image) != kMediaNoError) {
+                NSLog("reverse bytes failed")
+                isReverseBytes = false
+            }
         }
         
         MediaOutWrite(mMediaOut, image)
+        NSLog("image ref %d", SharedObjectGetRetainCount(image))
+        SharedObjectRelease(image)
     }
     
     public func openFile(url : String) {
@@ -261,12 +290,14 @@ class ViewController: NSViewController {
         print("onYUVCheck <- ", sender as Any)
         isYUV = mYUVCheck.state == NSControl.StateValue.on
         isRGB = !isYUV
+        drawImage()
     }
     
     @IBAction func onRGBCheck(_ sender: Any) {
         print("onRGBCheck <- ", sender as Any)
         isRGB = mRGBCheck.state == NSControl.StateValue.on
         isYUV = !isRGB
+        drawImage()
     }
     
     override func mouseDown(with event: NSEvent) {
