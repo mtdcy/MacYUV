@@ -149,8 +149,6 @@ class ViewController: NSViewController {
         isYUV = true
         isRGB = false
         isRectEnabled = false
-        
-        openFile()
     }
     
     override func viewWillDisappear() {

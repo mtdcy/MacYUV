@@ -25,6 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return false
         }
         
+        NSLog("openFile -> %@", filename)
         viewController?.openFile(url: filename)
         return true
     }
