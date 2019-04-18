@@ -175,7 +175,19 @@ class ViewController: NSViewController {
     
     // -> (RESOLUTION, [YUV, RGB])
     // not always work
-    func luckyGuess(size : Int) -> ((String, Int, Int), [ePixelFormat]) {
+    func luckyGuess(size : Int) -> ((String, Int, Int), [ePixelFormat])? {
+        // match with current format first
+        var plane0 : Int = Int(mWidth.intValue * mHeight.intValue);
+        if (isYUV) {
+            plane0 = (plane0 * GetPixelFormatBPP(yuvFormat)) / 8
+        } else {
+            plane0 = (plane0 * GetPixelFormatBPP(rgbFormat)) / 8
+        }
+        
+        if (size % plane0 == 0) {
+            return nil
+        }
+        
         // from large to small
         for res in Resolutions.reversed() {
             let plane0 = res.1 * res.2
@@ -190,7 +202,7 @@ class ViewController: NSViewController {
             }
         }
         // return custom
-        return (Resolutions.first!, [kPixelFormatUnknown, kPixelFormatUnknown])
+        return nil
     }
     
     var mReader : YUVReader = YUVReader()
@@ -368,19 +380,20 @@ class ViewController: NSViewController {
         if (mReader.open(url: url) == true) {
             NSLog("total bytes %d", mReader.totalBytes)
             let lucky = luckyGuess(size: mReader.totalBytes)
-            
-            print("lucky => ", lucky)
-            
-            mWidth.intValue     = Int32(lucky.0.1)
-            mHeight.intValue    = Int32(lucky.0.2)
-            validateRect(width: mWidth.intValue, height: mHeight.intValue)
-            
-            // set both yuv & rgb lucky guess
-            if (lucky.1[1] != kPixelFormatUnknown) {
-                rgbFormat = lucky.1[1]
-            }
-            if (lucky.1[0] != kPixelFormatUnknown) {
-                yuvFormat = lucky.1[0]
+            if (lucky != nil) {
+                print("lucky => ", lucky!)
+                
+                mWidth.intValue     = Int32(lucky!.0.1)
+                mHeight.intValue    = Int32(lucky!.0.2)
+                validateRect(width: mWidth.intValue, height: mHeight.intValue)
+                
+                // set both yuv & rgb lucky guess
+                if (lucky!.1[1] != kPixelFormatUnknown) {
+                    rgbFormat = lucky!.1[1]
+                }
+                if (lucky!.1[0] != kPixelFormatUnknown) {
+                    yuvFormat = lucky!.1[0]
+                }
             }
             
             drawImage()
