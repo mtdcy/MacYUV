@@ -262,6 +262,7 @@ class ViewController: NSViewController {
         closeFile()
         
         mPropertyView.isHidden = false
+        mInfoText.isHidden = false
         
         if (mReader.open(url: url) == true) {
             drawImage()
