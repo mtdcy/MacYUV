@@ -206,19 +206,24 @@ class ViewController: NSViewController {
         desc += "\n"
         
         // reverse bytes goes before others
-        var reversed = false
         if (isReverseBytes) {
-            if (ImageFrameReverseBytes(image) == kMediaNoError) {
-                desc += " reverse bytes."
-                reversed = true
+            if (ImageFrameReversePixel(image) == kMediaNoError) {
+                desc += " >> reverse pixel."
             } else {
-                NSLog("reverse bytes later")
+                NSLog("reverse bytes failed")
+                isReverseBytes = false
             }
         }
         
         // always planarization for packed yuv
         // MediaOut not support packed yuv well
         if (isYUV) {
+            // planarization
+            if (GetPixelFormatIsPlanar(imageFormat.pointee.format) == false && ImageFramePlanarization(image) == kMediaNoError) {
+                desc += String.init(format : " >> %s", GetPixelFormatString(imageFormat.pointee.format));
+            }
+            
+            // swap uv chroma
             if (isUVSwap) {
                 if (ImageFrameSwapUVChroma(image) == kMediaNoError) {
                     desc += " >> swap u/v."
@@ -228,20 +233,11 @@ class ViewController: NSViewController {
                 }
             }
             
+            // yuv2rgb
             if (ImageFrameToRGB(image) == kMediaNoError) {
                 desc += String.init(format : " >> %s.", GetPixelFormatString(imageFormat.pointee.format))
             } else {
                 NSLog("yuv2rgb failed")
-            }
-        }
-        
-        // try reverse again
-        if (isReverseBytes && reversed == false) {
-            if (ImageFrameReverseBytes(image) == kMediaNoError) {
-                desc += " >> reverse bytes."
-            } else {
-                NSLog("reverse bytes failed")
-                isReverseBytes = false
             }
         }
         
