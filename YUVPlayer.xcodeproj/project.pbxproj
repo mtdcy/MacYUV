@@ -38,7 +38,7 @@
 /* Begin PBXFileReference section */
 		57E17AC62268D13000E0B0C8 /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		57E17AC82268D49300E0B0C8 /* OpenGLView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGLView.swift; sourceTree = "<group>"; };
-		57E484942267349B000A2AF7 /* MacYUV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacYUV.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		57E484942267349B000A2AF7 /* YUVPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YUVPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57E484972267349B000A2AF7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57E484992267349B000A2AF7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		57E4849B2267349C000A2AF7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -75,7 +75,7 @@
 		57E484952267349B000A2AF7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				57E484942267349B000A2AF7 /* MacYUV.app */,
+				57E484942267349B000A2AF7 /* YUVPlayer.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -108,9 +108,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		57E484932267349B000A2AF7 /* MacYUV */ = {
+		57E484932267349B000A2AF7 /* YUVPlayer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 57E484A42267349C000A2AF7 /* Build configuration list for PBXNativeTarget "MacYUV" */;
+			buildConfigurationList = 57E484A42267349C000A2AF7 /* Build configuration list for PBXNativeTarget "YUVPlayer" */;
 			buildPhases = (
 				57E484902267349B000A2AF7 /* Sources */,
 				57E484912267349B000A2AF7 /* Frameworks */,
@@ -121,9 +121,9 @@
 			);
 			dependencies = (
 			);
-			name = MacYUV;
+			name = YUVPlayer;
 			productName = MacYUV;
-			productReference = 57E484942267349B000A2AF7 /* MacYUV.app */;
+			productReference = 57E484942267349B000A2AF7 /* YUVPlayer.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -141,7 +141,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 57E4848F2267349B000A2AF7 /* Build configuration list for PBXProject "MacYUV" */;
+			buildConfigurationList = 57E4848F2267349B000A2AF7 /* Build configuration list for PBXProject "YUVPlayer" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -154,7 +154,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				57E484932267349B000A2AF7 /* MacYUV */,
+				57E484932267349B000A2AF7 /* YUVPlayer */,
 			);
 		};
 /* End PBXProject section */
@@ -364,7 +364,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		57E4848F2267349B000A2AF7 /* Build configuration list for PBXProject "MacYUV" */ = {
+		57E4848F2267349B000A2AF7 /* Build configuration list for PBXProject "YUVPlayer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				57E484A22267349C000A2AF7 /* Debug */,
@@ -373,7 +373,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		57E484A42267349C000A2AF7 /* Build configuration list for PBXNativeTarget "MacYUV" */ = {
+		57E484A42267349C000A2AF7 /* Build configuration list for PBXNativeTarget "YUVPlayer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				57E484A52267349C000A2AF7 /* Debug */,

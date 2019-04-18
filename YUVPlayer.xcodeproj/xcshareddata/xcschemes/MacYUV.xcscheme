@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "57E484932267349B000A2AF7"
-               BuildableName = "MacYUV.app"
-               BlueprintName = "MacYUV"
-               ReferencedContainer = "container:MacYUV.xcodeproj">
+               BuildableName = "YUVPlayer.app"
+               BlueprintName = "YUVPlayer"
+               ReferencedContainer = "container:YUVPlayer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "57E484932267349B000A2AF7"
-            BuildableName = "MacYUV.app"
-            BlueprintName = "MacYUV"
-            ReferencedContainer = "container:MacYUV.xcodeproj">
+            BuildableName = "YUVPlayer.app"
+            BlueprintName = "YUVPlayer"
+            ReferencedContainer = "container:YUVPlayer.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,9 +56,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "57E484932267349B000A2AF7"
-            BuildableName = "MacYUV.app"
-            BlueprintName = "MacYUV"
-            ReferencedContainer = "container:MacYUV.xcodeproj">
+            BuildableName = "YUVPlayer.app"
+            BlueprintName = "YUVPlayer"
+            ReferencedContainer = "container:YUVPlayer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -75,9 +75,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "57E484932267349B000A2AF7"
-            BuildableName = "MacYUV.app"
-            BlueprintName = "MacYUV"
-            ReferencedContainer = "container:MacYUV.xcodeproj">
+            BuildableName = "YUVPlayer.app"
+            BlueprintName = "YUVPlayer"
+            ReferencedContainer = "container:YUVPlayer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
