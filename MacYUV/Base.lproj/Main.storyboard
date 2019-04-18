@@ -572,11 +572,11 @@
                                 <size key="contentViewMargins" width="8" height="8"/>
                             </box>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U5s-LZ-h4g">
-                                <rect key="frame" x="478" y="448" width="324" height="32"/>
+                                <rect key="frame" x="318" y="448" width="484" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="truncatingHead" selectable="YES" enabled="NO" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="right" id="1S8-ck-Jb2">
                                     <font key="font" metaFont="cellTitle"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>

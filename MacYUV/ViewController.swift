@@ -66,6 +66,24 @@ class ViewController: NSViewController {
         }
     }
     
+    var yuvFormat : ePixelFormat {
+        get {
+            if (isYUV == false) {
+                return kPixelFormatUnknown
+            }
+            return YUVs[mYUVItems.indexOfSelectedItem]
+        }
+        set {
+            guard newValue != kPixelFormatUnknown else {
+                return;
+            }
+            isRGB = false
+            isYUV = true
+            let index = YUVs.firstIndex(of: newValue)
+            mYUVItems.selectItem(at: index!)
+        }
+    }
+    
     var isUVSwap : Bool {
         get {
             return mUVSwap.state == NSControl.StateValue.on
@@ -104,6 +122,24 @@ class ViewController: NSViewController {
         }
     }
     
+    var rgbFormat : ePixelFormat {
+        get {
+            if (isRGB == false) {
+                return kPixelFormatUnknown
+            }
+            return RGBs[mRGBItems.indexOfSelectedItem]
+        }
+        set {
+            guard newValue != kPixelFormatUnknown else {
+                return;
+            }
+            isYUV = false
+            isRGB = true
+            let index = RGBs.firstIndex(of: newValue)
+            mRGBItems.selectItem(at: index!)
+        }
+    }
+    
     // both yuv & rgb
     @IBOutlet weak var mReverseBytes : NSButton!
     
@@ -118,15 +154,76 @@ class ViewController: NSViewController {
     
     @IBOutlet weak var mInfoText: NSTextField!
     
+    let Resolutions = [
+        ("Custom",  1280,   720),       // default value for custom
+        ("QCIF",    176,    144),
+        ("QVGA",    320,    240),
+        ("HVGA",    480,    320),
+        ("VGA",     640,    480),
+        ("480p",    720,    480),
+        ("576p",    720,    576),
+        ("PAL",     768,    576),
+        ("WVGA",    800,    480),
+        ("SVGA",    800,    600),
+        ("XGA",     1024,   768),
+        ("720p",    1280,   720),   // HD
+        ("WXGA",    1280,   800),
+        ("SXGA",    1280,   1024),
+        ("1080p",   1920,   1080),  // FHD
+        ("WUXGA",   1920,   1200),
+        ("2K",      2560,   1440),  // QHD
+        ("WQXGA",   2560,   1600),
+        ("4K UHD",  3840,   2160),  // UHD
+        ("4K",      4096,   2160),
+        ("5K",      5120,   2880),
+    ]
+    
+    // -> (RESOLUTION, [YUV, RGB])
+    // not always work
+    func luckyGuess(size : Int) -> ((String, Int, Int), [ePixelFormat]) {
+        // from large to small
+        for res in Resolutions.reversed() {
+            let plane0 = res.1 * res.2
+            if (plane0 * 2 == size) {   // 16 bpp
+                return (res, [kPixelFormatYUV422P, kPixelFormatBGR565])
+            } else if (plane0 * 3 == size) {    // 24 bpp
+                return (res, [kPixelFormatYUV444P, kPixelFormatBGR])
+            } else if (plane0 * 4 == size) {    // 32 bpp
+                return (res, [kPixelFormatUnknown, kPixelFormatBGRA])
+            } else if ((plane0 * 3) / 2 == size) {  // 12 bpp
+                return (res, [kPixelFormatYUV420P, kPixelFormatUnknown])
+            }
+        }
+        // return custom
+        return (Resolutions.first!, [kPixelFormatUnknown, kPixelFormatUnknown])
+    }
+    
     var mReader : YUVReader = YUVReader()
     var mMediaOut : MediaOutRef?
 
+    class OnlyNumberFormatter : NumberFormatter {
+        override func isPartialStringValid(_ partialString: String, newEditingString newString: AutoreleasingUnsafeMutablePointer<NSString?>?, errorDescription error: AutoreleasingUnsafeMutablePointer<NSString?>?) -> Bool {
+            if partialString.isEmpty {
+                return true
+            }
+            return Int(partialString) != nil
+        }
+    }
+    let formatter = OnlyNumberFormatter()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // setup OpenGL Context
         NSLog("OpenGLContext: %@", mOpenGLView.openGLContext!)
         mOpenGLView.prepareOpenGL()
+        
+        mWidth.formatter = formatter
+        mHeight.formatter = formatter
+        mLeft.formatter = formatter
+        mTop.formatter = formatter
+        mWidthDisplay.formatter = formatter
+        mHeightDisplay.formatter = formatter
         
         // set default value
         mReader.setFormat(pixel: kPixelFormatNV12, width: 176, height: 144)
@@ -150,6 +247,7 @@ class ViewController: NSViewController {
         }
 
         mPropertyView.isHidden = true
+        mInfoText.isHidden = true
         isYUV = true
         isRGB = false
         isRectEnabled = false
@@ -171,13 +269,9 @@ class ViewController: NSViewController {
     }
     
     func drawImage() {
-        var desc : String = "pixel"
-        
-        var pixel = kPixelFormatUnknown;
-        if (isYUV) {
-            pixel = YUVs[mYUVItems.indexOfSelectedItem]
-        } else if (isRGB) {
-            pixel = RGBs[mRGBItems.indexOfSelectedItem]
+        var pixel = yuvFormat
+        if (isRGB) {
+            pixel = rgbFormat
         }
         
         let width = mWidth.intValue
@@ -189,15 +283,19 @@ class ViewController: NSViewController {
         let w = mWidthDisplay.intValue
         let h = mHeightDisplay.intValue
         
-        desc += String.init(format: " %s: %d x %d [%d, %d, %d, %d]",
-                            GetPixelFormatString(pixel), width, height, x, y, w, h)
-        
         mReader.setFormat(pixel: pixel, width: width, height: height)
         mReader.setRect(x: x, y: y, w: w, h: h)
+        
+        var desc = String.init(format: "%d/%d bytes => pixel %s: %d x %d [%d, %d, %d, %d]",
+                            mReader.frameBytes, mReader.totalBytes,
+                            GetPixelFormatString(pixel), width, height, x, y, w, h)
+        
         
         let image = mReader.readFrame()
         guard image != nil else {
             NSLog("read image failed")
+            desc += "\n >> bad pixel format"
+            mInfoText.stringValue = desc
             return
         }
         
@@ -247,6 +345,8 @@ class ViewController: NSViewController {
         
         guard mMediaOut != nil else {
             NSLog("create MediaOut failed")
+            desc += " >> open device failed."
+            mInfoText.stringValue = desc
             return;
         }
         
@@ -265,6 +365,23 @@ class ViewController: NSViewController {
         mInfoText.isHidden = false
         
         if (mReader.open(url: url) == true) {
+            NSLog("total bytes %d", mReader.totalBytes)
+            let lucky = luckyGuess(size: mReader.totalBytes)
+            
+            print("lucky => ", lucky)
+            
+            mWidth.intValue     = Int32(lucky.0.1)
+            mHeight.intValue    = Int32(lucky.0.2)
+            validateRect(width: mWidth.intValue, height: mHeight.intValue)
+            
+            // set both yuv & rgb lucky guess
+            if (lucky.1[1] != kPixelFormatUnknown) {
+                rgbFormat = lucky.1[1]
+            }
+            if (lucky.1[0] != kPixelFormatUnknown) {
+                yuvFormat = lucky.1[0]
+            }
+            
             drawImage()
         }
     }
@@ -282,6 +399,7 @@ class ViewController: NSViewController {
     
     func closeFile() {
         if (mMediaOut != nil) {
+            MediaOutFlush(mMediaOut)
             SharedObjectRelease(mMediaOut)
             mMediaOut = nil
         }

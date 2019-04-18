@@ -77,6 +77,11 @@ class YUVReader : NSObject {
         
         let bytes = frameBytes
         let data = ContentObjectRead(mContent, bytes)
+        if (BufferObjectGetLength(data) < bytes) {
+            NSLog("no enough data")
+            return nil
+        }
+        
         let image = ImageFrameGenerate(mImageFormat, data)
         SharedObjectRelease(data)
         return image
