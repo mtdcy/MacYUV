@@ -85,9 +85,13 @@ class ViewController: NSViewController {
     
     let RGBs = [
         kPixelFormatRGB565,
-        kPixelFormatRGB888,
-        kPixelFormatRGBA,
+        kPixelFormatBGR565,
+        kPixelFormatRGB,
+        kPixelFormatBGR,
         kPixelFormatARGB,
+        kPixelFormatBGRA,
+        kPixelFormatRGBA,
+        kPixelFormatABGR,
     ]
     
     var isRGB : Bool {
@@ -191,20 +195,58 @@ class ViewController: NSViewController {
         mReader.setFormat(pixel: pixel, width: width, height: height)
         mReader.setRect(x: x, y: y, w: w, h: h)
         
-        var alt : Bool = false
-        if (mMediaOut == nil) {
-            mMediaOut = MediaOutCreateForImage(mReader.imageFormat, nil)
+        let image = mReader.readFrame()
+        guard image != nil else {
+            NSLog("read image failed")
+            return
+        }
+        
+        // get a pointer to image format struct
+        let imageFormat : UnsafeMutablePointer<ImageFormat> = MediaFrameGetImageFormat(image)
+        desc += "\n"
+        
+        // reverse bytes goes before others
+        var reversed = false
+        if (isReverseBytes) {
+            if (ImageFrameReverseBytes(image) == kMediaNoError) {
+                desc += " reverse bytes."
+                reversed = true
+            } else {
+                NSLog("reverse bytes later")
+            }
+        }
+        
+        // always planarization for packed yuv
+        // MediaOut not support packed yuv well
+        if (isYUV) {
+            if (isUVSwap) {
+                if (ImageFrameSwapUVChroma(image) == kMediaNoError) {
+                    desc += " >> swap u/v."
+                } else {
+                    NSLog("swap UV chroma failed")
+                    isUVSwap = false
+                }
+            }
+            
+            if (ImageFrameToRGB(image) == kMediaNoError) {
+                desc += String.init(format : " >> %s.", GetPixelFormatString(imageFormat.pointee.format))
+            } else {
+                NSLog("yuv2rgb failed")
+            }
+        }
+        
+        // try reverse again
+        if (isReverseBytes && reversed == false) {
+            if (ImageFrameReverseBytes(image) == kMediaNoError) {
+                desc += " >> reverse bytes."
+            } else {
+                NSLog("reverse bytes failed")
+                isReverseBytes = false
+            }
         }
         
         if (mMediaOut == nil) {
-            NSLog("using alt format")
-            let imageFormat = UnsafeMutablePointer<ImageFormat>.allocate(capacity: 1)
-            imageFormat.pointee.format = GetPixelFormatPlanar(mReader.imageFormat.pointee.format)
-            imageFormat.pointee.width  = mReader.imageFormat.pointee.width
-            imageFormat.pointee.height = mReader.imageFormat.pointee.height
-            mMediaOut = MediaOutCreateForImage(imageFormat, nil)
-            imageFormat.deallocate()
-            alt = true
+            mMediaOut = MediaOutCreateForImage(MediaFrameGetImageFormat(image), nil)
         }
         
         guard mMediaOut != nil else {
@@ -212,38 +254,10 @@ class ViewController: NSViewController {
             return;
         }
         
-        let image = mReader.readFrame()
-        guard image != nil else {
-            NSLog("read image failed")
-            return
-        }
-        
-        desc += "\n"
-        if (isReverseBytes) {
-            if (ImageFrameReverseBytes(image) != kMediaNoError) {
-                NSLog("reverse bytes failed")
-                isReverseBytes = false
-            } else {
-                desc += " reverse bytes."
-            }
-        }
-        
-        if (alt) {
-            NSLog("alt image @ planarization")
-            ImageFramePlanarization(image)
-        }
-        
-        if (isYUV && isUVSwap) {
-            if (ImageFrameSwapUVChroma(image) != kMediaNoError) {
-                NSLog("swap UV chroma failed")
-                isUVSwap = false
-            } else {
-                desc += " swap u/v."
-            }
-        }
-        
         MediaOutWrite(mMediaOut, image)
         SharedObjectRelease(image)
+        
+        NSLog("draw ==> %@", desc)
         mInfoText.stringValue = desc
     }
     
