@@ -253,12 +253,12 @@ class ViewController: NSViewController {
             mRGBItems.addItem(withTitle: String.init(cString: string))
         }
 
+        mFrameSlider.isHidden = true
         mPropertyView.isHidden = true
         mInfoText.isHidden = true
         isYUV = true
         isRGB = false
         isRectEnabled = false
-        numFrames = 1
     }
     
     override func viewWillDisappear() {
@@ -276,7 +276,7 @@ class ViewController: NSViewController {
         }
     }
     
-    func drawImage() {
+    func draw() {
         var pixel = yuvFormat
         if (isRGB) {
             pixel = rgbFormat
@@ -294,27 +294,36 @@ class ViewController: NSViewController {
         mReader.setFormat(pixel: pixel, width: width, height: height)
         mReader.setRect(x: x, y: y, w: w, h: h)
         
-        var desc = String.init(format: "%d/%d bytes => pixel %s: %d x %d [%d, %d, %d, %d]",
+        // force window aspect ratio
+        self.view.window?.contentAspectRatio = NSSize.init(width: Int(width), height: Int(height))
+        
+        numFrames = mReader.totalBytes / mReader.frameBytes
+        
+        var info = String.init(format: "%d/%d bytes => pixel %s: %d x %d [%d, %d, %d, %d]",
                             mReader.frameBytes, mReader.totalBytes,
                             GetPixelFormatString(pixel), width, height, x, y, w, h)
         
         
-        let image = mReader.readFrame()
+        let image : MediaFrameRef? = mReader.readFrame()
         guard image != nil else {
             NSLog("read image failed")
-            desc += "\n >> bad pixel format"
-            mInfoText.stringValue = desc
+            info += "\n >> bad pixel format"
+            mInfoText.stringValue = info
             return
         }
         
+        drawImage(image: image!)
+    }
+    
+    func drawImage(image : MediaFrameRef) -> Void {
         // get a pointer to image format struct
         let imageFormat : UnsafeMutablePointer<ImageFormat> = MediaFrameGetImageFormat(image)
-        desc += "\n"
+        var status = "\n"
         
         // reverse bytes goes before others
         if (isReverseBytes) {
             if (ImageFrameReversePixel(image) == kMediaNoError) {
-                desc += " >> reverse pixel."
+                status += " >> reverse pixel."
             } else {
                 NSLog("reverse bytes failed")
                 isReverseBytes = false
@@ -326,13 +335,13 @@ class ViewController: NSViewController {
         if (isYUV) {
             // planarization
             if (GetPixelFormatIsPlanar(imageFormat.pointee.format) == false && ImageFramePlanarization(image) == kMediaNoError) {
-                desc += String.init(format : " >> %s", GetPixelFormatString(imageFormat.pointee.format));
+                status += String.init(format : " >> %s", GetPixelFormatString(imageFormat.pointee.format));
             }
             
             // swap uv chroma
             if (isUVSwap) {
                 if (ImageFrameSwapCbCr(image) == kMediaNoError) {
-                    desc += " >> swap u/v."
+                    status += " >> swap u/v."
                 } else {
                     NSLog("swap UV chroma failed")
                     isUVSwap = false
@@ -341,7 +350,7 @@ class ViewController: NSViewController {
             
             // yuv2rgb
             if (ImageFrameToRGB(image) == kMediaNoError) {
-                desc += String.init(format : " >> %s.", GetPixelFormatString(imageFormat.pointee.format))
+                status += String.init(format : " >> %s.", GetPixelFormatString(imageFormat.pointee.format))
             } else {
                 NSLog("yuv2rgb failed")
             }
@@ -353,21 +362,16 @@ class ViewController: NSViewController {
         
         guard mMediaOut != nil else {
             NSLog("create MediaOut failed")
-            desc += " >> open device failed."
-            mInfoText.stringValue = desc
+            status += " >> open device failed."
+            mInfoText.stringValue = status
             return;
         }
-        
-        // force window aspect ratio
-        self.view.window?.contentAspectRatio = NSSize.init(width: Int(width), height: Int(height))
         
         MediaOutWrite(mMediaOut, image)
         SharedObjectRelease(image)
         
-        NSLog("draw ==> %@", desc)
-        mInfoText.stringValue = desc
-        
-        numFrames = mReader.totalBytes / mReader.frameBytes
+        NSLog("draw ==> %@", status)
+        mInfoText.stringValue += status
     }
     
     public func openFile(url : String) {
@@ -396,7 +400,7 @@ class ViewController: NSViewController {
                 }
             }
             
-            drawImage()
+            draw()
         }
     }
     
@@ -442,7 +446,7 @@ class ViewController: NSViewController {
             SharedObjectRelease(mMediaOut)
             mMediaOut = nil
         }
-        drawImage()
+        draw()
     }
     
     func validateRect(width : Int32, height : Int32) {
@@ -508,11 +512,11 @@ class ViewController: NSViewController {
     
     var numFrames : Int {
         get {
-            return mFrameSlider.numberOfTickMarks
+            return Int(mFrameSlider.maxValue)
         }
         set {
-            mFrameSlider.maxValue = Double(newValue)
             mFrameSlider.numberOfTickMarks = newValue
+            mFrameSlider.maxValue = Double(newValue)
             mFrameSlider.intValue = 0
             if (newValue <= 1) {
                 mFrameSlider.isHidden = true
@@ -531,14 +535,45 @@ class ViewController: NSViewController {
         }
         
         let index = mFrameSlider.intValue
-        let image = mReader.readFrame(index: Int(index))
+        let image : MediaFrameRef? = mReader.readFrame(index: Int(index))
         guard image != nil else {
             mInfoText.stringValue += " >> eos ?"
             return
         }
         
-        MediaOutWrite(mMediaOut, image)
-        SharedObjectRelease(image)
+        drawImage(image: image!)
+    }
+    
+    override func keyDown(with event: NSEvent) {
+        guard mMediaOut != nil else {
+            NSLog("MediaOut is not ready")
+            return
+        }
+        
+        var index = mFrameSlider.intValue
+        let special = event.specialKey;
+        if (special != nil) {
+            switch (special) {
+            case NSEvent.SpecialKey.rightArrow:
+                index += 1;
+            case NSEvent.SpecialKey.leftArrow:
+                index -= 1;
+            default:
+                break;
+            }
+        }
+        
+        mFrameSlider.intValue = index
+        
+        
+        NSLog("to %d", index)
+        let image : MediaFrameRef? = mReader.readFrame(index: Int(index))
+        guard image != nil else {
+            mInfoText.stringValue += " >> eos ?"
+            return
+        }
+        
+        drawImage(image: image!)
     }
 }
 

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		57E17AC72268D13000E0B0C8 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E17AC62268D13000E0B0C8 /* BaseView.swift */; };
+		57E17AC92268D49300E0B0C8 /* OpenGLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E17AC82268D49300E0B0C8 /* OpenGLView.swift */; };
 		57E484982267349B000A2AF7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E484972267349B000A2AF7 /* AppDelegate.swift */; };
 		57E4849A2267349B000A2AF7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E484992267349B000A2AF7 /* ViewController.swift */; };
 		57E4849C2267349C000A2AF7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57E4849B2267349C000A2AF7 /* Assets.xcassets */; };
@@ -34,6 +36,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		57E17AC62268D13000E0B0C8 /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		57E17AC82268D49300E0B0C8 /* OpenGLView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGLView.swift; sourceTree = "<group>"; };
 		57E484942267349B000A2AF7 /* MacYUV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacYUV.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57E484972267349B000A2AF7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57E484992267349B000A2AF7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -81,6 +85,8 @@
 			children = (
 				57E484972267349B000A2AF7 /* AppDelegate.swift */,
 				57E484AF22673650000A2AF7 /* YUVReader.swift */,
+				57E17AC82268D49300E0B0C8 /* OpenGLView.swift */,
+				57E17AC62268D13000E0B0C8 /* BaseView.swift */,
 				57E484992267349B000A2AF7 /* ViewController.swift */,
 				57E4849B2267349C000A2AF7 /* Assets.xcassets */,
 				57E4849D2267349C000A2AF7 /* Main.storyboard */,
@@ -173,6 +179,8 @@
 				57E484B022673650000A2AF7 /* YUVReader.swift in Sources */,
 				57E4849A2267349B000A2AF7 /* ViewController.swift in Sources */,
 				57E484982267349B000A2AF7 /* AppDelegate.swift in Sources */,
+				57E17AC92268D49300E0B0C8 /* OpenGLView.swift in Sources */,
+				57E17AC72268D13000E0B0C8 /* BaseView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
