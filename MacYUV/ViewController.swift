@@ -43,14 +43,12 @@ class ViewController: NSViewController {
     @IBOutlet weak var mUVInterlaced: NSButton!
     
     let YUVs : [ePixelFormat] = [
-        kPixelFormatYUV420P,
-        kPixelFormatYUV422P,
-        kPixelFormatYUV444P,
-        kPixelFormatNV12,
-        kPixelFormatNV21,
-        kPixelFormatYUYV422,
-        kPixelFormatYVYU422,
-        kPixelFormatYUV444,
+        kPixelFormat420YpCbCrPlanar,
+        kPixelFormat422YpCbCrPlanar,
+        kPixelFormat444YpCbCrPlanar,
+        kPixelFormat422YpCbCr,
+        kPixelFormat444YpCbCr,
+        kPixelFormat420YpCbCrSemiPlanar,
     ]
     
     var isYUV : Bool {
@@ -105,11 +103,8 @@ class ViewController: NSViewController {
         kPixelFormatRGB565,
         kPixelFormatBGR565,
         kPixelFormatRGB,
-        kPixelFormatBGR,
         kPixelFormatARGB,
-        kPixelFormatBGRA,
         kPixelFormatRGBA,
-        kPixelFormatABGR,
     ]
     
     var isRGB : Bool {
@@ -185,13 +180,13 @@ class ViewController: NSViewController {
         for res in Resolutions.reversed() {
             let plane0 = res.1 * res.2
             if (plane0 * 2 == size) {   // 16 bpp
-                return (res, [kPixelFormatYUV422P, kPixelFormatBGR565])
+                return (res, [kPixelFormat422YpCbCrPlanar, kPixelFormatRGB565])
             } else if (plane0 * 3 == size) {    // 24 bpp
-                return (res, [kPixelFormatYUV444P, kPixelFormatBGR])
+                return (res, [kPixelFormat444YpCbCrPlanar, kPixelFormatRGB])
             } else if (plane0 * 4 == size) {    // 32 bpp
-                return (res, [kPixelFormatUnknown, kPixelFormatBGRA])
+                return (res, [kPixelFormatUnknown, kPixelFormatARGB])
             } else if ((plane0 * 3) / 2 == size) {  // 12 bpp
-                return (res, [kPixelFormatYUV420P, kPixelFormatUnknown])
+                return (res, [kPixelFormat420YpCbCrPlanar, kPixelFormatUnknown])
             }
         }
         // return custom
@@ -226,7 +221,7 @@ class ViewController: NSViewController {
         mHeightDisplay.formatter = formatter
         
         // set default value
-        mReader.setFormat(pixel: kPixelFormatNV12, width: 176, height: 144)
+        mReader.setFormat(pixel: kPixelFormat422YpCbCrPlanar, width: 176, height: 144)
         let imageFormat = mReader.imageFormat
         mWidth.intValue = imageFormat.pointee.width
         mHeight.intValue = imageFormat.pointee.height
@@ -323,7 +318,7 @@ class ViewController: NSViewController {
             
             // swap uv chroma
             if (isUVSwap) {
-                if (ImageFrameSwapUVChroma(image) == kMediaNoError) {
+                if (ImageFrameSwapCbCr(image) == kMediaNoError) {
                     desc += " >> swap u/v."
                 } else {
                     NSLog("swap UV chroma failed")
@@ -349,6 +344,9 @@ class ViewController: NSViewController {
             mInfoText.stringValue = desc
             return;
         }
+        
+        // force window aspect ratio
+        self.view.window?.contentAspectRatio = NSSize.init(width: Int(width), height: Int(height))
         
         MediaOutWrite(mMediaOut, image)
         SharedObjectRelease(image)
