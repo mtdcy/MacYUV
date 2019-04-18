@@ -253,9 +253,6 @@ class ViewController: NSViewController {
             mRGBItems.addItem(withTitle: String.init(cString: string))
         }
 
-        mFrameSlider.isHidden = true
-        mPropertyView.isHidden = true
-        mInfoText.isHidden = true
         isYUV = true
         isRGB = false
         isRectEnabled = false
@@ -503,6 +500,10 @@ class ViewController: NSViewController {
             mPropertyView.isHidden = false
             mInfoText.isHidden = false
         } else {
+            guard mMediaOut != nil else {
+                NSLog("do NOT hide UI when draw is not complete")
+                return;
+            }
             mPropertyView.isHidden = true
             mInfoText.isHidden = true
         }
