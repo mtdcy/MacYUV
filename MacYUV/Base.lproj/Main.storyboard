@@ -584,6 +584,14 @@
                                     <color key="backgroundColor" red="0.12984204290000001" green="0.12984612579999999" blue="0.12984395030000001" alpha="0.75" colorSpace="custom" customColorSpace="sRGB"/>
                                 </textFieldCell>
                             </textField>
+                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eUM-5X-23T">
+                                <rect key="frame" x="0.0" y="-2" width="800" height="24"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <sliderCell key="cell" state="on" alignment="left" maxValue="100" tickMarkPosition="above" numberOfTickMarks="10" allowsTickMarkValuesOnly="YES" sliderType="linear" id="ADH-wv-z9N"/>
+                                <connections>
+                                    <action selector="onFrameSelect:" target="5gI-5U-AMq" id="WI5-jx-n1y"/>
+                                </connections>
+                            </slider>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="U5s-LZ-h4g" secondAttribute="trailing" id="8F9-he-4Ka"/>
@@ -591,6 +599,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="mFrameSlider" destination="eUM-5X-23T" id="65r-E3-LmR"/>
                         <outlet property="mHeight" destination="Uli-BL-VSg" id="FoM-uP-na1"/>
                         <outlet property="mHeightDisplay" destination="t9Z-2U-aJ7" id="uBM-Tn-Rpa"/>
                         <outlet property="mInfoText" destination="U5s-LZ-h4g" id="htd-00-SyO"/>

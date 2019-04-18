@@ -86,4 +86,21 @@ class YUVReader : NSObject {
         SharedObjectRelease(data)
         return image
     }
+    
+    func readFrame(index : Int) -> MediaFrameRef? {
+        guard mContent != nil else {
+            return nil
+        }
+        
+        let bytes = frameBytes
+        let data = ContentObjectReadPosition(mContent, bytes, Int64((index - 1) * bytes))
+        if (BufferObjectGetLength(data) < bytes) {
+            NSLog("no enough data or eos")
+            return nil
+        }
+        
+        let image = ImageFrameGenerate(mImageFormat, data)
+        SharedObjectRelease(data)
+        return image
+    }
 }

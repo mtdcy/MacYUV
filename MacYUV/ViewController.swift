@@ -246,6 +246,7 @@ class ViewController: NSViewController {
         isYUV = true
         isRGB = false
         isRectEnabled = false
+        numFrames = 1
     }
     
     override func viewWillDisappear() {
@@ -353,6 +354,8 @@ class ViewController: NSViewController {
         
         NSLog("draw ==> %@", desc)
         mInfoText.stringValue = desc
+        
+        numFrames = mReader.totalBytes / mReader.frameBytes
     }
     
     public func openFile(url : String) {
@@ -486,6 +489,43 @@ class ViewController: NSViewController {
             mPropertyView.isHidden = true
             mInfoText.isHidden = true
         }
+    }
+    
+    @IBOutlet weak var mFrameSlider: NSSlider!
+    
+    var numFrames : Int {
+        get {
+            return mFrameSlider.numberOfTickMarks
+        }
+        set {
+            mFrameSlider.maxValue = Double(newValue)
+            mFrameSlider.numberOfTickMarks = newValue
+            mFrameSlider.intValue = 0
+            if (newValue <= 1) {
+                mFrameSlider.isHidden = true
+            } else {
+                mFrameSlider.isHidden = false
+            }
+        }
+    }
+    
+    @IBAction func onFrameSelect(_ sender: Any) {
+        NSLog("select frame %d", mFrameSlider.intValue)
+        
+        guard mMediaOut != nil else {
+            NSLog("MediaOut is not ready")
+            return
+        }
+        
+        let index = mFrameSlider.intValue
+        let image = mReader.readFrame(index: Int(index))
+        guard image != nil else {
+            mInfoText.stringValue += " >> eos ?"
+            return
+        }
+        
+        MediaOutWrite(mMediaOut, image)
+        SharedObjectRelease(image)
     }
 }
 
