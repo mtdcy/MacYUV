@@ -256,6 +256,7 @@ class ViewController: NSViewController {
         isYUV = true
         isRGB = false
         isRectEnabled = false
+        isUIHidden = false
     }
     
     override func viewWillDisappear() {
@@ -300,6 +301,7 @@ class ViewController: NSViewController {
                             mReader.frameBytes, mReader.totalBytes,
                             GetPixelFormatString(pixel), width, height, x, y, w, h)
         
+        mInfoText.stringValue = info
         
         let image : MediaFrameRef? = mReader.readFrame()
         guard image != nil else {
@@ -309,13 +311,16 @@ class ViewController: NSViewController {
             return
         }
         
-        drawImage(image: image!)
+        let status = drawImage(image: image!)
+        
+        mInfoText.stringValue += "\n"
+        mInfoText.stringValue += status
     }
     
-    func drawImage(image : MediaFrameRef) -> Void {
+    func drawImage(image : MediaFrameRef) -> String {
         // get a pointer to image format struct
         let imageFormat : UnsafeMutablePointer<ImageFormat> = MediaFrameGetImageFormat(image)
-        var status = "\n"
+        var status : String = String()
         
         // reverse bytes goes before others
         if (isReverseBytes) {
@@ -360,23 +365,21 @@ class ViewController: NSViewController {
         guard mMediaOut != nil else {
             NSLog("create MediaOut failed")
             status += " >> open device failed."
-            mInfoText.stringValue = status
-            return;
+            return status;
         }
         
         MediaOutWrite(mMediaOut, image)
         SharedObjectRelease(image)
         
         NSLog("draw ==> %@", status)
-        mInfoText.stringValue += status
+        return status
     }
     
     public func openFile(url : String) {
         NSLog("url = %@", url)
         closeFile()
         
-        mPropertyView.isHidden = false
-        mInfoText.isHidden = false
+        isUIHidden = false
         
         if (mReader.open(url: url) == true) {
             NSLog("total bytes %d", mReader.totalBytes)
@@ -489,6 +492,22 @@ class ViewController: NSViewController {
         onFormatChanged(nil)
     }
     
+    var isUIHidden : Bool {
+        get {
+            return mPropertyView.isHidden
+        }
+        set {
+            if (newValue == true) {
+                guard mMediaOut != nil else {
+                    NSLog("hide ui when draw complete")
+                    return
+                }
+            }
+            mPropertyView.isHidden = newValue
+            mPropertyView.isHidden = newValue
+        }
+    }
+    
     override func mouseDown(with event: NSEvent) {
         
         guard mPropertyView.hitTest(event.locationInWindow) == nil else {
@@ -496,17 +515,7 @@ class ViewController: NSViewController {
             return
         }
         
-        if (mPropertyView.isHidden == true) {
-            mPropertyView.isHidden = false
-            mInfoText.isHidden = false
-        } else {
-            guard mMediaOut != nil else {
-                NSLog("do NOT hide UI when draw is not complete")
-                return;
-            }
-            mPropertyView.isHidden = true
-            mInfoText.isHidden = true
-        }
+        isUIHidden = !isUIHidden
     }
     
     @IBOutlet weak var mFrameSlider: NSSlider!
@@ -538,7 +547,7 @@ class ViewController: NSViewController {
         let index = mFrameSlider.intValue
         let image : MediaFrameRef? = mReader.readFrame(index: Int(index))
         guard image != nil else {
-            mInfoText.stringValue += " >> eos ?"
+            NSLog("read frame failed or eos")
             return
         }
         
@@ -570,7 +579,7 @@ class ViewController: NSViewController {
         NSLog("to %d", index)
         let image : MediaFrameRef? = mReader.readFrame(index: Int(index))
         guard image != nil else {
-            mInfoText.stringValue += " >> eos ?"
+            NSLog("read frame failed or eos")
             return
         }
         

@@ -161,7 +161,7 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="MacYUV" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="YUVPlayer" customModuleProvider="target"/>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -192,12 +192,12 @@
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController id="5gI-5U-AMq" customClass="ViewController" customModule="MacYUV" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" wantsLayer="YES" focusRingType="exterior" id="ERx-hH-rdd" customClass="BaseView" customModule="MacYUV" customModuleProvider="target">
+                <viewController id="5gI-5U-AMq" customClass="ViewController" customModule="YUVPlayer" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" wantsLayer="YES" focusRingType="exterior" id="ERx-hH-rdd" customClass="BaseView" customModule="YUVPlayer" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <openGLView wantsLayer="YES" fixedFrame="YES" antiAliasingType="supersample" useAuxiliaryDepthBufferStencil="NO" allowOffline="YES" wantsBestResolutionOpenGLSurface="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SO0-GO-UMg" customClass="OpenGLView" customModule="MacYUV" customModuleProvider="target">
+                            <openGLView wantsLayer="YES" fixedFrame="YES" antiAliasingType="supersample" useAuxiliaryDepthBufferStencil="NO" allowOffline="YES" wantsBestResolutionOpenGLSurface="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SO0-GO-UMg" customClass="OpenGLView" customModule="YUVPlayer" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="800" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </openGLView>
@@ -464,7 +464,7 @@
                                                 <gridCell row="GgJ-4j-FqD" column="dRw-co-Q03" id="pdW-g7-yZU">
                                                     <button key="contentView" toolTip="bytes-order to word-order" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4tE-aG-Vly">
                                                         <rect key="frame" x="41" y="130" width="98" height="18"/>
-                                                        <buttonCell key="cell" type="check" title="bytes order" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="Qv0-zo-tSj">
+                                                        <buttonCell key="cell" type="check" title="word-order" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="Qv0-zo-tSj">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
