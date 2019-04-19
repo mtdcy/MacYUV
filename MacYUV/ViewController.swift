@@ -325,7 +325,7 @@ class ViewController: NSViewController {
         // reverse bytes goes before others
         if (isReverseBytes) {
             if (ImageFrameReversePixel(image) == kMediaNoError) {
-                status += " >> reverse pixel."
+                status += " >> word-order."
             } else {
                 NSLog("reverse bytes failed")
                 isReverseBytes = false
