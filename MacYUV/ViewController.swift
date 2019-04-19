@@ -504,7 +504,7 @@ class ViewController: NSViewController {
                 }
             }
             mPropertyView.isHidden = newValue
-            mPropertyView.isHidden = newValue
+            mInfoText.isHidden = newValue
         }
     }
     
