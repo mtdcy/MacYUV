@@ -377,6 +377,8 @@ class ViewController: NSViewController {
     
     public func openFile(url : String) {
         NSLog("url = %@", url)
+        NSDocumentController.shared.noteNewRecentDocumentURL(URL(fileURLWithPath: url))
+        
         closeFile()
         
         isUIHidden = false
