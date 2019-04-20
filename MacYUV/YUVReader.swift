@@ -56,7 +56,9 @@ class YUVReader : NSObject {
     }
     
     var frameBytes : Int {
-        return GetImageFormatBytes(mImageFormat)
+        let desc : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(mImageFormat.pointee.format);
+        let plane0 = mImageFormat.pointee.width * mImageFormat.pointee.height
+        return (Int(plane0) * desc.pointee.bpp) / 8;
     }
     
     var totalBytes : Int {
@@ -94,8 +96,14 @@ class YUVReader : NSObject {
         
         let bytes = frameBytes
         let data = ContentObjectReadPosition(mContent, bytes, Int64((index - 1) * bytes))
+        guard data != nil else {
+            NSLog("no more data")
+            return nil
+        }
+        
         if (BufferObjectGetLength(data) < bytes) {
             NSLog("no enough data or eos")
+            SharedObjectRelease(data)
             return nil
         }
         

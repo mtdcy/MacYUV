@@ -179,9 +179,11 @@ class ViewController: NSViewController {
         // match with current format first
         var plane0 : Int = Int(mWidth.intValue * mHeight.intValue);
         if (isYUV) {
-            plane0 = (plane0 * GetPixelFormatBPP(yuvFormat)) / 8
+            let desc : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(yuvFormat)
+            plane0 = (plane0 * desc.pointee.bpp) / 8
         } else {
-            plane0 = (plane0 * GetPixelFormatBPP(rgbFormat)) / 8
+            let desc : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(rgbFormat)
+            plane0 = (plane0 * desc.pointee.bpp) / 8
         }
         
         if (size % plane0 == 0) {
@@ -244,13 +246,13 @@ class ViewController: NSViewController {
         
         mYUVItems.removeAllItems()
         for yuv in YUVs {
-            let string = GetPixelFormatString(yuv)!
-            mYUVItems.addItem(withTitle: String.init(cString: string))
+            let desc : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(yuv)
+            mYUVItems.addItem(withTitle: String.init(cString: desc.pointee.name))
         }
         mRGBItems.removeAllItems()
         for rgb in RGBs {
-            let string = GetPixelFormatString(rgb)!
-            mRGBItems.addItem(withTitle: String.init(cString: string))
+            let desc : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(rgb)
+            mRGBItems.addItem(withTitle: String.init(cString: desc.pointee.name))
         }
 
         isYUV = true
@@ -297,9 +299,10 @@ class ViewController: NSViewController {
         
         numFrames = mReader.totalBytes / mReader.frameBytes
         
+        let desc : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(pixel)
         var info = String.init(format: "%d/%d bytes => pixel %s: %d x %d [%d, %d, %d, %d]",
                             mReader.frameBytes, mReader.totalBytes,
-                            GetPixelFormatString(pixel), width, height, x, y, w, h)
+                            desc.pointee.name, width, height, x, y, w, h)
         
         mInfoText.stringValue = info
         
@@ -335,9 +338,10 @@ class ViewController: NSViewController {
         // always planarization for packed yuv
         // MediaOut not support packed yuv well
         if (isYUV) {
-            // planarization
-            if (GetPixelFormatIsPlanar(imageFormat.pointee.format) == false && ImageFramePlanarization(image) == kMediaNoError) {
-                status += String.init(format : " >> %s", GetPixelFormatString(imageFormat.pointee.format));
+            // planarization, we don't support packed yuv well
+            let pixelDesc = GetPixelFormatDescriptor(imageFormat.pointee.format)
+            if ((pixelDesc?.pointee.planes)! == 1 && ImageFramePlanarization(image) == kMediaNoError) {
+                status += String.init(format : " >> %s.", (GetPixelFormatDescriptor(imageFormat.pointee.format)?.pointee.name)!);
             }
             
             // swap uv chroma
@@ -351,11 +355,13 @@ class ViewController: NSViewController {
             }
             
             // yuv2rgb
+            /*
             if (ImageFrameToRGB(image) == kMediaNoError) {
                 status += String.init(format : " >> %s.", GetPixelFormatString(imageFormat.pointee.format))
             } else {
                 NSLog("yuv2rgb failed")
             }
+            */
         }
         
         if (mMediaOut == nil) {
