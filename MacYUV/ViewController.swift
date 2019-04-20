@@ -40,9 +40,10 @@ class ViewController: NSViewController {
     @IBOutlet weak var mYUVCheck: NSButton!
     @IBOutlet weak var mYUVItems: NSPopUpButton!
     @IBOutlet weak var mUVSwap: NSButton!
-    @IBOutlet weak var mUVInterlaced: NSButton!
+    @IBOutlet weak var mYUV2RGB: NSButton!
     
     let YUVs : [ePixelFormat] = [
+        // common pixels
         kPixelFormat420YpCbCrPlanar,
         kPixelFormat422YpCbCrPlanar,
         kPixelFormat444YpCbCrPlanar,
@@ -59,8 +60,7 @@ class ViewController: NSViewController {
             mYUVCheck.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
             mYUVItems.isEnabled = newValue
             mUVSwap.isEnabled = newValue
-            //mUVInterlaced.isEnabled = newValue
-            mUVInterlaced.isHidden = true
+            mYUV2RGB.isEnabled = newValue
         }
     }
     
@@ -91,8 +91,13 @@ class ViewController: NSViewController {
         }
     }
     
-    var isUVInterlaced : Bool {
-        return mUVInterlaced.state == NSControl.StateValue.on
+    var isYUV2RGB : Bool {
+        get {
+            return mYUV2RGB.state == NSControl.StateValue.on
+        }
+        set {
+            mYUV2RGB.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
+        }
     }
     
     // rgb formats
@@ -138,7 +143,7 @@ class ViewController: NSViewController {
     // both yuv & rgb
     @IBOutlet weak var mReverseBytes : NSButton!
     
-    var isReverseBytes : Bool {
+    var isWordOrder : Bool {
         get {
             return mReverseBytes.state == NSControl.StateValue.on
         }
@@ -276,6 +281,22 @@ class ViewController: NSViewController {
         }
     }
     
+    func pixelName(pixel : ePixelFormat) -> String {
+        let desc : UnsafePointer<PixelDescriptor>? = GetPixelFormatDescriptor(pixel)
+        guard desc != nil else {
+            return "unknown"
+        }
+        return String.init(cString: desc!.pointee.name)
+    }
+    
+    func pixelIsPlanar(pixel : ePixelFormat) -> Bool {
+        let desc : UnsafePointer<PixelDescriptor>? = GetPixelFormatDescriptor(pixel)
+        guard desc != nil else {
+            return false
+        }
+        return desc!.pointee.planes > 1
+    }
+    
     func draw() {
         var pixel = yuvFormat
         if (isRGB) {
@@ -299,10 +320,9 @@ class ViewController: NSViewController {
         
         numFrames = mReader.totalBytes / mReader.frameBytes
         
-        let desc : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(pixel)
-        var info = String.init(format: "%d/%d bytes => pixel %s: %d x %d [%d, %d, %d, %d]",
+        var info = String.init(format: "%d/%d bytes => pixel %@: %d x %d [%d, %d, %d, %d]",
                             mReader.frameBytes, mReader.totalBytes,
-                            desc.pointee.name, width, height, x, y, w, h)
+                            pixelName(pixel: pixel), width, height, x, y, w, h)
         
         mInfoText.stringValue = info
         
@@ -325,23 +345,36 @@ class ViewController: NSViewController {
         let imageFormat : UnsafeMutablePointer<ImageFormat> = MediaFrameGetImageFormat(image)
         var status : String = String()
         
-        // reverse bytes goes before others
-        if (isReverseBytes) {
+        // bytes-order vs word-order
+        if (isWordOrder) {
             if (ImageFrameReversePixel(image) == kMediaNoError) {
                 status += " >> word-order."
             } else {
                 NSLog("reverse bytes failed")
-                isReverseBytes = false
+                isWordOrder = false
             }
         }
         
-        // always planarization for packed yuv
-        // MediaOut not support packed yuv well
+        if (isWordOrder == false) {
+            status += " >> byte-roder."
+        }
+        
         if (isYUV) {
-            // planarization, we don't support packed yuv well
-            let pixelDesc = GetPixelFormatDescriptor(imageFormat.pointee.format)
-            if ((pixelDesc?.pointee.planes)! == 1 && ImageFramePlanarization(image) == kMediaNoError) {
-                status += String.init(format : " >> %s.", (GetPixelFormatDescriptor(imageFormat.pointee.format)?.pointee.name)!);
+            if (!pixelIsPlanar(pixel: imageFormat.pointee.format)) {
+                var planarization = isUVSwap || isYUV2RGB;
+                // MediaOut don't support 422 packed, fix later
+                if (imageFormat.pointee.format == kPixelFormat422YpCbCr ||
+                    imageFormat.pointee.format == kPixelFormat422YpCrCb) {
+                    planarization = true
+                }
+                
+                if (planarization) {
+                    if (ImageFramePlanarization(image) == kMediaNoError) {
+                        status += String.init(format : " >> %@.", pixelName(pixel: imageFormat.pointee.format));
+                    } else {
+                        NSLog("planarization %@ failed", pixelName(pixel: imageFormat.pointee.format))
+                    }
+                }
             }
             
             // swap uv chroma
@@ -355,13 +388,14 @@ class ViewController: NSViewController {
             }
             
             // yuv2rgb
-            /*
-            if (ImageFrameToRGB(image) == kMediaNoError) {
-                status += String.init(format : " >> %s.", GetPixelFormatString(imageFormat.pointee.format))
-            } else {
-                NSLog("yuv2rgb failed")
+            if (isYUV2RGB) {
+                if (ImageFrameToRGB(image) == kMediaNoError) {
+                    status += String.init(format : " >> %@.", pixelName(pixel: imageFormat.pointee.format))
+                } else {
+                    NSLog("yuv2rgb failed")
+                    isYUV2RGB = false
+                }
             }
-            */
         }
         
         if (mMediaOut == nil) {
@@ -451,6 +485,7 @@ class ViewController: NSViewController {
         NSLog("onFormatChanged")
         // format changed, release MediaOut
         if (mMediaOut != nil) {
+            MediaOutFlush(mMediaOut)
             SharedObjectRelease(mMediaOut)
             mMediaOut = nil
         }

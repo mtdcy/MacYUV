@@ -521,10 +521,13 @@
                                                 <gridCell row="7SO-fH-zpb" column="dRw-co-Q03" id="xEl-8O-1fO">
                                                     <button key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="erZ-Qj-mgh">
                                                         <rect key="frame" x="41" y="62" width="98" height="18"/>
-                                                        <buttonCell key="cell" type="check" title="interlaced" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="pxe-mq-xg1">
+                                                        <buttonCell key="cell" type="check" title="yuv2rgb" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="pxe-mq-xg1">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="onFormatChanged:" target="5gI-5U-AMq" id="RtU-8C-K9U"/>
+                                                        </connections>
                                                     </button>
                                                 </gridCell>
                                                 <gridCell row="Vg8-zz-Zcd" column="ewt-X6-zNN" id="JbU-KW-fFK">
@@ -611,10 +614,10 @@
                         <outlet property="mRectCheck" destination="aDM-eW-rLy" id="zrn-S7-ZT3"/>
                         <outlet property="mReverseBytes" destination="4tE-aG-Vly" id="eTB-e5-gJ4"/>
                         <outlet property="mTop" destination="fN6-vB-NKf" id="mJy-AQ-CIq"/>
-                        <outlet property="mUVInterlaced" destination="erZ-Qj-mgh" id="kpl-wt-Yl2"/>
                         <outlet property="mUVSwap" destination="c3r-hc-gey" id="SA3-LS-iHm"/>
                         <outlet property="mWidth" destination="5aA-mj-O9x" id="IYQ-6x-qYj"/>
                         <outlet property="mWidthDisplay" destination="yzJ-UG-kuw" id="Fhs-jX-PZF"/>
+                        <outlet property="mYUV2RGB" destination="erZ-Qj-mgh" id="0cY-9L-ulg"/>
                         <outlet property="mYUVCheck" destination="sVg-32-nTM" id="9pk-bl-2wh"/>
                         <outlet property="mYUVItems" destination="ORp-SL-vO7" id="hPb-iS-pWA"/>
                     </connections>
