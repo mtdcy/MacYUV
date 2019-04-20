@@ -316,7 +316,7 @@ class ViewController: NSViewController {
         mReader.setRect(x: x, y: y, w: w, h: h)
         
         // force window aspect ratio
-        self.view.window?.contentAspectRatio = NSSize.init(width: Int(width), height: Int(height))
+        self.view.window?.contentAspectRatio = NSSize.init(width: Int(w), height: Int(h))
         
         numFrames = mReader.totalBytes / mReader.frameBytes
         
@@ -503,11 +503,11 @@ class ViewController: NSViewController {
             if (mLeft.intValue > width) {
                 mLeft.intValue = width
             }
-            if (mWidthDisplay.intValue > width) {
-                mWidthDisplay.intValue = width
+            if (mWidthDisplay.intValue > width - mLeft.intValue) {
+                mWidthDisplay.intValue = width - mLeft.intValue
             }
-            if (mHeightDisplay.intValue > height) {
-                mHeightDisplay.intValue = height
+            if (mHeightDisplay.intValue > height - mTop.intValue) {
+                mHeightDisplay.intValue = height - mTop.intValue;
             }
         } else {
             mTop.intValue   = 0
