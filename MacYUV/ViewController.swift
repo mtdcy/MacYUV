@@ -271,8 +271,6 @@ class ViewController: NSViewController {
         
         NSLog("View Will Disappear")
         super.viewWillDisappear()
-        
-        NSApplication.shared.terminate(self)
     }
 
     override var representedObject: Any? {
@@ -476,7 +474,8 @@ class ViewController: NSViewController {
     }
     
     @IBAction func close(sender : Any?) {
-        self.view.window?.performClose(nil)
+        //self.view.window?.performClose(nil)
+        NSApplication.shared.terminate(self)
     }
     
     // move window by background
