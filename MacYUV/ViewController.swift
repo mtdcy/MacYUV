@@ -328,6 +328,9 @@ class ViewController: NSViewController {
         
         let image : MediaFrameRef? = mReader.readFrame()
         guard image != nil else {
+            if (mMediaOut != nil) {
+                MediaOutFlush(mMediaOut)
+            }
             NSLog("read image failed")
             info += "\n >> bad pixel format"
             mInfoText.stringValue = info
@@ -485,7 +488,6 @@ class ViewController: NSViewController {
         NSLog("onFormatChanged")
         // format changed, release MediaOut
         if (mMediaOut != nil) {
-            MediaOutFlush(mMediaOut)
             SharedObjectRelease(mMediaOut)
             mMediaOut = nil
         }
