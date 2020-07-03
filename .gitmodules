@@ -1,0 +1,3 @@
+[submodule "MediaFramework"]
+	path = MediaFramework
+	url = https://github.com/mtdcy/MediaFramework
