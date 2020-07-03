@@ -10,8 +10,8 @@ import Foundation
 
 class YUVReader : NSObject {
     
-    var mContent : BufferObjectRef?
-    var mImageFormat : ImageFormat = ImageFormat.init()
+    var mContent : ContentObjectRef?
+    var mImageFormat = UnsafeMutablePointer<ImageFormat>.allocate(capacity: 1)
     
     override init() {
         
@@ -20,7 +20,7 @@ class YUVReader : NSObject {
     func open(url : String) -> Bool {
         close()
         
-        mContent = BufferObjectCreateWithUrl(url)
+        mContent = ContentObjectCreate(url)
         
         if (mContent == nil) {
             return false
@@ -35,39 +35,40 @@ class YUVReader : NSObject {
     }
     
     func setFormat(pixel : ePixelFormat, width : Int32, height : Int32) -> Void {
-        mImageFormat.format     = pixel
-        mImageFormat.width      = width
-        mImageFormat.height     = height
-        mImageFormat.rect.x     = 0
-        mImageFormat.rect.y     = 0
-        mImageFormat.rect.w     = width
-        mImageFormat.rect.h     = height
+        mImageFormat.pointee.format     = pixel
+        mImageFormat.pointee.width      = width
+        mImageFormat.pointee.height     = height
+        mImageFormat.pointee.rect.x     = 0
+        mImageFormat.pointee.rect.y     = 0
+        mImageFormat.pointee.rect.w     = width
+        mImageFormat.pointee.rect.h     = height
         
         if (mContent != nil) {
-            BufferObjectResetBytes(mContent!)
+            ContentObjectReset(mContent!)
         }
     }
     
     func setRect(x : Int32, y : Int32, w : Int32, h : Int32) -> Void {
-        mImageFormat.rect.x     = x
-        mImageFormat.rect.y     = y
-        mImageFormat.rect.w     = w
-        mImageFormat.rect.h     = h
+        mImageFormat.pointee.rect.x     = x
+        mImageFormat.pointee.rect.y     = y
+        mImageFormat.pointee.rect.w     = w
+        mImageFormat.pointee.rect.h     = h
     }
     
     var frameBytes : Int {
-        let desc : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(mImageFormat.format);
-        return (Int(mImageFormat.width * mImageFormat.height) * desc.pointee.bpp) / 8;
+        let desc : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(mImageFormat.pointee.format);
+        let plane0 = mImageFormat.pointee.width * mImageFormat.pointee.height
+        return (Int(plane0) * desc.pointee.bpp) / 8;
     }
     
-    var totalBytes : Int64 {
+    var totalBytes : Int {
         guard mContent != nil else {
             return 0
         }
-        return BufferObjectGetCapacity(mContent)
+        return ContentObjectLength(mContent)
     }
     
-    var imageFormat : ImageFormat {
+    var imageFormat : UnsafeMutablePointer<ImageFormat> {
         return mImageFormat
     }
     
@@ -77,13 +78,13 @@ class YUVReader : NSObject {
         }
         
         let bytes = frameBytes
-        let data = BufferObjectReadBytes(mContent, bytes);
-        if (BufferObjectGetDataLength(data) < bytes) {
+        let data = ContentObjectRead(mContent, bytes)
+        if (BufferObjectGetLength(data) < bytes) {
             NSLog("no enough data")
             return nil
         }
         
-        let image = MediaFrameCreateWithImageBuffer(&mImageFormat, data)
+        let image = ImageFrameGenerate(mImageFormat, data)
         SharedObjectRelease(data)
         return image
     }
@@ -94,22 +95,19 @@ class YUVReader : NSObject {
         }
         
         let bytes = frameBytes
-        BufferObjectResetBytes(mContent)
-        BufferObjectSkipBytes(mContent, Int64((index - 1) * bytes))
-        
-        let data = BufferObjectReadBytes(mContent, bytes)
+        let data = ContentObjectReadPosition(mContent, bytes, Int64((index - 1) * bytes))
         guard data != nil else {
             NSLog("no more data")
             return nil
         }
         
-        if (BufferObjectGetDataLength(data) < bytes) {
+        if (BufferObjectGetLength(data) < bytes) {
             NSLog("no enough data or eos")
             SharedObjectRelease(data)
             return nil
         }
         
-        let image = MediaFrameCreateWithImageBuffer(&mImageFormat, data)
+        let image = ImageFrameGenerate(mImageFormat, data)
         SharedObjectRelease(data)
         return image
     }
