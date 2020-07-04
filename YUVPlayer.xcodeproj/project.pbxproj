@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		57E17AC72268D13000E0B0C8 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E17AC62268D13000E0B0C8 /* BaseView.swift */; };
-		57E17AC92268D49300E0B0C8 /* ImageFrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E17AC82268D49300E0B0C8 /* ImageFrameView.swift */; };
+		57E17AC92268D49300E0B0C8 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E17AC82268D49300E0B0C8 /* ImageView.swift */; };
 		57E484982267349B000A2AF7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E484972267349B000A2AF7 /* AppDelegate.swift */; };
 		57E4849A2267349B000A2AF7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E484992267349B000A2AF7 /* ViewController.swift */; };
 		57E4849C2267349C000A2AF7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57E4849B2267349C000A2AF7 /* Assets.xcassets */; };
@@ -36,7 +36,7 @@
 
 /* Begin PBXFileReference section */
 		57E17AC62268D13000E0B0C8 /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
-		57E17AC82268D49300E0B0C8 /* ImageFrameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageFrameView.swift; sourceTree = "<group>"; };
+		57E17AC82268D49300E0B0C8 /* ImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		57E484942267349B000A2AF7 /* YUVPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YUVPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57E484972267349B000A2AF7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57E484992267349B000A2AF7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -82,7 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				57E484972267349B000A2AF7 /* AppDelegate.swift */,
-				57E17AC82268D49300E0B0C8 /* ImageFrameView.swift */,
+				57E17AC82268D49300E0B0C8 /* ImageView.swift */,
 				57E17AC62268D13000E0B0C8 /* BaseView.swift */,
 				57E484992267349B000A2AF7 /* ViewController.swift */,
 				57E4849B2267349C000A2AF7 /* Assets.xcassets */,
@@ -175,7 +175,7 @@
 			files = (
 				57E4849A2267349B000A2AF7 /* ViewController.swift in Sources */,
 				57E484982267349B000A2AF7 /* AppDelegate.swift in Sources */,
-				57E17AC92268D49300E0B0C8 /* ImageFrameView.swift in Sources */,
+				57E17AC92268D49300E0B0C8 /* ImageView.swift in Sources */,
 				57E17AC72268D13000E0B0C8 /* BaseView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

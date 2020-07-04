@@ -45,12 +45,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard url != nil else {
             return
         }
-        
-        // draw input immediately after view open will cause error
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: {
-            () -> Void in
-            viewController.openFile(url: url!)
-        })
+        viewController.openFile(url: url!)
+            
+        // draw input immediately after view open will cause error for OpenGL
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: {
+//            () -> Void in
+//            viewController.openFile(url: url!)
+//        })
     }
     
     @IBAction func open(sender : Any?) {

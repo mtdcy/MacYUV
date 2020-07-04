@@ -9,14 +9,14 @@
 import Cocoa
 import OpenGL
 
-class ImageFrameView: NSOpenGLView {
+class ImageView: NSImageView {
     
     @IBOutlet weak var viewController : ViewController!
     
     let NSFilenamesPboardType = NSPasteboard.PasteboardType("NSFilenamesPboardType")
 
-    override func draw(_ dirtyRect: NSRect) {
-        super.draw(dirtyRect)
+    override func draw(withExpansionFrame contentFrame: NSRect, in view: NSView) {
+        super.draw(withExpansionFrame: contentFrame, in: view)
     }
     
     required init?(coder: NSCoder) {

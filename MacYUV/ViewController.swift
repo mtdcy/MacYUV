@@ -11,7 +11,7 @@ import Cocoa
 // https://www.darktable.org/2017/01/rawsamples-ch-replacement/
 class ViewController: NSViewController {
     
-    @IBOutlet weak var imageView: ImageFrameView!
+    @IBOutlet weak var imageView: ImageView!
     
     @IBOutlet weak var widthText: NSTextField!
     @IBOutlet weak var heightText: NSTextField!
@@ -238,8 +238,8 @@ class ViewController: NSViewController {
         self.view.layer?.backgroundColor = NSColor.black.cgColor
                 
         // setup OpenGL Context
-        NSLog("OpenGLContext: %@", imageView.openGLContext!)
-        imageView.openGLContext?.makeCurrentContext()
+        //NSLog("OpenGLContext: %@", imageView.openGLContext!)
+        //imageView.openGLContext?.makeCurrentContext()
         
         // not working, but still put this line
         self.view.window?.isMovableByWindowBackground = true
@@ -304,8 +304,8 @@ class ViewController: NSViewController {
         MessageObjectPutInt32(formats, kKeyHeight,  format.height)
         
         let options : MessageObjectRef = MessageObjectCreate()
-        let openGLContext = imageView.openGLContext?.cglContextObj
-        MessageObjectPutPointer(options, kKeyOpenGLContext, openGLContext)
+        //let openGLContext = imageView.openGLContext?.cglContextObj
+        //MessageObjectPutPointer(options, kKeyOpenGLContext, openGLContext)
         
         let device = MediaDeviceCreate(formats, options)
         SharedObjectRelease(formats)
@@ -376,21 +376,13 @@ class ViewController: NSViewController {
             status += " >> " + String.init(cString: descriptor!.pointee.name)
         }
         
+        outputFormat.format = kPixelFormatRGBA
         if (outputFormat.format != origFormat.pointee.format) {
             let descriptor = GetPixelFormatDescriptor(outputFormat.format)
             NSLog("output format: %@", String.init(cString: descriptor!.pointee.name))
             status += " >> " + String.init(cString: descriptor!.pointee.name)
         }
         
-        var device = openOutputDevice(format: outputFormat)
-        
-        // yuv output is not supported ?
-        if (device == nil && isYUV) {
-            // force output RGB32
-            NSLog("output device not support current format, force rgb32")
-            outputFormat.format = kPixelFormatRGB32
-            device = openOutputDevice(format: outputFormat)
-        }
         
         var output = SharedObjectRetain(imageFrame);
         if (inputFormat.format != outputFormat.format) {
@@ -410,16 +402,24 @@ class ViewController: NSViewController {
                 return
             }
         }
-        
-        guard device != nil else {
-            infoText.stringValue += "create media device failed."
+                
+        var data = MediaFrameGetPlaneData(output, 0)
+        let bitmap = NSBitmapImageRep.init(bitmapDataPlanes: &data, pixelsWide: Int(outputFormat.width), pixelsHigh: Int(outputFormat.height), bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: NSColorSpaceName.deviceRGB, bytesPerRow: Int(outputFormat.width * 4), bitsPerPixel: 32)
+        guard bitmap != nil else {
+            imageView.image = nil
             return
         }
         
-        MediaDevicePush(device, output)
-        SharedObjectRelease(output)
-        SharedObjectRelease(device)
+        let cgImage = bitmap!.cgImage
+        guard cgImage != nil else {
+            imageView.image = nil
+            return
+        }
         
+        let image = NSImage.init(cgImage: cgImage!, size: NSMakeSize(CGFloat(outputFormat.width), CGFloat(outputFormat.height)))
+        imageView.image = image
+        
+        SharedObjectRelease(output)
         NSLog("draw ==> %@", status)
     }
     
@@ -633,7 +633,7 @@ class ViewController: NSViewController {
         if (event.eventNumber < eventNumber) {
             return
         }
-        NSLog("filterMouseUp %@", event)
+        //NSLog("filterMouseUp %@", event)
         switch event.clickCount {
         case 1:
             NSLog("show or hide UI")
@@ -649,7 +649,7 @@ class ViewController: NSViewController {
     
     override func mouseUp(with event: NSEvent) {
         eventNumber = event.eventNumber
-        NSLog("mouseUp %@", event)
+        //NSLog("mouseUp %@", event)
         // show/hide property box
         guard propertyBox.hitTest(event.locationInWindow) == nil else {
             NSLog("mouse hit property view")

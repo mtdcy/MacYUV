@@ -198,13 +198,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="800" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <openGLView wantsLayer="YES" fixedFrame="YES" samplingRate="4" useAuxiliaryDepthBufferStencil="NO" allowOffline="YES" wantsBestResolutionOpenGLSurface="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SO0-GO-UMg" customClass="ImageFrameView" customModule="YUVPlayer" customModuleProvider="target">
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DVq-3N-Nj6" customClass="ImageView" customModule="YUVPlayer" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="800" height="480"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="VE4-5S-p9y"/>
                                 <connections>
-                                    <outlet property="viewController" destination="5gI-5U-AMq" id="IUK-cO-ONK"/>
+                                    <outlet property="viewController" destination="5gI-5U-AMq" id="N0q-a2-RW0"/>
                                 </connections>
-                            </openGLView>
+                            </imageView>
                             <box fixedFrame="YES" boxType="custom" borderType="bezel" borderWidth="2" cornerRadius="8" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="yyU-4c-mO4">
                                 <rect key="frame" x="259" y="129" width="280" height="220"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -602,7 +603,7 @@
                         <outlet property="displayWidthText" destination="yzJ-UG-kuw" id="Fhs-jX-PZF"/>
                         <outlet property="frameSlider" destination="eUM-5X-23T" id="65r-E3-LmR"/>
                         <outlet property="heightText" destination="Uli-BL-VSg" id="FoM-uP-na1"/>
-                        <outlet property="imageView" destination="SO0-GO-UMg" id="JiQ-NX-Xar"/>
+                        <outlet property="imageView" destination="DVq-3N-Nj6" id="nme-XY-3hv"/>
                         <outlet property="infoText" destination="U5s-LZ-h4g" id="htd-00-SyO"/>
                         <outlet property="leftText" destination="mBW-0h-Zte" id="0mr-BR-b2o"/>
                         <outlet property="propertyBox" destination="yyU-4c-mO4" id="HgJ-xu-3zV"/>
@@ -622,4 +623,7 @@
             <point key="canvasLocation" x="145" y="779"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="NSApplicationIcon" width="32" height="32"/>
+    </resources>
 </document>
