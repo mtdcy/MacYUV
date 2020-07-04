@@ -21,19 +21,19 @@ class ViewController: NSViewController {
     @IBOutlet weak var displayHeightText: NSTextField!
     
     // default image format value
-    var mImageFormat : ImageFormat = ImageFormat.init(format: kPixelFormat420YpCbCrPlanar, width: 1920, height: 1080, rect: ImageRect.init(x: 0, y: 0, w: 1920, h: 1080))
+    var imageFormat : ImageFormat = ImageFormat.init(format: kPixelFormat420YpCbCrPlanar, width: 1920, height: 1080, rect: ImageRect.init(x: 0, y: 0, w: 1920, h: 1080))
     
-    @IBOutlet weak var mRectCheck: NSButton!
+    @IBOutlet weak var displayRectButton: NSButton!
     var isRectEnabled : Bool {
         get {
-            return mRectCheck.state == NSControl.StateValue.on
+            return displayRectButton.state == NSControl.StateValue.on
         }
         set {
-            mRectCheck.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
-            topText.isEnabled              = newValue
-            leftText.isEnabled             = newValue
-            displayWidthText.isEnabled     = newValue
-            displayHeightText.isEnabled    = newValue
+            displayRectButton.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
+            topText.isEnabled           = newValue
+            leftText.isEnabled          = newValue
+            displayWidthText.isEnabled  = newValue
+            displayHeightText.isEnabled = newValue
         }
     }
     
@@ -150,13 +150,13 @@ class ViewController: NSViewController {
     }
     
     // both yuv & rgb
-    @IBOutlet weak var mWordOrder : NSButton!
+    @IBOutlet weak var wordOrderButton : NSButton!
     var isWordOrder : Bool {
         get {
-            return mWordOrder.state == NSControl.StateValue.on
+            return wordOrderButton.state == NSControl.StateValue.on
         }
         set {
-            mWordOrder.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
+            wordOrderButton.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
         }
     }
     
@@ -233,9 +233,16 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // set background color
+        self.view.wantsLayer = true;
+        self.view.layer?.backgroundColor = NSColor.black.cgColor
+                
         // setup OpenGL Context
         NSLog("OpenGLContext: %@", imageView.openGLContext!)
-        imageView.prepareOpenGL()
+        imageView.openGLContext?.makeCurrentContext()
+        
+        // not working, but still put this line
+        self.view.window?.isMovableByWindowBackground = true
         
         widthText.formatter = formatter
         heightText.formatter = formatter
@@ -245,12 +252,12 @@ class ViewController: NSViewController {
         displayHeightText.formatter = formatter
         
         // set default value
-        widthText.intValue         = mImageFormat.width
-        heightText.intValue        = mImageFormat.height
-        leftText.intValue          = mImageFormat.rect.x
-        topText.intValue           = mImageFormat.rect.y
-        displayWidthText.intValue  = mImageFormat.rect.w
-        displayHeightText.intValue = mImageFormat.rect.h
+        widthText.intValue         = imageFormat.width
+        heightText.intValue        = imageFormat.height
+        leftText.intValue          = imageFormat.rect.x
+        topText.intValue           = imageFormat.rect.y
+        displayWidthText.intValue  = imageFormat.rect.w
+        displayHeightText.intValue = imageFormat.rect.h
         
         yuvItems.removeAllItems()
         for yuv in YUVs {
@@ -416,26 +423,15 @@ class ViewController: NSViewController {
         NSLog("draw ==> %@", status)
     }
     
-    func openFile() {
-        NSLog("Open File...")
-        closeFile()
-        
-        let urls = NSDocumentController.shared.urlsFromRunningOpenPanel()
-        guard urls != nil else {
-            NSLog("Open File Canceled")
-            return
-        }
-        let url = urls![0].path
-        NSLog("url = %@", url)
-        openFile(url: url)
-    }
-    
     var imageBuffer : BufferObjectRef?
     var imageFrame : MediaFrameRef?
     var imageLength : Int32 = 0
     public func openFile(url : String) -> Void {
         // note recent documents
         NSDocumentController.shared.noteNewRecentDocumentURL(URL(fileURLWithPath: url))
+        self.view.window?.title = URL.init(string: url)!.lastPathComponent
+        
+        closeFile()
         
         isUIHidden = false
         
@@ -473,13 +469,9 @@ class ViewController: NSViewController {
         infoText.stringValue = ""
     }
     
-    @IBAction func open(sender : Any?) {
-        openFile()
-    }
-    
     @IBAction func close(sender : Any?) {
-        //self.view.window?.performClose(nil)
-        NSApplication.shared.terminate(self)
+        self.view.window?.performClose(nil)
+        //NSApplication.shared.terminate(self)
     }
     
     // move window by background
@@ -490,23 +482,23 @@ class ViewController: NSViewController {
     @IBAction func onFormatChanged(_ sender: Any?) {
         NSLog("onFormatChanged")
         
-        mImageFormat.format     = yuvFormat
+        imageFormat.format     = yuvFormat
         if (isRGB) {
-            mImageFormat.format = rgbFormat
+            imageFormat.format = rgbFormat
         }
-        mImageFormat.width      = widthText.intValue
-        mImageFormat.height     = heightText.intValue
-        validateRect(width: mImageFormat.width, height: mImageFormat.height)
+        imageFormat.width      = widthText.intValue
+        imageFormat.height     = heightText.intValue
+        validateRect(width: imageFormat.width, height: imageFormat.height)
         if (isRectEnabled) {
-            mImageFormat.rect.x = leftText.intValue
-            mImageFormat.rect.y = topText.intValue
-            mImageFormat.rect.w = displayWidthText.intValue
-            mImageFormat.rect.h = displayHeightText.intValue
+            imageFormat.rect.x = leftText.intValue
+            imageFormat.rect.y = topText.intValue
+            imageFormat.rect.w = displayWidthText.intValue
+            imageFormat.rect.h = displayHeightText.intValue
         } else {
-            mImageFormat.rect.x = 0
-            mImageFormat.rect.y = 0
-            mImageFormat.rect.w = mImageFormat.width
-            mImageFormat.rect.h = mImageFormat.height
+            imageFormat.rect.x = 0
+            imageFormat.rect.y = 0
+            imageFormat.rect.w = imageFormat.width
+            imageFormat.rect.h = imageFormat.height
         }
         
         if (imageFrame != nil) {
@@ -520,8 +512,8 @@ class ViewController: NSViewController {
         }
     
         BufferObjectResetBytes(imageBuffer)
-        let descriptor = GetPixelFormatDescriptor(mImageFormat.format)
-        imageLength = (mImageFormat.width * mImageFormat.height * Int32(descriptor!.pointee.bpp)) / 8
+        let descriptor = GetPixelFormatDescriptor(imageFormat.format)
+        imageLength = (imageFormat.width * imageFormat.height * Int32(descriptor!.pointee.bpp)) / 8
         numFrames = BufferObjectGetDataLength(imageBuffer) / Int64(imageLength)
         
         let data = BufferObjectReadBytes(imageBuffer, Int(imageLength))
@@ -530,7 +522,7 @@ class ViewController: NSViewController {
             return
         }
         
-        imageFrame = MediaFrameCreateWithImageBuffer(&mImageFormat, data)
+        imageFrame = MediaFrameCreateWithImageBuffer(&imageFormat, data)
         drawImage()
     }
     
@@ -559,7 +551,7 @@ class ViewController: NSViewController {
     
     @IBAction func onRectCheck(_ sender: Any) {
         print("onRectCheck <- ", sender)
-        isRectEnabled = mRectCheck.state == NSControl.StateValue.on
+        isRectEnabled = displayRectButton.state == NSControl.StateValue.on
         onFormatChanged(nil)
     }
     
@@ -582,6 +574,7 @@ class ViewController: NSViewController {
             return propertyBox.isHidden
         }
         set {
+            self.view.window?.titleVisibility = newValue ? NSWindow.TitleVisibility.hidden : NSWindow.TitleVisibility.visible
             propertyBox.isHidden = newValue
             infoText.isHidden = newValue
             
@@ -630,7 +623,7 @@ class ViewController: NSViewController {
             return
         }
         
-        imageFrame = MediaFrameCreateWithImageBuffer(&mImageFormat, data)
+        imageFrame = MediaFrameCreateWithImageBuffer(&imageFormat, data)
         drawImage()
     }
     
