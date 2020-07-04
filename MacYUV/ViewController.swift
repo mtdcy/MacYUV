@@ -318,9 +318,16 @@ class ViewController: NSViewController {
         if (imageFrame == nil) { return }
         infoText.stringValue = ""
         
-        let imageFormat = MediaFrameGetImageFormat(imageFrame)
-        // force window aspect ratio
-        self.view.window?.contentAspectRatio = NSSize.init(width: Int(imageFormat!.pointee.width), height: Int(imageFormat!.pointee.height))
+        let imageFormat : UnsafeMutablePointer<ImageFormat> = MediaFrameGetImageFormat(imageFrame)
+        let frame = self.view.window?.frame
+        if frame != nil {
+            let size = NSSize.init(width: frame!.width, height: frame!.width * CGFloat(imageFormat.pointee.height) / CGFloat(imageFormat.pointee.width))
+            // keep width, change height
+            let rect = NSRect.init(x: frame!.minX, y: frame!.minY, width: size.width, height: size.height)
+            self.view.window?.setFrame(rect, display: true)
+            // set aspectRatio will NOT take effect immediately, so setFrame first
+            self.view.window?.aspectRatio = size
+        }
         
         var status : String = "pixel: "
         
@@ -404,21 +411,25 @@ class ViewController: NSViewController {
         }
                 
         var data = MediaFrameGetPlaneData(output, 0)
+        let size = MediaFrameGetPlaneSize(output, 0)
         let bitmap = NSBitmapImageRep.init(bitmapDataPlanes: &data, pixelsWide: Int(outputFormat.width), pixelsHigh: Int(outputFormat.height), bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: NSColorSpaceName.deviceRGB, bytesPerRow: Int(outputFormat.width * 4), bitsPerPixel: 32)
         guard bitmap != nil else {
             imageView.image = nil
             return
         }
-        
+
         let cgImage = bitmap!.cgImage
         guard cgImage != nil else {
             imageView.image = nil
             return
         }
-        
+
         let image = NSImage.init(cgImage: cgImage!, size: NSMakeSize(CGFloat(outputFormat.width), CGFloat(outputFormat.height)))
         imageView.image = image
         
+        // error: unrecognized selector sent to instance. WHY?
+        //imageView.provideImageData(UnsafeMutableRawPointer.init(data!), bytesPerRow: Int(outputFormat.width * 4), origin: Int(outputFormat.rect.x), Int(outputFormat.rect.y), size: size, Int(outputFormat.height), userInfo: self)
+                
         SharedObjectRelease(output)
         NSLog("draw ==> %@", status)
     }

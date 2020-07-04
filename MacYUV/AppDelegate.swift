@@ -28,6 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     public func openFile(url: String?) -> Void {
+        NSLog(">> windows size %d", NSApplication.shared.windows.count)
         let lastWindow = NSApplication.shared.windows.last;
         
         let storyBoard = NSStoryboard.init(name: NSStoryboard.Name("Main"), bundle: Bundle.main)
@@ -38,9 +39,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if lastWindow != nil {
             NSLog("set window position")
             let frame = lastWindow!.frame
+            // setFrameOrigin/setFrameTopLeftPoint not working
             windowController.window?.setFrame(NSRect.init(x: frame.minX + 32, y: frame.minY - 32, width: frame.width, height: frame.height), display: false)
         }
         windowController.showWindow(self)
+        NSLog("<< windows size %d", NSApplication.shared.windows.count)
         
         guard url != nil else {
             return
