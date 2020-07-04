@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		57E17AC72268D13000E0B0C8 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E17AC62268D13000E0B0C8 /* BaseView.swift */; };
-		57E17AC92268D49300E0B0C8 /* OpenGLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E17AC82268D49300E0B0C8 /* OpenGLView.swift */; };
+		57E17AC92268D49300E0B0C8 /* ImageFrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E17AC82268D49300E0B0C8 /* ImageFrameView.swift */; };
 		57E484982267349B000A2AF7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E484972267349B000A2AF7 /* AppDelegate.swift */; };
 		57E4849A2267349B000A2AF7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E484992267349B000A2AF7 /* ViewController.swift */; };
 		57E4849C2267349C000A2AF7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57E4849B2267349C000A2AF7 /* Assets.xcassets */; };
@@ -17,7 +17,6 @@
 		57E484AB226735CB000A2AF7 /* MediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57E484A9226735CB000A2AF7 /* MediaFramework.framework */; };
 		57E484AD226735E5000A2AF7 /* ABE.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 57E484A8226735CB000A2AF7 /* ABE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57E484AE226735E5000A2AF7 /* MediaFramework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 57E484A9226735CB000A2AF7 /* MediaFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		57E484B022673650000A2AF7 /* YUVReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E484AF22673650000A2AF7 /* YUVReader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,7 +36,7 @@
 
 /* Begin PBXFileReference section */
 		57E17AC62268D13000E0B0C8 /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
-		57E17AC82268D49300E0B0C8 /* OpenGLView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenGLView.swift; sourceTree = "<group>"; };
+		57E17AC82268D49300E0B0C8 /* ImageFrameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageFrameView.swift; sourceTree = "<group>"; };
 		57E484942267349B000A2AF7 /* YUVPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YUVPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57E484972267349B000A2AF7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57E484992267349B000A2AF7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,7 +46,6 @@
 		57E484A12267349C000A2AF7 /* MacYUV.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MacYUV.entitlements; sourceTree = "<group>"; };
 		57E484A8226735CB000A2AF7 /* ABE.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ABE.framework; path = ../../Library/Frameworks/ABE.framework; sourceTree = "<group>"; };
 		57E484A9226735CB000A2AF7 /* MediaFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaFramework.framework; path = ../../Library/Frameworks/MediaFramework.framework; sourceTree = "<group>"; };
-		57E484AF22673650000A2AF7 /* YUVReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YUVReader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,8 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				57E484972267349B000A2AF7 /* AppDelegate.swift */,
-				57E484AF22673650000A2AF7 /* YUVReader.swift */,
-				57E17AC82268D49300E0B0C8 /* OpenGLView.swift */,
+				57E17AC82268D49300E0B0C8 /* ImageFrameView.swift */,
 				57E17AC62268D13000E0B0C8 /* BaseView.swift */,
 				57E484992267349B000A2AF7 /* ViewController.swift */,
 				57E4849B2267349C000A2AF7 /* Assets.xcassets */,
@@ -176,10 +173,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57E484B022673650000A2AF7 /* YUVReader.swift in Sources */,
 				57E4849A2267349B000A2AF7 /* ViewController.swift in Sources */,
 				57E484982267349B000A2AF7 /* AppDelegate.swift in Sources */,
-				57E17AC92268D49300E0B0C8 /* OpenGLView.swift in Sources */,
+				57E17AC92268D49300E0B0C8 /* ImageFrameView.swift in Sources */,
 				57E17AC72268D13000E0B0C8 /* BaseView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="jGA-0Y-lOj">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="jGA-0Y-lOj">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -198,14 +198,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="800" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <openGLView wantsLayer="YES" fixedFrame="YES" samplingRate="4" useAuxiliaryDepthBufferStencil="NO" allowOffline="YES" wantsBestResolutionOpenGLSurface="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SO0-GO-UMg" customClass="OpenGLView" customModule="YUVPlayer" customModuleProvider="target">
+                            <openGLView wantsLayer="YES" fixedFrame="YES" samplingRate="4" useAuxiliaryDepthBufferStencil="NO" allowOffline="YES" wantsBestResolutionOpenGLSurface="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SO0-GO-UMg" customClass="ImageFrameView" customModule="YUVPlayer" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="800" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <connections>
+                                    <outlet property="viewController" destination="5gI-5U-AMq" id="IUK-cO-ONK"/>
+                                </connections>
                             </openGLView>
                             <box fixedFrame="YES" boxType="custom" borderType="bezel" borderWidth="2" cornerRadius="8" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="yyU-4c-mO4">
                                 <rect key="frame" x="259" y="129" width="280" height="220"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <view key="contentView" id="wrd-BN-h06">
+                                <view key="contentView" ambiguous="YES" id="wrd-BN-h06">
                                     <rect key="frame" x="10" y="10" width="260" height="200"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -601,24 +604,24 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="mFrameSlider" destination="eUM-5X-23T" id="65r-E3-LmR"/>
-                        <outlet property="mHeight" destination="Uli-BL-VSg" id="FoM-uP-na1"/>
-                        <outlet property="mHeightDisplay" destination="t9Z-2U-aJ7" id="uBM-Tn-Rpa"/>
-                        <outlet property="mInfoText" destination="U5s-LZ-h4g" id="htd-00-SyO"/>
-                        <outlet property="mLeft" destination="mBW-0h-Zte" id="0mr-BR-b2o"/>
-                        <outlet property="mOpenGLView" destination="SO0-GO-UMg" id="JiQ-NX-Xar"/>
-                        <outlet property="mPropertyView" destination="yyU-4c-mO4" id="HgJ-xu-3zV"/>
-                        <outlet property="mRGBCheck" destination="TWP-ab-UQP" id="zSb-gS-slh"/>
-                        <outlet property="mRGBItems" destination="WNP-SU-LYp" id="si1-OE-4lN"/>
+                        <outlet property="displayHeightText" destination="t9Z-2U-aJ7" id="uBM-Tn-Rpa"/>
+                        <outlet property="displayWidthText" destination="yzJ-UG-kuw" id="Fhs-jX-PZF"/>
+                        <outlet property="frameSlider" destination="eUM-5X-23T" id="65r-E3-LmR"/>
+                        <outlet property="heightText" destination="Uli-BL-VSg" id="FoM-uP-na1"/>
+                        <outlet property="imageView" destination="SO0-GO-UMg" id="JiQ-NX-Xar"/>
+                        <outlet property="infoText" destination="U5s-LZ-h4g" id="htd-00-SyO"/>
+                        <outlet property="leftText" destination="mBW-0h-Zte" id="0mr-BR-b2o"/>
                         <outlet property="mRectCheck" destination="aDM-eW-rLy" id="zrn-S7-ZT3"/>
-                        <outlet property="mReverseBytes" destination="4tE-aG-Vly" id="eTB-e5-gJ4"/>
-                        <outlet property="mTop" destination="fN6-vB-NKf" id="mJy-AQ-CIq"/>
-                        <outlet property="mUVSwap" destination="c3r-hc-gey" id="SA3-LS-iHm"/>
-                        <outlet property="mWidth" destination="5aA-mj-O9x" id="IYQ-6x-qYj"/>
-                        <outlet property="mWidthDisplay" destination="yzJ-UG-kuw" id="Fhs-jX-PZF"/>
-                        <outlet property="mYUV2RGB" destination="erZ-Qj-mgh" id="0cY-9L-ulg"/>
-                        <outlet property="mYUVCheck" destination="sVg-32-nTM" id="9pk-bl-2wh"/>
-                        <outlet property="mYUVItems" destination="ORp-SL-vO7" id="hPb-iS-pWA"/>
+                        <outlet property="mWordOrder" destination="4tE-aG-Vly" id="eTB-e5-gJ4"/>
+                        <outlet property="propertyBox" destination="yyU-4c-mO4" id="HgJ-xu-3zV"/>
+                        <outlet property="rgbButton" destination="TWP-ab-UQP" id="zSb-gS-slh"/>
+                        <outlet property="rgbItems" destination="WNP-SU-LYp" id="si1-OE-4lN"/>
+                        <outlet property="topText" destination="fN6-vB-NKf" id="mJy-AQ-CIq"/>
+                        <outlet property="uvButton" destination="c3r-hc-gey" id="SA3-LS-iHm"/>
+                        <outlet property="widthText" destination="5aA-mj-O9x" id="IYQ-6x-qYj"/>
+                        <outlet property="yuv2rgbButton" destination="erZ-Qj-mgh" id="0cY-9L-ulg"/>
+                        <outlet property="yuvButton" destination="sVg-32-nTM" id="9pk-bl-2wh"/>
+                        <outlet property="yuvItems" destination="ORp-SL-vO7" id="hPb-iS-pWA"/>
                     </connections>
                 </viewController>
                 <customObject id="2Tp-Fl-jBw" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
