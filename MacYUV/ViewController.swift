@@ -509,7 +509,6 @@ class ViewController: NSViewController {
         set {
             self.view.window?.titleVisibility = newValue ? NSWindow.TitleVisibility.hidden : NSWindow.TitleVisibility.visible
             propertyBox.isHidden = newValue
-            infoText.isHidden = newValue
             
             if (numFrames <= 1) {
                 frameSlider.isHidden = true
