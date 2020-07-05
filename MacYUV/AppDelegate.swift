@@ -10,6 +10,8 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
+    
+    var lastWindow : NSWindow?
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         NSLog("applicationDidFinishLaunching")
@@ -28,9 +30,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     public func openFile(url: String?) -> Void {
-        NSLog(">> windows size %d", NSApplication.shared.windows.count)
-        let lastWindow = NSApplication.shared.windows.last;
-        
         let storyBoard = NSStoryboard.init(name: NSStoryboard.Name("Main"), bundle: Bundle.main)
         var windowController = storyBoard.instantiateController(withIdentifier:  NSStoryboard.SceneIdentifier("ImageWindowController")) as! NSWindowController
         let viewController = storyBoard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier("ImageViewController")) as! ViewController
@@ -43,7 +42,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             windowController.window?.setFrame(NSRect.init(x: frame.minX + 32, y: frame.minY - 32, width: frame.width, height: frame.height), display: false)
         }
         windowController.showWindow(self)
-        NSLog("<< windows size %d", NSApplication.shared.windows.count)
+        
+        lastWindow = windowController.window
         
         guard url != nil else {
             return
