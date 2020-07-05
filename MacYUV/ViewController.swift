@@ -12,18 +12,36 @@ import Cocoa
 class ViewController: NSViewController {
     
     @IBOutlet weak var imageView: ImageView!
-    
     @IBOutlet weak var widthText: NSTextField!
     @IBOutlet weak var heightText: NSTextField!
     @IBOutlet weak var leftText: NSTextField!
     @IBOutlet weak var topText: NSTextField!
     @IBOutlet weak var displayWidthText: NSTextField!
     @IBOutlet weak var displayHeightText: NSTextField!
-    
-    // default image format value
-    var imageFormat : ImageFormat = ImageFormat.init(format: kPixelFormat420YpCbCrPlanar, width: 1920, height: 1080, rect: ImageRect.init(x: 0, y: 0, w: 1920, h: 1080))
-    
     @IBOutlet weak var displayRectButton: NSButton!
+    @IBOutlet weak var propertyBox: NSBox!
+    @IBOutlet weak var yuvButton: NSButton!
+    @IBOutlet weak var yuvItems: NSPopUpButton!
+    @IBOutlet weak var uvButton: NSButton!
+    @IBOutlet weak var yuv2rgbButton: NSButton!
+    @IBOutlet weak var rgbButton: NSButton!
+    @IBOutlet weak var rgbItems: NSPopUpButton!
+    @IBOutlet weak var wordOrderButton : NSButton!
+    @IBOutlet weak var infoText: NSTextField!
+    @IBOutlet weak var frameSlider: NSSlider!
+    
+    var imageBuffer : BufferObjectRef?
+    var imageFrame : MediaFrameRef?
+    // default image format value
+    var imageFormat : ImageFormat = ImageFormat.init(format: kPixelFormat420YpCbCrPlanar,
+                                                     width: 1920,
+                                                     height: 1080,
+                                                     rect: ImageRect.init(x: 0, y: 0, w: 1920, h: 1080))
+    var imageLength : Int32 {
+        let descriptor : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(imageFormat.format)
+        return (imageFormat.width * imageFormat.height * Int32(descriptor.pointee.bpp)) / 8
+    }
+    
     var isRectEnabled : Bool {
         get {
             return displayRectButton.state == NSControl.StateValue.on
@@ -37,14 +55,6 @@ class ViewController: NSViewController {
         }
     }
     
-    @IBOutlet weak var propertyBox: NSBox!
-    
-    // yuv formats
-    @IBOutlet weak var yuvButton: NSButton!
-    @IBOutlet weak var yuvItems: NSPopUpButton!
-    @IBOutlet weak var uvButton: NSButton!
-    @IBOutlet weak var yuv2rgbButton: NSButton!
-    
     let YUVs : [ePixelFormat] = [
         // common pixels
         kPixelFormat420YpCbCrPlanar,
@@ -55,6 +65,9 @@ class ViewController: NSViewController {
         kPixelFormat420YpCbCrSemiPlanar,
         kPixelFormat420YpCrCbSemiPlanar,
         kPixelFormat422YpCbCr,
+        kPixelFormat422YpCrCb,
+        kPixelFormat422YpCbCrWO,
+        kPixelFormat422YpCrCbWO,
         kPixelFormat444YpCbCr,
     ]
     
@@ -106,10 +119,6 @@ class ViewController: NSViewController {
         }
     }
     
-    // rgb formats
-    @IBOutlet weak var rgbButton: NSButton!
-    @IBOutlet weak var rgbItems: NSPopUpButton!
-    
     let RGBs = [
         kPixelFormatRGB565,
         kPixelFormatBGR565,
@@ -149,8 +158,6 @@ class ViewController: NSViewController {
         }
     }
     
-    // both yuv & rgb
-    @IBOutlet weak var wordOrderButton : NSButton!
     var isWordOrder : Bool {
         get {
             return wordOrderButton.state == NSControl.StateValue.on
@@ -160,7 +167,19 @@ class ViewController: NSViewController {
         }
     }
     
-    @IBOutlet weak var infoText: NSTextField!
+    var statusText : String {
+        get {
+            return infoText.stringValue
+        }
+        set {
+            if newValue.isEmpty {
+                infoText.isHidden = true
+            } else {
+                infoText.isHidden = false
+                infoText.stringValue = newValue
+            }
+        }
+    }
     
     let Resolutions = [
         ("Custom",  1280,   720),       // default value for custom
@@ -264,6 +283,7 @@ class ViewController: NSViewController {
             let desc = GetPixelFormatDescriptor(yuv)
             yuvItems.addItem(withTitle: String.init(cString: desc!.pointee.name))
         }
+        
         rgbItems.removeAllItems()
         for rgb in RGBs {
             let desc = GetPixelFormatDescriptor(rgb)
@@ -289,154 +309,55 @@ class ViewController: NSViewController {
         }
     }
     
-    func pixelIsPlanar(pixel : ePixelFormat) -> Bool {
-        let desc : UnsafePointer<PixelDescriptor>? = GetPixelFormatDescriptor(pixel)
-        guard desc != nil else {
-            return false
-        }
-        return desc!.pointee.nb_planes > 1
-    }
-    
-    func openOutputDevice(format: ImageFormat) -> MediaDeviceRef? {
-        let formats : MessageObjectRef = MessageObjectCreate()
-        MessageObjectPutInt32(formats, kKeyFormat,  Int32(format.format))
-        MessageObjectPutInt32(formats, kKeyWidth,   format.width)
-        MessageObjectPutInt32(formats, kKeyHeight,  format.height)
-        
-        let options : MessageObjectRef = MessageObjectCreate()
-        //let openGLContext = imageView.openGLContext?.cglContextObj
-        //MessageObjectPutPointer(options, kKeyOpenGLContext, openGLContext)
-        
-        let device = MediaDeviceCreate(formats, options)
-        SharedObjectRelease(formats)
-        SharedObjectRelease(options)
-        
-        return device
-    }
-    
     func drawImage() {
-        if (imageFrame == nil) { return }
-        infoText.stringValue = ""
+        if imageFrame == nil { return }
         
+        // force window aspect ratio
         let imageFormat : UnsafeMutablePointer<ImageFormat> = MediaFrameGetImageFormat(imageFrame)
-        let frame = self.view.window?.frame
-        if frame != nil {
-            let size = NSSize.init(width: frame!.width, height: frame!.width * CGFloat(imageFormat.pointee.height) / CGFloat(imageFormat.pointee.width))
-            // keep width, change height
-            let rect = NSRect.init(x: frame!.minX, y: frame!.minY, width: size.width, height: size.height)
-            self.view.window?.setFrame(rect, display: true)
-            // set aspectRatio will NOT take effect immediately, so setFrame first
-            self.view.window?.aspectRatio = size
-        }
-        
-        var status : String = "pixel: "
-        
-        let origFormat : UnsafeMutablePointer<ImageFormat> = MediaFrameGetImageFormat(imageFrame!)
-        var inputFormat     = ImageFormat.init()
-        var outputFormat    = ImageFormat.init()
-        
-        // real input format
-        inputFormat.format  = origFormat.pointee.format
-        inputFormat.width   = origFormat.pointee.width
-        inputFormat.height  = origFormat.pointee.height
-        inputFormat.rect    = origFormat.pointee.rect
-        
-        var descriptor = GetPixelFormatDescriptor(inputFormat.format)
-        NSLog("input format: %@", String.init(cString: descriptor!.pointee.name))
-        
-        // setup output format
-        outputFormat        = inputFormat
-        outputFormat.format = isYUV2RGB ? kPixelFormatRGB32 : inputFormat.format
-        if (isRGB) {
-            // output rgb in platform preferred format
-            let descriptor = GetPixelFormatDescriptor(origFormat.pointee.format);
-            if (descriptor!.pointee.bpp == 16) {
-                outputFormat.format = kPixelFormatRGB16
-            } else if (descriptor!.pointee.bpp == 24) {
-                outputFormat.format = kPixelFormatRGB24
-            } else if (descriptor!.pointee.bpp == 32) {
-                outputFormat.format = kPixelFormatRGB32
+        if self.view.isInFullScreenMode == false {
+            let frame = self.view.window?.frame
+            if frame != nil {
+                let size = NSSize.init(width: frame!.width, height: frame!.width * CGFloat(imageFormat.pointee.height) / CGFloat(imageFormat.pointee.width))
+                // keep width, change height
+                let rect = NSRect.init(x: frame!.minX, y: frame!.minY, width: size.width, height: size.height)
+                self.view.window?.setFrame(rect, display: true)
+                // set aspectRatio will NOT take effect immediately, so setFrame first
+                self.view.window?.aspectRatio = size
             }
         }
-        
-        // swap input uv chroma
-        if (isYUV && isUVSwap) {
-            if (descriptor!.pointee.similar.1 != kPixelFormatUnknown) {
-                inputFormat.format = descriptor!.pointee.similar.1
-                descriptor = GetPixelFormatDescriptor(inputFormat.format)
-                NSLog("input format(swap uv): %@", String.init(cString: descriptor!.pointee.name))
-            }
-        }
-        
-        // byte-order -> word-order, only work for packed format
-        if (isWordOrder && descriptor!.pointee.nb_planes == 1) {
-            if (descriptor!.pointee.similar.2 != kPixelFormatUnknown) {
-                inputFormat.format = descriptor!.pointee.similar.2;
-                descriptor = GetPixelFormatDescriptor(inputFormat.format)
-                NSLog("input format(word order): ", String.init(cString: descriptor!.pointee.name))
-            }
-        }
-        
-        status += String.init(cString: descriptor!.pointee.name)
-        if (origFormat.pointee.format != inputFormat.format) {
-            let descriptor = GetPixelFormatDescriptor(origFormat.pointee.format)
-            status += " >> " + String.init(cString: descriptor!.pointee.name)
-        }
-        
-        outputFormat.format = kPixelFormatRGBA
-        if (outputFormat.format != origFormat.pointee.format) {
-            let descriptor = GetPixelFormatDescriptor(outputFormat.format)
-            NSLog("output format: %@", String.init(cString: descriptor!.pointee.name))
-            status += " >> " + String.init(cString: descriptor!.pointee.name)
-        }
-        
+
+        var outputFormat = ImageFormat.init()
+        outputFormat.format     = imageView.pixelFormat
+        outputFormat.width      = imageFormat.pointee.width
+        outputFormat.height     = imageFormat.pointee.height
+        outputFormat.rect       = imageFormat.pointee.rect
         
         var output = SharedObjectRetain(imageFrame);
-        if (inputFormat.format != outputFormat.format) {
-            let cc : MediaDeviceRef? = ColorConverterCreate(&inputFormat, &outputFormat, nil)
+        if (imageFormat.pointee.format != outputFormat.format) {
+            let cc : MediaDeviceRef? = ColorConverterCreate(imageFormat, &outputFormat, nil)
             guard cc != nil else {
-                infoText.stringValue += "create color converter failed."
+                statusText = "create color converter failed."
                 return;
             }
             
             MediaDevicePush(cc, output)
             SharedObjectRelease(output)
+            
             output = MediaDevicePull(cc)
             SharedObjectRelease(cc)
             
             guard output != nil else {
-                infoText.stringValue += "color convert failed."
+                statusText = "color convert failed."
                 return
             }
         }
-                
-        var data = MediaFrameGetPlaneData(output, 0)
-        let size = MediaFrameGetPlaneSize(output, 0)
-        let bitmap = NSBitmapImageRep.init(bitmapDataPlanes: &data, pixelsWide: Int(outputFormat.width), pixelsHigh: Int(outputFormat.height), bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: NSColorSpaceName.deviceRGB, bytesPerRow: Int(outputFormat.width * 4), bitsPerPixel: 32)
-        guard bitmap != nil else {
-            imageView.image = nil
-            return
-        }
-
-        let cgImage = bitmap!.cgImage
-        guard cgImage != nil else {
-            imageView.image = nil
-            return
-        }
-
-        let image = NSImage.init(cgImage: cgImage!, size: NSMakeSize(CGFloat(outputFormat.width), CGFloat(outputFormat.height)))
-        imageView.image = image
         
-        // error: unrecognized selector sent to instance. WHY?
-        //imageView.provideImageData(UnsafeMutableRawPointer.init(data!), bytesPerRow: Int(outputFormat.width * 4), origin: Int(outputFormat.rect.x), Int(outputFormat.rect.y), size: size, Int(outputFormat.height), userInfo: self)
-                
-        SharedObjectRelease(output)
-        NSLog("draw ==> %@", status)
+        let status = imageView.drawFrame(frame: output!)
+        if status.isEmpty { return }
+        
+        statusText += "\n drawImage: " + status
     }
     
-    var imageBuffer : BufferObjectRef?
-    var imageFrame : MediaFrameRef?
-    var imageLength : Int32 = 0
     public func openFile(url : String) -> Void {
         // note recent documents
         NSDocumentController.shared.noteNewRecentDocumentURL(URL(fileURLWithPath: url))
@@ -477,7 +398,7 @@ class ViewController: NSViewController {
             SharedObjectRelease(imageFrame)
             imageFrame = nil
         }
-        infoText.stringValue = ""
+        statusText = ""
     }
     
     @IBAction func close(sender : Any?) {
@@ -523,13 +444,15 @@ class ViewController: NSViewController {
         }
     
         BufferObjectResetBytes(imageBuffer)
-        let descriptor = GetPixelFormatDescriptor(imageFormat.format)
-        imageLength = (imageFormat.width * imageFormat.height * Int32(descriptor!.pointee.bpp)) / 8
         numFrames = BufferObjectGetDataLength(imageBuffer) / Int64(imageLength)
         
         let data = BufferObjectReadBytes(imageBuffer, Int(imageLength))
         guard data != nil else {
-            NSLog("read image frame failed, bad format?")
+            statusText = "read image failed."
+            return
+        }
+        guard BufferObjectGetDataLength(data!) == imageLength else {
+            statusText = "no enough pixel data."
             return
         }
         
@@ -596,8 +519,6 @@ class ViewController: NSViewController {
             }
         }
     }
-    
-    @IBOutlet weak var frameSlider: NSSlider!
     
     var numFrames : Int64 {
         get {
@@ -687,7 +608,5 @@ class ViewController: NSViewController {
             onFrameSelect(nil)
         }
     }
-    
-    
 }
 

@@ -31,7 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     public func openFile(url: String?) -> Void {
         let storyBoard = NSStoryboard.init(name: NSStoryboard.Name("Main"), bundle: Bundle.main)
-        var windowController = storyBoard.instantiateController(withIdentifier:  NSStoryboard.SceneIdentifier("ImageWindowController")) as! NSWindowController
+        let windowController = storyBoard.instantiateController(withIdentifier:  NSStoryboard.SceneIdentifier("ImageWindowController")) as! NSWindowController
         let viewController = storyBoard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier("ImageViewController")) as! ViewController
         windowController.contentViewController = viewController
         
