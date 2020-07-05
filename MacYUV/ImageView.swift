@@ -74,7 +74,14 @@ class ImageView: NSImageView {
         
         // THIS IS WERE YOU GET THE PATH FOR THE DROPPED FILE
         NSLog("openFile -> %@", url!)
-        viewController!.openFile(url: url!)
+        
+        // FIXME: draw immediately will show a black frame, WHY?
+        // override draw() won't fix this
+        //viewController!.openFile(url: url!)
+        DispatchQueue.main.asyncAfter(wallDeadline: DispatchWallTime.now() + 0.05, execute: {
+            () -> Void in
+            self.viewController!.openFile(url: self.url!)
+        })
         return true
     }
     
@@ -144,6 +151,7 @@ class ImageView: NSImageView {
         //imageView.provideImageData(UnsafeMutableRawPointer.init(data!), bytesPerRow: Int(outputFormat.width * 4), origin: Int(outputFormat.rect.x), Int(outputFormat.rect.y), size: size, Int(outputFormat.height), userInfo: self)
                 
         SharedObjectRelease(frame)
+        NSLog("drawFrame complete")
         return ""
     }
 }
