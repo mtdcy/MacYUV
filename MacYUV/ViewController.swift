@@ -68,7 +68,6 @@ class ViewController: NSViewController {
         kPixelFormat422YpCrCb,
         kPixelFormat422YpCbCrWO,
         kPixelFormat422YpCrCbWO,
-        kPixelFormat444YpCbCr,
     ]
     
     var isYUV : Bool {
