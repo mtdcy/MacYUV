@@ -25,3 +25,13 @@ We use letters to represent pixel format in byte-order instead of word-order bot
 
 We always output image frame as RGBA, which uses color converter to achieve it. 
 
+## Get Started
+
+1. Open raw image files with extensions yuv/rgb/raw:
+    * Double click the file in Finder.
+    * Application menu: Open - File.
+    * Drag the file into application and drop.
+2. Set the right image format in property box.
+3. Zoom in or out with mouse wheel, reset by mouse right key.
+4. Play multiple raw images in the same file by left/right arrow key.
+
