@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -197,7 +197,7 @@
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DVq-3N-Nj6" customClass="ImageView" customModule="YUVPlayer" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="800" height="480"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="VE4-5S-p9y"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="NSApplicationIcon" id="VE4-5S-p9y"/>
                                 <connections>
                                     <outlet property="viewController" destination="5gI-5U-AMq" id="N0q-a2-RW0"/>
                                 </connections>
@@ -205,7 +205,7 @@
                             <box fixedFrame="YES" boxType="custom" borderType="bezel" borderWidth="2" cornerRadius="8" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="yyU-4c-mO4">
                                 <rect key="frame" x="259" y="129" width="280" height="220"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <view key="contentView" ambiguous="YES" id="wrd-BN-h06">
+                                <view key="contentView" id="wrd-BN-h06">
                                     <rect key="frame" x="10" y="10" width="260" height="200"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -307,7 +307,7 @@
                                                         <rect key="frame" x="44" y="106" width="45" height="18"/>
                                                         <buttonCell key="cell" type="check" title="rect" bezelStyle="regularSquare" imagePosition="trailing" alignment="right" inset="2" id="NrB-Sk-Tdi">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="label" size="11"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="onRectCheck:" target="5gI-5U-AMq" id="xrC-au-My0"/>
@@ -465,7 +465,7 @@
                                                         <rect key="frame" x="41" y="130" width="98" height="18"/>
                                                         <buttonCell key="cell" type="check" title="word-order" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="Qv0-zo-tSj">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="label" size="11"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="onFormatChanged:" target="5gI-5U-AMq" id="xQE-S2-lKo"/>
@@ -477,7 +477,7 @@
                                                         <rect key="frame" x="-2" y="106" width="41" height="18"/>
                                                         <buttonCell key="cell" type="check" title="yuv" bezelStyle="regularSquare" imagePosition="right" alignment="right" state="on" inset="2" id="WYA-sq-wH1">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="label" size="11"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="onYUVCheck:" target="5gI-5U-AMq" id="qWA-q6-1y1"/>
@@ -509,7 +509,7 @@
                                                         <rect key="frame" x="41" y="82" width="98" height="18"/>
                                                         <buttonCell key="cell" type="check" title="u/v swap" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="ONU-TC-11E">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="label" size="11"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="onFormatChanged:" target="5gI-5U-AMq" id="gTM-fn-pg0"/>
@@ -522,7 +522,7 @@
                                                         <rect key="frame" x="41" y="62" width="98" height="18"/>
                                                         <buttonCell key="cell" type="check" title="yuv2rgb" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="pxe-mq-xg1">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="label" size="11"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="onFormatChanged:" target="5gI-5U-AMq" id="RtU-8C-K9U"/>
@@ -534,7 +534,7 @@
                                                         <rect key="frame" x="-2" y="38" width="41" height="18"/>
                                                         <buttonCell key="cell" type="check" title="rgb" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="go8-99-Pul">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="label" size="11"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="onRGBCheck:" target="5gI-5U-AMq" id="8pR-xN-eLR"/>

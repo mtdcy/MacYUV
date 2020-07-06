@@ -31,16 +31,6 @@ class ViewController: NSViewController {
     @IBOutlet weak var frameSlider: NSSlider!
     
     var imageBuffer : BufferObjectRef?
-    var imageFrame : MediaFrameRef?
-    // default image format value
-    var imageFormat : ImageFormat = ImageFormat.init(format: kPixelFormat420YpCbCrPlanar,
-                                                     width: 1920,
-                                                     height: 1080,
-                                                     rect: ImageRect.init(x: 0, y: 0, w: 1920, h: 1080))
-    var imageLength : Int32 {
-        let descriptor : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(imageFormat.format)
-        return (imageFormat.width * imageFormat.height * Int32(descriptor.pointee.bpp)) / 8
-    }
     
     var isRectEnabled : Bool {
         get {
@@ -270,12 +260,12 @@ class ViewController: NSViewController {
         displayHeightText.formatter = formatter
         
         // set default value
-        widthText.intValue         = imageFormat.width
-        heightText.intValue        = imageFormat.height
-        leftText.intValue          = imageFormat.rect.x
-        topText.intValue           = imageFormat.rect.y
-        displayWidthText.intValue  = imageFormat.rect.w
-        displayHeightText.intValue = imageFormat.rect.h
+        widthText.intValue         = 1920
+        heightText.intValue        = 1080
+        leftText.intValue          = 0
+        topText.intValue           = 0
+        displayWidthText.intValue  = 1920
+        displayHeightText.intValue = 1080
         
         yuvItems.removeAllItems()
         for yuv in YUVs {
@@ -308,32 +298,80 @@ class ViewController: NSViewController {
         }
     }
     
-    func drawImage() {
-        if imageFrame == nil { return }
+    var imageFormat : ImageFormat {
+        get {
+            let rect = ImageFormat.__Unnamed_struct_rect.init(x: isRectEnabled ? leftText.intValue : 0,
+                                                              y: isRectEnabled ? topText.intValue : 0,
+                                                              w: isRectEnabled ? displayWidthText.intValue : widthText.intValue,
+                                                              h: isRectEnabled ? displayHeightText.intValue : heightText.intValue)
+            return ImageFormat.init(format: isYUV ? yuvFormat : rgbFormat,
+                                    width: widthText.intValue,
+                                    height: heightText.intValue,
+                                    rect: rect)
+        }
+        set {
+            if newValue.width != newValue.rect.w || newValue.height != newValue.rect.h {
+                isRectEnabled               = true
+            }
+            widthText.intValue          = newValue.width
+            heightText.intValue         = newValue.height
+            leftText.intValue           = newValue.rect.x
+            topText.intValue            = newValue.rect.y
+            displayWidthText.intValue   = newValue.rect.w
+            displayHeightText.intValue  = newValue.rect.h
+        }
+    }
+    
+    var imageLength : Int32 {
+        let descriptor : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(isYUV ? yuvFormat : rgbFormat)
+        return (widthText.intValue * heightText.intValue * Int32(descriptor.pointee.bpp)) / 8
+    }
+    
+    func drawImage(index: Int32) {
+        BufferObjectResetBytes(imageBuffer)
+        var data = BufferObjectReadBytes(imageBuffer, Int(imageLength))
+        guard data != nil else {
+            statusText = "read image data failed. bad file ?"
+            return
+        }
+        
+        var format = imageFormat
+        var image = MediaFrameCreateWithImageBuffer(&format, data)
+        SharedObjectRelease(data)
+        data = nil
+        
+        guard image != nil else {
+            statusText = "create image frame failed."
+            return
+        }
         
         // force window aspect ratio
-        let imageFormat : UnsafeMutablePointer<ImageFormat> = MediaFrameGetImageFormat(imageFrame)
         if self.view.isInFullScreenMode == false {
             let frame = self.view.window?.frame
             if frame != nil {
-                let size = NSSize.init(width: frame!.width, height: frame!.width * CGFloat(imageFormat.pointee.height) / CGFloat(imageFormat.pointee.width))
                 // keep width, change height
-                let rect = NSRect.init(x: frame!.minX, y: frame!.minY, width: size.width, height: size.height)
-                self.view.window?.setFrame(rect, display: true)
+                let size = NSSize.init(width: frame!.width, height: frame!.width * CGFloat(format.rect.h) / CGFloat(format.rect.w))
                 // set aspectRatio will NOT take effect immediately, so setFrame first
                 self.view.window?.aspectRatio = size
+                let rect = NSRect.init(x: frame!.minX, y: frame!.minY, width: size.width, height: size.height)
+                self.view.window?.setFrame(rect, display: true)
             }
         }
 
         var outputFormat = ImageFormat.init()
         outputFormat.format     = imageView.pixelFormat
-        outputFormat.width      = imageFormat.pointee.width
-        outputFormat.height     = imageFormat.pointee.height
-        outputFormat.rect       = imageFormat.pointee.rect
+        outputFormat.width      = format.rect.w
+        outputFormat.height     = format.rect.h
+        outputFormat.rect.x     = 0
+        outputFormat.rect.y     = 0
+        outputFormat.rect.w     = outputFormat.width
+        outputFormat.rect.h     = outputFormat.height
         
-        var output = SharedObjectRetain(imageFrame);
-        if (imageFormat.pointee.format != outputFormat.format) {
-            let cc : MediaDeviceRef? = ColorConverterCreate(imageFormat, &outputFormat, nil)
+        var output = SharedObjectRetain(image);
+        // do color convertion or cropping
+        if (format.format != outputFormat.format ||
+            format.rect.x != 0 || format.rect.y != 0) {
+            let cc : MediaDeviceRef? = ColorConverterCreate(&format, &outputFormat, nil)
             guard cc != nil else {
                 statusText = "create color converter failed."
                 return;
@@ -352,6 +390,9 @@ class ViewController: NSViewController {
         }
         
         let status = imageView.drawFrame(frame: output!)
+        SharedObjectRelease(image)
+        image = nil
+        
         if status.isEmpty { return }
         
         statusText += "\n drawImage: " + status
@@ -393,10 +434,6 @@ class ViewController: NSViewController {
             SharedObjectRelease(imageBuffer)
             imageBuffer = nil
         }
-        if (imageFrame != nil) {
-            SharedObjectRelease(imageFrame)
-            imageFrame = nil
-        }
         statusText = ""
     }
     
@@ -412,51 +449,7 @@ class ViewController: NSViewController {
     
     @IBAction func onFormatChanged(_ sender: Any?) {
         NSLog("onFormatChanged")
-        
-        imageFormat.format     = yuvFormat
-        if (isRGB) {
-            imageFormat.format = rgbFormat
-        }
-        imageFormat.width      = widthText.intValue
-        imageFormat.height     = heightText.intValue
-        validateRect(width: imageFormat.width, height: imageFormat.height)
-        if (isRectEnabled) {
-            imageFormat.rect.x = leftText.intValue
-            imageFormat.rect.y = topText.intValue
-            imageFormat.rect.w = displayWidthText.intValue
-            imageFormat.rect.h = displayHeightText.intValue
-        } else {
-            imageFormat.rect.x = 0
-            imageFormat.rect.y = 0
-            imageFormat.rect.w = imageFormat.width
-            imageFormat.rect.h = imageFormat.height
-        }
-        
-        if (imageFrame != nil) {
-            SharedObjectRelease(imageFrame)
-            imageFrame = nil
-        }
-        
-        guard imageBuffer != nil else {
-            NSLog("no media file")
-            return
-        }
-    
-        BufferObjectResetBytes(imageBuffer)
-        numFrames = BufferObjectGetDataLength(imageBuffer) / Int64(imageLength)
-        
-        let data = BufferObjectReadBytes(imageBuffer, Int(imageLength))
-        guard data != nil else {
-            statusText = "read image failed."
-            return
-        }
-        guard BufferObjectGetDataLength(data!) == imageLength else {
-            statusText = "no enough pixel data."
-            return
-        }
-        
-        imageFrame = MediaFrameCreateWithImageBuffer(&imageFormat, data)
-        drawImage()
+        drawImage(index: frameSlider.intValue)
     }
     
     func validateRect(width : Int32, height : Int32) {
@@ -474,12 +467,8 @@ class ViewController: NSViewController {
             if (displayHeightText.intValue > height - topText.intValue) {
                 displayHeightText.intValue = height - topText.intValue;
             }
-        } else {
-            topText.intValue   = 0
-            leftText.intValue  = 0
-            displayWidthText.intValue  = width
-            displayHeightText.intValue = height
         }
+        // DON'T change values if display rectangle is disabled
     }
     
     @IBAction func onRectCheck(_ sender: Any) {
@@ -537,24 +526,7 @@ class ViewController: NSViewController {
     
     @IBAction func onFrameSelect(_ sender: Any?) {
         NSLog("select frame %d", frameSlider.intValue)
-        
-        let index = frameSlider.intValue
-        BufferObjectResetBytes(imageBuffer)
-        BufferObjectSkipBytes(imageBuffer, Int64(imageLength * (index - 1)))
-        
-        if (imageFrame != nil) {
-            SharedObjectRelease(imageFrame)
-            imageFrame = nil
-        }
-        
-        let data = BufferObjectReadBytes(imageBuffer, Int(imageLength))
-        guard data != nil else {
-            NSLog("read image failed")
-            return
-        }
-        
-        imageFrame = MediaFrameCreateWithImageBuffer(&imageFormat, data)
-        drawImage()
+        drawImage(index: frameSlider.intValue)
     }
     
     var eventNumber : Int = 0
@@ -568,10 +540,15 @@ class ViewController: NSViewController {
         case 1:
             NSLog("show or hide UI")
             isUIHidden = !isUIHidden
+            // hide property box after 3 seconds
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+                () -> Void in
+                self.isUIHidden = true
+            }
         case 2:
             NSLog("Enter full screen")
             self.view.window?.toggleFullScreen(self);
-            drawImage()
+            drawImage(index: frameSlider.intValue)
         default:
             break
         }
@@ -594,6 +571,62 @@ class ViewController: NSViewController {
                 self.filterMouseUp(with: event)
             })
         }
+    }
+    
+    func zoomImage(scale : CGFloat, position : CGPoint) -> Void {
+        var format = imageFormat
+        var w = Int32(CGFloat(format.width) / scale)
+        if w > format.width { w = format.width }
+        else if w < 32 { w = 32 }   // CGImage min pixels
+        else { w = (w / 16) * 16 }  // color converter require row align 16 bytes
+        
+        // always keep aspect ratio
+        let h = (format.height * w) / format.width
+        
+        var x = Int32(CGFloat(format.rect.w - w) * position.x + CGFloat(format.rect.x))
+        if x + w > format.width { x = format.width - w }
+        else if x < 0 { x = 0 }
+        
+        var y = Int32(CGFloat(format.rect.h - h) * position.y + CGFloat(format.rect.y))
+        if (y + h > format.height) { y = format.height - h }
+        else if y < 0 { y = 0 }
+        
+        // update property box
+        format.rect.x   = Int32(x)
+        format.rect.y   = Int32(y)
+        format.rect.w   = Int32(w)
+        format.rect.h   = Int32(h)
+        imageFormat     = format
+        
+        drawImage(index: frameSlider.intValue)
+    }
+    
+    var scale : CGFloat = 1.0
+    override func scrollWheel(with event: NSEvent) {
+        NSLog("mouse scroll %@", event)
+        
+        guard self.view.window != nil else {
+            statusText = "window is missing"
+            return
+        }
+        // in frame coordinates with origin at left top
+        let frame = self.view.window!.frame
+        // in screen coordinates with origin at left bottom
+        let mouse = self.view.window!.mouseLocationOutsideOfEventStream
+        
+        // to percentage
+        let position = NSPoint.init(x: mouse.x / frame.width, y: 1 - mouse.y / frame.height)
+        
+        scale += event.deltaY > 0 ? 0.1 : -0.1
+        if scale < 1 { scale = 1 }
+        
+        zoomImage(scale: scale, position: position)
+    }
+    
+    override func rightMouseUp(with event: NSEvent) {
+        // reset zoom
+        scale = 1.0
+        zoomImage(scale: 1.0, position: NSPoint.init(x: 1.0, y: 1.0))
     }
     
     override func keyDown(with event: NSEvent) {
