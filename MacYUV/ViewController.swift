@@ -329,6 +329,9 @@ class ViewController: NSViewController {
     
     func drawImage(index: Int32) {
         BufferObjectResetBytes(imageBuffer)
+        if (index > 0) {
+            BufferObjectSkipBytes(imageBuffer, Int64(imageLength * index))
+        }
         var data = BufferObjectReadBytes(imageBuffer, Int(imageLength))
         guard data != nil else {
             statusText = "read image data failed. bad file ?"
@@ -449,6 +452,7 @@ class ViewController: NSViewController {
     
     @IBAction func onFormatChanged(_ sender: Any?) {
         NSLog("onFormatChanged")
+        numFrames = BufferObjectGetDataLength(imageBuffer) / Int64(imageLength)
         drawImage(index: frameSlider.intValue)
     }
     
@@ -512,9 +516,9 @@ class ViewController: NSViewController {
             return Int64(frameSlider.maxValue)
         }
         set {
-            frameSlider.numberOfTickMarks = Int(newValue)
+            frameSlider.numberOfTickMarks = Int(newValue) - 1
             frameSlider.minValue = 0
-            frameSlider.maxValue = Double(newValue)
+            frameSlider.maxValue = Double(newValue - 1)
             frameSlider.intValue = 0
             if (newValue <= 1) {
                 frameSlider.isHidden = true
@@ -540,11 +544,6 @@ class ViewController: NSViewController {
         case 1:
             NSLog("show or hide UI")
             isUIHidden = !isUIHidden
-            // hide property box after 3 seconds
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
-                () -> Void in
-                self.isUIHidden = true
-            }
         case 2:
             NSLog("Enter full screen")
             self.view.window?.toggleFullScreen(self);
@@ -630,13 +629,12 @@ class ViewController: NSViewController {
     }
     
     override func keyDown(with event: NSEvent) {
-        
         let special = event.specialKey;
         if (special == NSEvent.SpecialKey.rightArrow || special == NSEvent.SpecialKey.leftArrow) {
             var index = frameSlider.intValue
             index += special == NSEvent.SpecialKey.rightArrow ? +1 : -1
             frameSlider.intValue = index
-            onFrameSelect(nil)
+            drawImage(index: index)
         }
     }
 }
