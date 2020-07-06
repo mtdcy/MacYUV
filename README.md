@@ -12,7 +12,8 @@ A YUV/RGB raw image player powered by [MediaFramework](https://github.com/mtdcy/
 4. Zoom in/output the raw image.
 5. Open a raw image by drag&drop.
 6. Open multiple raw images at the same time.
-7. More features are comming...
+7. Convert from YUV to RGB with color matrix.
+8. More features are comming...
 
 
 ## Notes
