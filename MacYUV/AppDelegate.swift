@@ -12,11 +12,27 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     var lastWindow : NSWindow?
+    let usingSystemLog = false
+    
+    override init() {
+        super.init()
+        NSLog("On Application init")
+        if (usingSystemLog) {
+            // setup log callback
+            // https://originware.com/blog/?p=265
+            LogSetCallback { (line : UnsafePointer<Int8>?) in
+                // print won't send to syslog
+                NSLog(String.init(cString: line!))
+            }
+        }
+    }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         NSLog("applicationDidFinishLaunching")
         // Insert code here to initialize your application
-        open(sender: self)
+        if lastWindow == nil {
+            open(sender: self)
+        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -67,6 +83,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let url = urls![0].path
         NSLog("url = %@", url)
         openFile(url: url)
+    }
+    
+    @IBAction func openHelpWindow(sender : Any?) {
+        NSWorkspace.shared.open(URL.init(string: "https://github.com/mtdcy/MacYUV")!)
     }
 }
 

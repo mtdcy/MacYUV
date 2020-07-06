@@ -148,7 +148,11 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
                                     <items>
-                                        <menuItem title="YUVPlayer Help" keyEquivalent="?" id="FKE-Sm-Kum"/>
+                                        <menuItem title="YUVPlayer Help" keyEquivalent="?" id="FKE-Sm-Kum">
+                                            <connections>
+                                                <action selector="openHelpWindowWithSender:" target="Voe-Tx-rLC" id="eCk-Vo-dar"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
@@ -307,7 +311,7 @@
                                                         <rect key="frame" x="44" y="106" width="45" height="18"/>
                                                         <buttonCell key="cell" type="check" title="rect" bezelStyle="regularSquare" imagePosition="trailing" alignment="right" inset="2" id="NrB-Sk-Tdi">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="label" size="11"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="onRectCheck:" target="5gI-5U-AMq" id="xrC-au-My0"/>
@@ -460,7 +464,7 @@
                                                         <rect key="frame" x="-2" y="30" width="41" height="18"/>
                                                         <buttonCell key="cell" type="check" title="yuv" bezelStyle="regularSquare" imagePosition="right" alignment="right" state="on" inset="2" id="WYA-sq-wH1">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="label" size="11"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="onYUVCheck:" target="5gI-5U-AMq" id="qWA-q6-1y1"/>
@@ -491,7 +495,7 @@
                                                         <rect key="frame" x="-2" y="2" width="41" height="18"/>
                                                         <buttonCell key="cell" type="check" title="rgb" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="go8-99-Pul">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="message" size="11"/>
+                                                            <font key="font" metaFont="label" size="11"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="onRGBCheck:" target="5gI-5U-AMq" id="8pR-xN-eLR"/>
