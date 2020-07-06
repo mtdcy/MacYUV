@@ -195,20 +195,6 @@ class ViewController: NSViewController {
     // -> (RESOLUTION, [YUV, RGB])
     // not always work
     func luckyGuess(size : Int64) -> ((String, Int, Int), [ePixelFormat])? {
-        // match with current format first
-        var plane0 : Int64 = Int64(widthText.intValue * heightText.intValue);
-        if (isYUV) {
-            let desc : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(yuvFormat)
-            plane0 = (plane0 * Int64(desc.pointee.bpp)) / 8
-        } else {
-            let desc : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(rgbFormat)
-            plane0 = (plane0 * Int64(desc.pointee.bpp)) / 8
-        }
-        
-        if (size % plane0 == 0) {
-            return nil
-        }
-        
         // from large to small
         for res in Resolutions.reversed() {
             let plane0 = res.1 * res.2
