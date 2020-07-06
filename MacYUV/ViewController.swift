@@ -22,11 +22,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var propertyBox: NSBox!
     @IBOutlet weak var yuvButton: NSButton!
     @IBOutlet weak var yuvItems: NSPopUpButton!
-    @IBOutlet weak var uvButton: NSButton!
-    @IBOutlet weak var yuv2rgbButton: NSButton!
     @IBOutlet weak var rgbButton: NSButton!
     @IBOutlet weak var rgbItems: NSPopUpButton!
-    @IBOutlet weak var wordOrderButton : NSButton!
     @IBOutlet weak var infoText: NSTextField!
     @IBOutlet weak var frameSlider: NSSlider!
     
@@ -67,8 +64,6 @@ class ViewController: NSViewController {
         set {
             yuvButton.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
             yuvItems.isEnabled = newValue
-            uvButton.isEnabled = newValue
-            yuv2rgbButton.isEnabled = newValue
         }
     }
     
@@ -87,24 +82,6 @@ class ViewController: NSViewController {
             isYUV = true
             let index = YUVs.firstIndex(of: newValue)
             yuvItems.selectItem(at: index!)
-        }
-    }
-    
-    var isUVSwap : Bool {
-        get {
-            return uvButton.state == NSControl.StateValue.on
-        }
-        set {
-            uvButton.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
-        }
-    }
-    
-    var isYUV2RGB : Bool {
-        get {
-            return yuv2rgbButton.state == NSControl.StateValue.on
-        }
-        set {
-            yuv2rgbButton.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
         }
     }
     
@@ -144,15 +121,6 @@ class ViewController: NSViewController {
             isRGB = true
             let index = RGBs.firstIndex(of: newValue)
             rgbItems.selectItem(at: index!)
-        }
-    }
-    
-    var isWordOrder : Bool {
-        get {
-            return wordOrderButton.state == NSControl.StateValue.on
-        }
-        set {
-            wordOrderButton.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
         }
     }
     

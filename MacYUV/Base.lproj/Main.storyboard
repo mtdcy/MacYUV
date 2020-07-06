@@ -307,7 +307,7 @@
                                                         <rect key="frame" x="44" y="106" width="45" height="18"/>
                                                         <buttonCell key="cell" type="check" title="rect" bezelStyle="regularSquare" imagePosition="trailing" alignment="right" inset="2" id="NrB-Sk-Tdi">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="label" size="11"/>
+                                                            <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="onRectCheck:" target="5gI-5U-AMq" id="xrC-au-My0"/>
@@ -445,48 +445,31 @@
                                             </gridCells>
                                         </gridView>
                                         <gridView fixedFrame="YES" xPlacement="fill" yPlacement="center" rowAlignment="lastBaseline" translatesAutoresizingMaskIntoConstraints="NO" id="tyd-5z-VLw">
-                                            <rect key="frame" x="123" y="54" width="137" height="146"/>
+                                            <rect key="frame" x="123" y="150" width="137" height="50"/>
                                             <rows>
                                                 <gridRow id="GgJ-4j-FqD"/>
                                                 <gridRow id="bpe-wm-PsR"/>
-                                                <gridRow id="3q0-hK-VE1"/>
-                                                <gridRow id="7SO-fH-zpb"/>
-                                                <gridRow id="Vg8-zz-Zcd"/>
-                                                <gridRow id="F0v-zy-8cW"/>
                                             </rows>
                                             <columns>
                                                 <gridColumn id="ewt-X6-zNN"/>
                                                 <gridColumn id="dRw-co-Q03"/>
                                             </columns>
                                             <gridCells>
-                                                <gridCell row="GgJ-4j-FqD" column="ewt-X6-zNN" id="9tT-8q-gaM"/>
-                                                <gridCell row="GgJ-4j-FqD" column="dRw-co-Q03" id="pdW-g7-yZU">
-                                                    <button key="contentView" toolTip="bytes-order to word-order" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4tE-aG-Vly">
-                                                        <rect key="frame" x="41" y="130" width="98" height="18"/>
-                                                        <buttonCell key="cell" type="check" title="word-order" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="Qv0-zo-tSj">
-                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="label" size="11"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="onFormatChanged:" target="5gI-5U-AMq" id="xQE-S2-lKo"/>
-                                                        </connections>
-                                                    </button>
-                                                </gridCell>
-                                                <gridCell row="bpe-wm-PsR" column="ewt-X6-zNN" id="0Pv-CY-HKL">
+                                                <gridCell row="GgJ-4j-FqD" column="ewt-X6-zNN" id="9tT-8q-gaM">
                                                     <button key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sVg-32-nTM">
-                                                        <rect key="frame" x="-2" y="106" width="41" height="18"/>
+                                                        <rect key="frame" x="-2" y="30" width="41" height="18"/>
                                                         <buttonCell key="cell" type="check" title="yuv" bezelStyle="regularSquare" imagePosition="right" alignment="right" state="on" inset="2" id="WYA-sq-wH1">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="label" size="11"/>
+                                                            <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="onYUVCheck:" target="5gI-5U-AMq" id="qWA-q6-1y1"/>
                                                         </connections>
                                                     </button>
                                                 </gridCell>
-                                                <gridCell row="bpe-wm-PsR" column="dRw-co-Q03" id="gEm-5E-flc">
+                                                <gridCell row="GgJ-4j-FqD" column="dRw-co-Q03" id="pdW-g7-yZU">
                                                     <popUpButton key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ORp-SL-vO7">
-                                                        <rect key="frame" x="41" y="102" width="99" height="25"/>
+                                                        <rect key="frame" x="41" y="26" width="99" height="25"/>
                                                         <popUpButtonCell key="cell" type="push" title="yuvyuvyuv" bezelStyle="rounded" alignment="left" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ns0-DW-msr" id="FW1-7x-5Ni">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="label" size="12"/>
@@ -503,47 +486,21 @@
                                                         </connections>
                                                     </popUpButton>
                                                 </gridCell>
-                                                <gridCell row="3q0-hK-VE1" column="ewt-X6-zNN" id="t35-jB-HZd"/>
-                                                <gridCell row="3q0-hK-VE1" column="dRw-co-Q03" id="d7Q-rF-Ri1">
-                                                    <button key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="c3r-hc-gey">
-                                                        <rect key="frame" x="41" y="82" width="98" height="18"/>
-                                                        <buttonCell key="cell" type="check" title="u/v swap" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="ONU-TC-11E">
-                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="label" size="11"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="onFormatChanged:" target="5gI-5U-AMq" id="gTM-fn-pg0"/>
-                                                        </connections>
-                                                    </button>
-                                                </gridCell>
-                                                <gridCell row="7SO-fH-zpb" column="ewt-X6-zNN" id="0RP-t3-AAn"/>
-                                                <gridCell row="7SO-fH-zpb" column="dRw-co-Q03" id="xEl-8O-1fO">
-                                                    <button key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="erZ-Qj-mgh">
-                                                        <rect key="frame" x="41" y="62" width="98" height="18"/>
-                                                        <buttonCell key="cell" type="check" title="yuv2rgb" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="pxe-mq-xg1">
-                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="label" size="11"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="onFormatChanged:" target="5gI-5U-AMq" id="RtU-8C-K9U"/>
-                                                        </connections>
-                                                    </button>
-                                                </gridCell>
-                                                <gridCell row="Vg8-zz-Zcd" column="ewt-X6-zNN" id="JbU-KW-fFK">
+                                                <gridCell row="bpe-wm-PsR" column="ewt-X6-zNN" id="0Pv-CY-HKL">
                                                     <button key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TWP-ab-UQP">
-                                                        <rect key="frame" x="-2" y="38" width="41" height="18"/>
+                                                        <rect key="frame" x="-2" y="2" width="41" height="18"/>
                                                         <buttonCell key="cell" type="check" title="rgb" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="go8-99-Pul">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="label" size="11"/>
+                                                            <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="onRGBCheck:" target="5gI-5U-AMq" id="8pR-xN-eLR"/>
                                                         </connections>
                                                     </button>
                                                 </gridCell>
-                                                <gridCell row="Vg8-zz-Zcd" column="dRw-co-Q03" id="6ho-Wh-Bu4">
+                                                <gridCell row="bpe-wm-PsR" column="dRw-co-Q03" id="gEm-5E-flc">
                                                     <popUpButton key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WNP-SU-LYp">
-                                                        <rect key="frame" x="41" y="34" width="99" height="25"/>
+                                                        <rect key="frame" x="41" y="-2" width="99" height="25"/>
                                                         <popUpButtonCell key="cell" type="push" title="rgbrgbrgb" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="amb-Y3-DvE" id="7MT-Ka-tvg">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="label" size="12"/>
@@ -560,8 +517,6 @@
                                                         </connections>
                                                     </popUpButton>
                                                 </gridCell>
-                                                <gridCell row="F0v-zy-8cW" column="ewt-X6-zNN" id="lv8-of-vA1"/>
-                                                <gridCell row="F0v-zy-8cW" column="dRw-co-Q03" id="6GD-Ja-GWL"/>
                                             </gridCells>
                                         </gridView>
                                         <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="EYn-SP-5lA">
@@ -606,10 +561,7 @@
                         <outlet property="rgbButton" destination="TWP-ab-UQP" id="zSb-gS-slh"/>
                         <outlet property="rgbItems" destination="WNP-SU-LYp" id="si1-OE-4lN"/>
                         <outlet property="topText" destination="fN6-vB-NKf" id="mJy-AQ-CIq"/>
-                        <outlet property="uvButton" destination="c3r-hc-gey" id="SA3-LS-iHm"/>
                         <outlet property="widthText" destination="5aA-mj-O9x" id="IYQ-6x-qYj"/>
-                        <outlet property="wordOrderButton" destination="4tE-aG-Vly" id="eTB-e5-gJ4"/>
-                        <outlet property="yuv2rgbButton" destination="erZ-Qj-mgh" id="0cY-9L-ulg"/>
                         <outlet property="yuvButton" destination="sVg-32-nTM" id="9pk-bl-2wh"/>
                         <outlet property="yuvItems" destination="ORp-SL-vO7" id="hPb-iS-pWA"/>
                     </connections>
