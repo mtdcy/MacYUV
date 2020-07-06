@@ -22,6 +22,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var propertyBox: NSBox!
     @IBOutlet weak var yuvButton: NSButton!
     @IBOutlet weak var yuvItems: NSPopUpButton!
+    @IBOutlet weak var colorItems: NSPopUpButton!
     @IBOutlet weak var rgbButton: NSButton!
     @IBOutlet weak var rgbItems: NSPopUpButton!
     @IBOutlet weak var infoText: NSTextField!
@@ -64,6 +65,7 @@ class ViewController: NSViewController {
         set {
             yuvButton.state = newValue == true ? NSControl.StateValue.on : NSControl.StateValue.off
             yuvItems.isEnabled = newValue
+            colorItems.isEnabled = newValue
         }
     }
     
@@ -82,6 +84,34 @@ class ViewController: NSViewController {
             isYUV = true
             let index = YUVs.firstIndex(of: newValue)
             yuvItems.selectItem(at: index!)
+        }
+    }
+    
+    let Matrices : [(eColorMatrix, String)] = [
+        (kColorMatrixBT601,     "BT601"),
+        (kColorMatrixBT709,     "BT709"),
+        (kColorMatrixBT2020,    "BT2020"),
+        (kColorMatrixJPEG,      "JPEG"),
+    ]
+    
+    var colorMatrix : eColorMatrix {
+        get {
+            if isYUV == false {
+                return kColorMatrixNull
+            }
+            return Matrices[colorItems.indexOfSelectedItem].0
+        }
+        set {
+            guard newValue != kColorMatrixNull else {
+                return
+            }
+            isYUV   = true
+            for (index, (color, _)) in Matrices.enumerated() {
+                if color == newValue {
+                    colorItems.selectItem(at: index)
+                    break
+                }
+            }
         }
     }
     
@@ -241,6 +271,11 @@ class ViewController: NSViewController {
             yuvItems.addItem(withTitle: String.init(cString: desc!.pointee.name))
         }
         
+        colorItems.removeAllItems()
+        for (_, name) in Matrices {
+            colorItems.addItem(withTitle: name)
+        }
+        
         rgbItems.removeAllItems()
         for rgb in RGBs {
             let desc = GetPixelFormatDescriptor(rgb)
@@ -273,6 +308,7 @@ class ViewController: NSViewController {
                                                               w: isRectEnabled ? displayWidthText.intValue : widthText.intValue,
                                                               h: isRectEnabled ? displayHeightText.intValue : heightText.intValue)
             return ImageFormat.init(format: isYUV ? yuvFormat : rgbFormat,
+                                    matrix: colorMatrix,
                                     width: widthText.intValue,
                                     height: heightText.intValue,
                                     rect: rect)
@@ -360,13 +396,9 @@ class ViewController: NSViewController {
             }
         }
         
-        let status = imageView.drawFrame(frame: output!)
+        statusText = imageView.drawFrame(frame: output!)
         SharedObjectRelease(image)
         image = nil
-        
-        if status.isEmpty { return }
-        
-        statusText += "\n drawImage: " + status
     }
     
     public func openFile(url : String) -> Void {

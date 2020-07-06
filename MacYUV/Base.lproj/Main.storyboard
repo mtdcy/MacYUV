@@ -449,10 +449,11 @@
                                             </gridCells>
                                         </gridView>
                                         <gridView fixedFrame="YES" xPlacement="fill" yPlacement="center" rowAlignment="lastBaseline" translatesAutoresizingMaskIntoConstraints="NO" id="tyd-5z-VLw">
-                                            <rect key="frame" x="123" y="150" width="137" height="50"/>
+                                            <rect key="frame" x="123" y="122" width="137" height="78"/>
                                             <rows>
                                                 <gridRow id="GgJ-4j-FqD"/>
                                                 <gridRow id="bpe-wm-PsR"/>
+                                                <gridRow id="lJA-rZ-0VT"/>
                                             </rows>
                                             <columns>
                                                 <gridColumn id="ewt-X6-zNN"/>
@@ -461,7 +462,7 @@
                                             <gridCells>
                                                 <gridCell row="GgJ-4j-FqD" column="ewt-X6-zNN" id="9tT-8q-gaM">
                                                     <button key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sVg-32-nTM">
-                                                        <rect key="frame" x="-2" y="30" width="41" height="18"/>
+                                                        <rect key="frame" x="-2" y="58" width="41" height="18"/>
                                                         <buttonCell key="cell" type="check" title="yuv" bezelStyle="regularSquare" imagePosition="right" alignment="right" state="on" inset="2" id="WYA-sq-wH1">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="label" size="11"/>
@@ -473,7 +474,7 @@
                                                 </gridCell>
                                                 <gridCell row="GgJ-4j-FqD" column="dRw-co-Q03" id="pdW-g7-yZU">
                                                     <popUpButton key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ORp-SL-vO7">
-                                                        <rect key="frame" x="41" y="26" width="99" height="25"/>
+                                                        <rect key="frame" x="41" y="54" width="99" height="25"/>
                                                         <popUpButtonCell key="cell" type="push" title="yuvyuvyuv" bezelStyle="rounded" alignment="left" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ns0-DW-msr" id="FW1-7x-5Ni">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="label" size="12"/>
@@ -491,6 +492,35 @@
                                                     </popUpButton>
                                                 </gridCell>
                                                 <gridCell row="bpe-wm-PsR" column="ewt-X6-zNN" id="0Pv-CY-HKL">
+                                                    <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="exg-zs-dDk">
+                                                        <rect key="frame" x="-2" y="31" width="41" height="16"/>
+                                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="color" id="Ewv-Fd-r2y">
+                                                            <font key="font" usesAppearanceFont="YES"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                </gridCell>
+                                                <gridCell row="bpe-wm-PsR" column="dRw-co-Q03" id="gEm-5E-flc">
+                                                    <popUpButton key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Faa-lS-YGP">
+                                                        <rect key="frame" x="41" y="25" width="99" height="25"/>
+                                                        <popUpButtonCell key="cell" type="push" title="JPEG" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="b8D-pA-dSa" id="uHc-ge-zKo">
+                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="label" size="12"/>
+                                                            <menu key="menu" id="QXi-et-CRg">
+                                                                <items>
+                                                                    <menuItem title="JPEG" state="on" id="b8D-pA-dSa"/>
+                                                                    <menuItem title="Item 2" id="kKW-DF-NfS"/>
+                                                                    <menuItem title="Item 3" id="g2B-qi-B2g"/>
+                                                                </items>
+                                                            </menu>
+                                                        </popUpButtonCell>
+                                                        <connections>
+                                                            <action selector="onFormatChanged:" target="5gI-5U-AMq" id="DJ1-ru-5Zl"/>
+                                                        </connections>
+                                                    </popUpButton>
+                                                </gridCell>
+                                                <gridCell row="lJA-rZ-0VT" column="ewt-X6-zNN" id="umG-S2-u9i">
                                                     <button key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TWP-ab-UQP">
                                                         <rect key="frame" x="-2" y="2" width="41" height="18"/>
                                                         <buttonCell key="cell" type="check" title="rgb" bezelStyle="regularSquare" imagePosition="right" alignment="right" inset="2" id="go8-99-Pul">
@@ -502,7 +532,7 @@
                                                         </connections>
                                                     </button>
                                                 </gridCell>
-                                                <gridCell row="bpe-wm-PsR" column="dRw-co-Q03" id="gEm-5E-flc">
+                                                <gridCell row="lJA-rZ-0VT" column="dRw-co-Q03" id="q1B-di-tAz">
                                                     <popUpButton key="contentView" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WNP-SU-LYp">
                                                         <rect key="frame" x="41" y="-2" width="99" height="25"/>
                                                         <popUpButtonCell key="cell" type="push" title="rgbrgbrgb" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="amb-Y3-DvE" id="7MT-Ka-tvg">
@@ -553,6 +583,7 @@
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="colorItems" destination="Faa-lS-YGP" id="KyH-qM-6eY"/>
                         <outlet property="displayHeightText" destination="t9Z-2U-aJ7" id="uBM-Tn-Rpa"/>
                         <outlet property="displayRectButton" destination="aDM-eW-rLy" id="zrn-S7-ZT3"/>
                         <outlet property="displayWidthText" destination="yzJ-UG-kuw" id="Fhs-jX-PZF"/>
