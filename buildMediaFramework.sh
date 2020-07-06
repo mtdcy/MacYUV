@@ -6,5 +6,5 @@
 
 mkdir xcode && 
 cd xcode
-cmake -G Xcode -DWITH_FFMPEG=OFF -DCMAKE_IGNORE_PATH="/usr/local/lib;/usr/local/include" -DCMAKE_INSTALL_PREFIX=~/Library/Frameworks $@
+cmake -G Xcode -DWITH_FFMPEG=OFF -DCMAKE_IGNORE_PATH="/usr/local/lib;/usr/local/include" -DCMAKE_INSTALL_PREFIX=$PWD $@
 xcodebuild -target install -configuration Release
