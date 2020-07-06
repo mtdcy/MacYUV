@@ -2,7 +2,7 @@
 
 A YUV/RGB raw image player powered by [MediaFramework](https://github.com/mtdcy/MediaFramework).
 
-![](app.png?raw=true)
+![](app.jpeg?raw=true)
 
 ## Features
 
