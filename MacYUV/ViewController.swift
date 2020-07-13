@@ -30,7 +30,7 @@ class ViewController: NSViewController {
     
     var imageBuffer : BufferObjectRef?
     
-    var isRectEnabled : Bool {
+    var isRectEnabled : Swift.Bool {
         get {
             return displayRectButton.state == NSControl.StateValue.on
         }
@@ -58,7 +58,7 @@ class ViewController: NSViewController {
         kPixelFormat422YpCrCbWO,
     ]
     
-    var isYUV : Bool {
+    var isYUV : Swift.Bool {
         get {
             return yuvButton.state == NSControl.StateValue.on
         }
@@ -126,7 +126,7 @@ class ViewController: NSViewController {
         kPixelFormatRGBA,
     ]
     
-    var isRGB : Bool {
+    var isRGB : Swift.Bool {
         get {
             return rgbButton.state == NSControl.StateValue.on
         }
@@ -194,7 +194,7 @@ class ViewController: NSViewController {
     
     // -> (RESOLUTION, [YUV, RGB])
     // not always work
-    func luckyGuess(size : Int64) -> ((String, Int, Int), [ePixelFormat])? {
+    func luckyGuess(size : Int64) -> ((String, Swift.Int, Swift.Int), [ePixelFormat])? {
         // from large to small
         for res in Resolutions.reversed() {
             let plane0 = res.1 * res.2
@@ -213,7 +213,7 @@ class ViewController: NSViewController {
     }
     
     class OnlyNumberFormatter : NumberFormatter {
-        override func isPartialStringValid(_ partialString: String, newEditingString newString: AutoreleasingUnsafeMutablePointer<NSString?>?, errorDescription error: AutoreleasingUnsafeMutablePointer<NSString?>?) -> Bool {
+        override func isPartialStringValid(_ partialString: String, newEditingString newString: AutoreleasingUnsafeMutablePointer<NSString?>?, errorDescription error: AutoreleasingUnsafeMutablePointer<NSString?>?) -> Swift.Bool {
             if partialString.isEmpty {
                 return true
             }
@@ -322,7 +322,7 @@ class ViewController: NSViewController {
         if (index > 0) {
             BufferObjectSkipBytes(imageBuffer, Int64(imageLength * index))
         }
-        var data = BufferObjectReadBytes(imageBuffer, Int(imageLength))
+        var data = BufferObjectReadBytes(imageBuffer, UInt32(imageLength))
         guard data != nil else {
             statusText = "read image data failed. bad file ?"
             return
@@ -481,7 +481,7 @@ class ViewController: NSViewController {
         onFormatChanged(nil)
     }
     
-    var isUIHidden : Bool {
+    var isUIHidden : Swift.Bool {
         get {
             return propertyBox.isHidden
         }
@@ -502,7 +502,7 @@ class ViewController: NSViewController {
             return Int64(frameSlider.maxValue)
         }
         set {
-            frameSlider.numberOfTickMarks = Int(newValue) - 1
+            frameSlider.numberOfTickMarks = Swift.Int(newValue) - 1
             frameSlider.minValue = 0
             frameSlider.maxValue = Double(newValue - 1)
             frameSlider.intValue = 0
@@ -540,7 +540,7 @@ class ViewController: NSViewController {
     }
     
     override func mouseUp(with event: NSEvent) {
-        eventNumber = event.eventNumber
+        eventNumber = Int(event.eventNumber)
         //NSLog("mouseUp %@", event)
         // show/hide property box
         guard propertyBox.hitTest(event.locationInWindow) == nil else {

@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		57DD15B224BC62AE00DB671F /* ABE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DD15B124BC62AD00DB671F /* ABE.framework */; };
+		57DD15B424BC62B900DB671F /* MediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DD15B324BC62B900DB671F /* MediaFramework.framework */; };
+		57DD15B524BC62C400DB671F /* MediaFramework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 57DD15B324BC62B900DB671F /* MediaFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		57DD15B624BC62C400DB671F /* ABE.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 57DD15B124BC62AD00DB671F /* ABE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57E17AC72268D13000E0B0C8 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E17AC62268D13000E0B0C8 /* BaseView.swift */; };
 		57E17AC92268D49300E0B0C8 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E17AC82268D49300E0B0C8 /* ImageView.swift */; };
 		57E484982267349B000A2AF7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E484972267349B000A2AF7 /* AppDelegate.swift */; };
 		57E4849A2267349B000A2AF7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E484992267349B000A2AF7 /* ViewController.swift */; };
 		57E4849C2267349C000A2AF7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57E4849B2267349C000A2AF7 /* Assets.xcassets */; };
 		57E4849F2267349C000A2AF7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57E4849D2267349C000A2AF7 /* Main.storyboard */; };
-		57F95B2B24B3EA3200D58E2A /* ABE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F95B2A24B3EA3200D58E2A /* ABE.framework */; };
-		57F95B2D24B3EA5600D58E2A /* MediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F95B2C24B3EA5600D58E2A /* MediaFramework.framework */; };
-		57F95B2E24B3EA6900D58E2A /* ABE.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 57F95B2A24B3EA3200D58E2A /* ABE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		57F95B2F24B3EA6D00D58E2A /* MediaFramework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 57F95B2C24B3EA5600D58E2A /* MediaFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,8 +26,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				57F95B2F24B3EA6D00D58E2A /* MediaFramework.framework in Copy Frameworks */,
-				57F95B2E24B3EA6900D58E2A /* ABE.framework in Copy Frameworks */,
+				57DD15B524BC62C400DB671F /* MediaFramework.framework in Copy Frameworks */,
+				57DD15B624BC62C400DB671F /* ABE.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -35,6 +35,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		57DD15B124BC62AD00DB671F /* ABE.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ABE.framework; sourceTree = "<group>"; };
+		57DD15B324BC62B900DB671F /* MediaFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MediaFramework.framework; sourceTree = "<group>"; };
 		57E17AC62268D13000E0B0C8 /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		57E17AC82268D49300E0B0C8 /* ImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		57E484942267349B000A2AF7 /* YUVPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YUVPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,10 +46,6 @@
 		57E4849E2267349C000A2AF7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		57E484A02267349C000A2AF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57E484A12267349C000A2AF7 /* MacYUV.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MacYUV.entitlements; sourceTree = "<group>"; };
-		57E484A8226735CB000A2AF7 /* ABE.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ABE.framework; path = ../../Library/Frameworks/ABE.framework; sourceTree = "<group>"; };
-		57E484A9226735CB000A2AF7 /* MediaFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaFramework.framework; path = ../../Library/Frameworks/MediaFramework.framework; sourceTree = "<group>"; };
-		57F95B2A24B3EA3200D58E2A /* ABE.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ABE.framework; path = xcode/ABE.framework; sourceTree = "<group>"; };
-		57F95B2C24B3EA5600D58E2A /* MediaFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaFramework.framework; path = xcode/MediaFramework.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,8 +53,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57F95B2B24B3EA3200D58E2A /* ABE.framework in Frameworks */,
-				57F95B2D24B3EA5600D58E2A /* MediaFramework.framework in Frameworks */,
+				57DD15B424BC62B900DB671F /* MediaFramework.framework in Frameworks */,
+				57DD15B224BC62AE00DB671F /* ABE.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,10 +96,8 @@
 		57E484A7226735CA000A2AF7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				57F95B2C24B3EA5600D58E2A /* MediaFramework.framework */,
-				57E484A8226735CB000A2AF7 /* ABE.framework */,
-				57F95B2A24B3EA3200D58E2A /* ABE.framework */,
-				57E484A9226735CB000A2AF7 /* MediaFramework.framework */,
+				57DD15B324BC62B900DB671F /* MediaFramework.framework */,
+				57DD15B124BC62AD00DB671F /* ABE.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -325,6 +321,7 @@
 					"$(inherited)",
 					"$(USER_LIBRARY_DIR)/Frameworks",
 					"$(PROJECT_DIR)/xcode",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = MacYUV/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -351,6 +348,7 @@
 					"$(inherited)",
 					"$(USER_LIBRARY_DIR)/Frameworks",
 					"$(PROJECT_DIR)/xcode",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = MacYUV/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

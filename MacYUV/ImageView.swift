@@ -28,7 +28,7 @@ class ImageView: NSImageView {
     }
     
     var url : String?
-    func checkFile(drag: NSDraggingInfo) -> Bool {
+    func checkFile(drag: NSDraggingInfo) -> Swift.Bool {
         if let board = drag.draggingPasteboard.propertyList(forType: NSFilenamesPboardType) as? NSArray {
             url = board[0] as? String
             guard url != nil else {
@@ -66,7 +66,7 @@ class ImageView: NSImageView {
         }
     }
     
-    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Swift.Bool {
         NSLog("performDragOperation")
         guard url != nil else {
             return false
@@ -86,14 +86,14 @@ class ImageView: NSImageView {
     }
     
     // help move window by drag
-    override var acceptsFirstResponder: Bool {
+    override var acceptsFirstResponder: Swift.Bool {
         get {
             return true
         }
     }
     
     // not working but still put this
-    override var mouseDownCanMoveWindow: Bool {
+    override var mouseDownCanMoveWindow: Swift.Bool {
         get {
             return false
         }
@@ -131,10 +131,10 @@ class ImageView: NSImageView {
         // create a ARGB(word-order) CGImage
         let bitmapInfo = CGBitmapInfo.byteOrder32Little.rawValue | CGImageAlphaInfo.premultipliedFirst.rawValue
         let cgContext = CGContext.init(data: data,
-                                       width: Int(imageFormat.pointee.width),
-                                       height: Int(imageFormat.pointee.height),
+                                       width: Swift.Int(imageFormat.pointee.width),
+                                       height: Swift.Int(imageFormat.pointee.height),
                                        bitsPerComponent: 8,
-                                       bytesPerRow: Int(imageFormat.pointee.width * 4),
+                                       bytesPerRow: Swift.Int(imageFormat.pointee.width) * 4,
                                        space: CGColorSpace.init(name: CGColorSpace.sRGB)!,
                                        bitmapInfo: bitmapInfo)
         let cgImage = cgContext?.makeImage()

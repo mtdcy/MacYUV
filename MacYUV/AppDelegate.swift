@@ -40,7 +40,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Insert code here to tear down your application
     }
 
-    func application(_ sender: NSApplication, openFile filename: String) -> Bool {
+    func application(_ sender: NSApplication, openFile filename: String) -> Swift.Bool {
         NSLog("application openFile -> %@", filename)
         openFile(url: filename)
         return true
