@@ -11,6 +11,16 @@
 		57DD15B424BC62B900DB671F /* MediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DD15B324BC62B900DB671F /* MediaFramework.framework */; };
 		57DD15B524BC62C400DB671F /* MediaFramework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 57DD15B324BC62B900DB671F /* MediaFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57DD15B624BC62C400DB671F /* ABE.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 57DD15B124BC62AD00DB671F /* ABE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		57DD15F924C3D6A200DB671F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E484992267349B000A2AF7 /* ViewController.swift */; };
+		57DD15FA24C3D6A200DB671F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E484972267349B000A2AF7 /* AppDelegate.swift */; };
+		57DD15FB24C3D6A200DB671F /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E17AC82268D49300E0B0C8 /* ImageView.swift */; };
+		57DD15FC24C3D6A200DB671F /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E17AC62268D13000E0B0C8 /* BaseView.swift */; };
+		57DD15FE24C3D6A200DB671F /* MediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DD15B324BC62B900DB671F /* MediaFramework.framework */; };
+		57DD15FF24C3D6A200DB671F /* ABE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DD15B124BC62AD00DB671F /* ABE.framework */; };
+		57DD160124C3D6A200DB671F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57E4849B2267349C000A2AF7 /* Assets.xcassets */; };
+		57DD160224C3D6A200DB671F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57E4849D2267349C000A2AF7 /* Main.storyboard */; };
+		57DD160424C3D6A200DB671F /* MediaFramework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 57DD15B324BC62B900DB671F /* MediaFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		57DD160524C3D6A200DB671F /* ABE.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 57DD15B124BC62AD00DB671F /* ABE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57E17AC72268D13000E0B0C8 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E17AC62268D13000E0B0C8 /* BaseView.swift */; };
 		57E17AC92268D49300E0B0C8 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E17AC82268D49300E0B0C8 /* ImageView.swift */; };
 		57E484982267349B000A2AF7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E484972267349B000A2AF7 /* AppDelegate.swift */; };
@@ -20,6 +30,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		57DD160324C3D6A200DB671F /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				57DD160424C3D6A200DB671F /* MediaFramework.framework in Copy Frameworks */,
+				57DD160524C3D6A200DB671F /* ABE.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57E484AC226735D7000A2AF7 /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
@@ -37,6 +59,8 @@
 /* Begin PBXFileReference section */
 		57DD15B124BC62AD00DB671F /* ABE.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ABE.framework; sourceTree = "<group>"; };
 		57DD15B324BC62B900DB671F /* MediaFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MediaFramework.framework; sourceTree = "<group>"; };
+		57DD160924C3D6A200DB671F /* YUVPlayer Lite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "YUVPlayer Lite.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		57DD160A24C3D6A200DB671F /* InfoLite.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = InfoLite.plist; path = /Users/chenfang/Projects/MacYUV/InfoLite.plist; sourceTree = "<absolute>"; };
 		57E17AC62268D13000E0B0C8 /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		57E17AC82268D49300E0B0C8 /* ImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		57E484942267349B000A2AF7 /* YUVPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YUVPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,6 +73,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		57DD15FD24C3D6A200DB671F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57DD15FE24C3D6A200DB671F /* MediaFramework.framework in Frameworks */,
+				57DD15FF24C3D6A200DB671F /* ABE.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57E484912267349B000A2AF7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -74,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				57E484942267349B000A2AF7 /* YUVPlayer.app */,
+				57DD160924C3D6A200DB671F /* YUVPlayer Lite.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -89,6 +123,7 @@
 				57E4849D2267349C000A2AF7 /* Main.storyboard */,
 				57E484A02267349C000A2AF7 /* Info.plist */,
 				57E484A12267349C000A2AF7 /* MacYUV.entitlements */,
+				57DD160A24C3D6A200DB671F /* InfoLite.plist */,
 			);
 			path = MacYUV;
 			sourceTree = "<group>";
@@ -105,6 +140,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		57DD15F724C3D6A200DB671F /* YUVPlayer Lite */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 57DD160624C3D6A200DB671F /* Build configuration list for PBXNativeTarget "YUVPlayer Lite" */;
+			buildPhases = (
+				57DD15F824C3D6A200DB671F /* Sources */,
+				57DD15FD24C3D6A200DB671F /* Frameworks */,
+				57DD160024C3D6A200DB671F /* Resources */,
+				57DD160324C3D6A200DB671F /* Copy Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "YUVPlayer Lite";
+			productName = MacYUV;
+			productReference = 57DD160924C3D6A200DB671F /* YUVPlayer Lite.app */;
+			productType = "com.apple.product-type.application";
+		};
 		57E484932267349B000A2AF7 /* YUVPlayer */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 57E484A42267349C000A2AF7 /* Build configuration list for PBXNativeTarget "YUVPlayer" */;
@@ -152,11 +205,21 @@
 			projectRoot = "";
 			targets = (
 				57E484932267349B000A2AF7 /* YUVPlayer */,
+				57DD15F724C3D6A200DB671F /* YUVPlayer Lite */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		57DD160024C3D6A200DB671F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57DD160124C3D6A200DB671F /* Assets.xcassets in Resources */,
+				57DD160224C3D6A200DB671F /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57E484922267349B000A2AF7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -169,6 +232,17 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		57DD15F824C3D6A200DB671F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57DD15F924C3D6A200DB671F /* ViewController.swift in Sources */,
+				57DD15FA24C3D6A200DB671F /* AppDelegate.swift in Sources */,
+				57DD15FB24C3D6A200DB671F /* ImageView.swift in Sources */,
+				57DD15FC24C3D6A200DB671F /* BaseView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		57E484902267349B000A2AF7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -194,6 +268,66 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		57DD160724C3D6A200DB671F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MacYUV/MacYUV.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9FY6WA76LN;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+					"$(PROJECT_DIR)/xcode",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/InfoLite.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_SWIFT_FLAGS = "-DLITE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mtdcy.MacYUV;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = MacYUV/Header.h;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		57DD160824C3D6A200DB671F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MacYUV/MacYUV.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9FY6WA76LN;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+					"$(PROJECT_DIR)/xcode",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/InfoLite.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_SWIFT_FLAGS = "-DLITE";
+				"OTHER_SWIFT_FLAGS[arch=*]" = "-DRELEASE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mtdcy.MacYUVFree;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = MacYUV/Header.h;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		57E484A22267349C000A2AF7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -355,6 +489,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				"OTHER_SWIFT_FLAGS[arch=*]" = "-DRELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mtdcy.MacYUV;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = MacYUV/Header.h;
@@ -365,6 +500,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		57DD160624C3D6A200DB671F /* Build configuration list for PBXNativeTarget "YUVPlayer Lite" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				57DD160724C3D6A200DB671F /* Debug */,
+				57DD160824C3D6A200DB671F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		57E4848F2267349B000A2AF7 /* Build configuration list for PBXProject "YUVPlayer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

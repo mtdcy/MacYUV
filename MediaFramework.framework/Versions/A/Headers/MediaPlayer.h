@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2016, Chen Fang <mtdcy.chen@gmail.com>
+ * Copyright (c) 2020, Chen Fang <mtdcy.chen@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,15 +27,15 @@
 
 
 /**
- * File:    mpx.h
+ * File:    MediaPlayer.h
  * Author:  mtdcy.chen
  * Changes:
  *          1. 20181214     initial version
  *
  */
 
-#ifndef _MEDIA_PLAYER_H
-#define _MEDIA_PLAYER_H
+#ifndef MFWK_MEDIA_PLAYER_H
+#define MFWK_MEDIA_PLAYER_H
 
 #include <MediaFramework/MediaTypes.h>
 #include <MediaFramework/MediaClock.h>
@@ -78,7 +78,7 @@ enum {
 __END_DECLS
 
 #ifdef __cplusplus
-__BEGIN_NAMESPACE_MPX
+__BEGIN_NAMESPACE_MFWK
 
 /**
  * for MediaPlayer streaming MediaFrame to client
@@ -97,8 +97,8 @@ typedef MediaEvent2<ePlayerInfoType, sp<Message> > PlayerInfoEvent;
  *  "url"                   - [String]                  - mandatory, url of the media
  *  "VideoFrameEvent"       - [sp<MediaFrameEvent>]     - optional
  *  "AudioFrameEvent"       - [sp<MediaFrameEvent>]     - optional
- *  "StartTime"             - [Float64|seconds]          - optional
- *  "EndTime"               - [Float64|seconds]          - optional
+ *  "StartTime"             - [Float64|seconds]         - optional
+ *  "EndTime"               - [Float64|seconds]         - optional
  * about options (global):
  *  "StatusEvent"           - [sp<StatusEvent>]         - optional
  *  "PlayerInfoEvent"       - [sp<PlayerInfoEvent>]     - optional
@@ -116,8 +116,6 @@ class API_EXPORT IMediaPlayer : public SharedObject {
 
     protected:
         IMediaPlayer(const sp<Looper>& lp);
-
-        virtual ~IMediaPlayer() { }
 
     public:
         virtual sp<Clock>   clock() const;
@@ -148,17 +146,15 @@ class API_EXPORT IMediaPlayer : public SharedObject {
         virtual void        onPrepare(const MediaTime&) = 0;
         virtual void        onStart() = 0;
         virtual void        onPause() = 0;
-    
-    private:
-        virtual void        onFirstRetain();
-        virtual void        onLastRetain();
         
     protected:
         sp<DispatchQueue>   mDispatch;
         sp<SharedClock>     mClock;
+    
+        OBJECT_TAIL(IMediaPlayer)
 };
-__END_NAMESPACE_MPX
+__END_NAMESPACE_MFWK
 #endif
 
-#endif // _MEDIA_PLAYER_H
+#endif // MFWK_MEDIA_PLAYER_H
 

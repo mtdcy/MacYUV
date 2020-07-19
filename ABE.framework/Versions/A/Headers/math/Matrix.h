@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2016, Chen Fang <mtdcy.chen@gmail.com>
+ * Copyright (c) 2020, Chen Fang <mtdcy.chen@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

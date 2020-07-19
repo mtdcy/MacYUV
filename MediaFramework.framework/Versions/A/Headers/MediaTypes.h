@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2016, Chen Fang <mtdcy.chen@gmail.com>
+ * Copyright (c) 2020, Chen Fang <mtdcy.chen@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,10 +32,19 @@
 //          1. 20160701     initial version
 //
 
-#ifndef _MPX_MEDIA_TYPES_H
-#define _MPX_MEDIA_TYPES_H
+#ifndef MFWK_MEDIA_TYPES_H
+#define MFWK_MEDIA_TYPES_H
 
 #include <ABE/ABE.h>
+
+#pragma mark Version
+
+#define MFWK_MAJOR  (2)
+#define MFWK_MINOR  (0)
+#define MFWK_PATCH  (0)
+
+#define MFWK_VERSION    ABE_VERSION_INT(MFWK_MAJOR, MFWK_MINOR, MFWK_PATCH)
+#define MFWK_VERSION_STRING __LITERAL_TO_STRING(MFWK_MAJOR) "." __LITERAL_TO_STRING(MFWK_MINOR) "." __LITERAL_TO_STRING(MFWK_PATCH)
 
 #pragma mark Basic Macros
 #ifndef FORCE_INLINE 
@@ -51,9 +60,9 @@
 #endif
 
 #ifdef __cplusplus 
-#define __BEGIN_NAMESPACE_MPX   __BEGIN_NAMESPACE(mpx)
-#define __END_NAMESPACE_MPX     __END_NAMESPACE(mpx)
-#define __USING_NAMESPACE_MPX   __USING_NAMESPACE(mpx)
+#define __BEGIN_NAMESPACE_MFWK  __BEGIN_NAMESPACE(MFWK)
+#define __END_NAMESPACE_MFWK    __END_NAMESPACE(MFWK)
+#define USING_NAMESPACE_MFWK    __USING_NAMESPACE(MFWK)
 USING_NAMESPACE_ABE
 #endif
 
@@ -65,9 +74,9 @@ USING_NAMESPACE_ABE
 __BEGIN_DECLS
 
 #undef FOURCC // FOURCC may be defined by others
-#define FOURCC(x) ((((UInt32)(x) >> 24) & 0xff)       \
-                | (((UInt32)(x) >> 8) & 0xff00)       \
-                | (((UInt32)(x) << 8) & 0xff0000)     \
+#define FOURCC(x) ((((UInt32)(x) >> 24) & 0xff)         \
+                | (((UInt32)(x) >> 8) & 0xff00)         \
+                | (((UInt32)(x) << 8) & 0xff0000)       \
                 | (((UInt32)(x) << 24) & 0xff000000))
 
 #define MEDIA_ENUM_MAX              (0xFFFFFFFF)
@@ -388,8 +397,8 @@ API_EXPORT Bool                     IsSemiPlanarPixelFormat(ePixelFormat);
 typedef struct ImageFormat {
     ePixelFormat        format;         ///< image pixel format
     eColorMatrix        matrix;         ///< color matrix for yuv
-    Int32             width;          ///< plane width
-    Int32             height;         ///< plane height
+    Int32               width;          ///< plane width
+    Int32               height;         ///< plane height
     struct {                            ///< display rectangle
         Int32             x;          ///< left start position
         Int32             y;          ///< top start position
@@ -413,17 +422,17 @@ API_EXPORT Bool                     IsPlanarSampleFormat(eSampleFormat);
 
 typedef struct AudioFormat {
     eSampleFormat       format;         ///< audio sample format @see eSampleFormat
-    Int32             freq;           ///< audio sample rate
+    UInt32              freq;           ///< audio sample rate
     UInt32              channels;       ///< audio channels
-    UInt32              samples;        ///< samples per channel
+    UInt32              samples;        ///< samples per channel [TODO: remove it]
 } AudioFormat;
 
 /**
  * time struct for represent decoding and presentation time
- * @note we prefer Int64(us) for our framework, but files and decoders prefer
- * time value & scale, so we using MediaTime for MediaFrame, but Int64
+ * @note we prefer Time(ns) for our framework, but files and decoders prefer
+ * time value & scale, so we using MediaTime for MediaFrame, but Time
  * for rest of the framework.
- * @note MediaTime should only be used inside, no export, using Int64(us) export
+ * @note MediaTime should only be used inside, no export, using Time export
  * time related properties. so MediaTime will not derive from SharedObject
  */
 typedef struct MediaTime {
@@ -447,7 +456,7 @@ __END_DECLS
 
 #pragma mark C++ Accesories
 #ifdef __cplusplus
-__BEGIN_NAMESPACE_MPX
+__BEGIN_NAMESPACE_MFWK
 
 // AudioFormat
 API_EXPORT String   GetAudioFormatString(const AudioFormat&);
@@ -573,8 +582,8 @@ class ABE_EXPORT MediaEvent2 : public Job {
         }
 };
 
-__END_NAMESPACE_MPX
+__END_NAMESPACE_MFWK
 #endif // __cplusplus
 
-#endif // _MPX_MEDIA_TYPES_H
+#endif // MFWK_MEDIA_TYPES_H
 

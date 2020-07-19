@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2016, Chen Fang <mtdcy.chen@gmail.com>
+ * Copyright (c) 2020, Chen Fang <mtdcy.chen@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,8 +32,8 @@
 //          1. 20200630     initial version
 //
 
-#ifndef _MEDIA_MODULES_FRAME_H
-#define _MEDIA_MODULES_FRAME_H
+#ifndef MFWK_MEDIA_FRAME_H
+#define MFWK_MEDIA_FRAME_H
 
 #include <MediaFramework/MediaTypes.h>
 
@@ -50,16 +50,16 @@ typedef struct MediaBuffer {
 
 typedef struct MediaBufferList {
     UInt32          count;              ///< number buffer in list
-    MediaBuffer     buffers[1];         ///< a variable length array with min length = 1
+    MediaBuffer     buffers[0];         ///< a variable length array with min length = 1
 #ifdef __cplusplus
-    MediaBufferList() : count(1) { }
+    MediaBufferList() : count(0) { }
 #endif
 } MediaBufferList;
 
 __END_DECLS
 
 #ifdef __cplusplus
-__BEGIN_NAMESPACE_MPX
+__BEGIN_NAMESPACE_MFWK
 
 API_EXPORT String   GetMediaBufferListString(const MediaBufferList&);
 
@@ -91,7 +91,7 @@ struct API_EXPORT MediaFrame : public SharedObject {
     static sp<MediaFrame>   Create(const AudioFormat&);                 ///< create a audio frame
     static sp<MediaFrame>   Create(const ImageFormat&);                 ///< create a video/image frame
     static sp<MediaFrame>   Create(const ImageFormat&, sp<Buffer>&);    ///< create a video/image frame with Buffer
-    
+
     // DEBUGGING: get a human readable string
     virtual String          string() const;
 
@@ -103,14 +103,14 @@ struct API_EXPORT MediaFrame : public SharedObject {
      * @note default implementation: read directly from planes
      */
     virtual sp<ABuffer> readPlane(UInt32) const;
-    
+
     protected:
     MediaFrame();
-    virtual ~MediaFrame() { }
-    DISALLOW_EVILS(MediaFrame);
+
+    OBJECT_TAIL(MediaFrame);
 };
 
-__END_NAMESPACE_MPX
+__END_NAMESPACE_MFWK
 #endif // __cplusplus
 
-#endif // _MEDIA_MODULES_FRAME_H
+#endif // MFWK_MEDIA_FRAME_H

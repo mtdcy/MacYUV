@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2016, Chen Fang <mtdcy.chen@gmail.com>
+ * Copyright (c) 2020, Chen Fang <mtdcy.chen@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,15 +27,15 @@
 
 
 /**
- * File:    mpx.h
+ * File:    MediaClock.h
  * Author:  mtdcy.chen
  * Changes:
  *          1. 20181214     initial version
  *
  */
 
-#ifndef _MPX_MEDIA_CLOCK_H
-#define _MPX_MEDIA_CLOCK_H
+#ifndef MFWK_MEDIA_CLOCK_H
+#define MFWK_MEDIA_CLOCK_H
 
 #include <MediaFramework/MediaTypes.h>
 
@@ -55,7 +55,7 @@ enum eClockState {
 __END_DECLS
 
 #ifdef __cplusplus
-__BEGIN_NAMESPACE_MPX
+__BEGIN_NAMESPACE_MFWK
 
 typedef MediaEvent<eClockState> ClockEvent;
 
@@ -70,7 +70,6 @@ class Clock;
 class API_EXPORT SharedClock : public SharedObject {
     public:
         SharedClock();
-        virtual ~SharedClock() { }
 
         /**
          * set clock time, without alter clock state
@@ -138,7 +137,7 @@ class API_EXPORT SharedClock : public SharedObject {
 
         Time            get_l() const;
 
-        DISALLOW_EVILS(SharedClock);
+        OBJECT_TAIL(SharedClock);
 };
 
 /**
@@ -153,7 +152,6 @@ class API_EXPORT Clock : public SharedObject {
          * @param role  @see SharedClock::eClockRole
          */
         Clock(const sp<SharedClock>& sc, eClockRole role = kClockRoleSlave);
-        virtual ~Clock();
 
     public:
         /**
@@ -220,11 +218,11 @@ class API_EXPORT Clock : public SharedObject {
          */
         mutable SharedClock::ClockInt   mClockInt;
 
-        DISALLOW_EVILS(Clock);
+        OBJECT_TAIL(Clock);
 };
 
 
-__END_NAMESPACE_MPX
+__END_NAMESPACE_MFWK
 #endif
 
 #endif

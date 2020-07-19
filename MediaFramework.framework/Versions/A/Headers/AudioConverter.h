@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2016, Chen Fang <mtdcy.chen@gmail.com>
+ * Copyright (c) 2020, Chen Fang <mtdcy.chen@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,18 +34,18 @@
  *
  */
 
-#ifndef _MPX_MEDIA_AUDIO_CONVERTER_H
-#define _MPX_MEDIA_AUDIO_CONVERTER_H
+#ifndef MFWK_AUDIO_CONVERTER_H
+#define MFWK_AUDIO_CONVERTER_H
 
 #include <MediaFramework/MediaTypes.h>
 #include <MediaFramework/MediaDevice.h>
 
 #ifdef __cplusplus
-__BEGIN_NAMESPACE_MPX
+__BEGIN_NAMESPACE_MFWK
 
 sp<MediaDevice> CreateAudioConverter(const AudioFormat&, const AudioFormat&, const sp<Message>&);
 
-__END_NAMESPACE_MPX
+__END_NAMESPACE_MFWK
 #endif // __cplusplus
 
-#endif // _MPX_MEDIA_AUDIO_CONVERTER_H
+#endif // MFWK_AUDIO_CONVERTER_H

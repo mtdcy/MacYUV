@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>MacYUV Lite.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>MacYUV.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -12,6 +17,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>57DD15F724C3D6A200DB671F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>57E484932267349B000A2AF7</key>
 		<dict>
 			<key>primary</key>

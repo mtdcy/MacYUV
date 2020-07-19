@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2016, Chen Fang <mtdcy.chen@gmail.com>
+ * Copyright (c) 2020, Chen Fang <mtdcy.chen@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,8 +34,8 @@
  *
  */
 
-#ifndef _MEDIA_MODULES_IMAGE_CONVERTER_H
-#define _MEDIA_MODULES_IMAGE_CONVERTER_H
+#ifndef MFWK_COLOR_CONVERTER_H
+#define MFWK_COLOR_CONVERTER_H
 #include <MediaFramework/MediaTypes.h>
 #include <MediaFramework/MediaUnit.h>
 #include <MediaFramework/MediaDevice.h>
@@ -44,16 +44,14 @@ __BEGIN_DECLS
 
 API_EXPORT const MediaUnit * ColorUnitFindNext(const MediaUnit *, const ePixelFormat);
 
-enum eConversion { kBT601, kBT709, kJFIF };
-
 __END_DECLS
 
 #ifdef __cplusplus
-__BEGIN_NAMESPACE_MPX
+__BEGIN_NAMESPACE_MFWK
 
 API_EXPORT sp<MediaDevice> CreateColorConverter(const ImageFormat&, const ImageFormat&, const sp<Message>&);
 
-__END_NAMESPACE_MPX
+__END_NAMESPACE_MFWK
 #endif // __cplusplus
 
-#endif //_MEDIA_MODULES_IMAGE_CONVERTER_H
+#endif //MFWK_COLOR_CONVERTER_H

@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2016, Chen Fang <mtdcy.chen@gmail.com>
+ * Copyright (c) 2020, Chen Fang <mtdcy.chen@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -151,12 +151,14 @@ typedef UInt32          Status;
 #else
 #define ABE_EXPORT                      __declspec(dllimport)
 #endif
-#define ABE_DEPRECATED                  __declspec(deprecated)
+#define ABE_DEPRECATED                  __declspec(deprecated("deprecated"))
+#define ABE_EXPERIMENTAL                __declspec(deprecated("experimental"))
 #else
 //#define __ABE_INLINE                    __attribute__ ((__always_inline__))
 #define ABE_INLINE                      __attribute__ ((__visibility__("hidden"), __always_inline__)) inline
 #define ABE_EXPORT                      __attribute__ ((__visibility__("default")))
-#define ABE_DEPRECATED                  __attribute__ ((deprecated))
+#define ABE_DEPRECATED                  __attribute__ ((deprecated("deprecated")))
+#define ABE_EXPERIMENTAL                __attribute__ ((deprecated("experimental")))
 #endif
 
 #if defined(_MSC_VER)
@@ -500,6 +502,36 @@ class wp : public StaticObject {
         template<typename U> ABE_INLINE void set(const wp<U>&);
         template<typename U> ABE_INLINE void set(const sp<U>&);
         SharedObject::Refs * mRefs;
+};
+
+// local pointer
+template <typename TYPE>
+class ABE_EXPERIMENTAL lp : public StaticObject {
+    public:
+        ABE_INLINE lp() : mTarget(Nil), mRefs(0) { }
+        ABE_INLINE lp(const lp& rhs) : mTarget(rhs.mTarget), mRefs(rhs.mRefs.load()) { }
+    
+        ABE_INLINE lp& operator=(const lp& rhs) {
+            if (mTarget && (--mRefs) == 0) delete mTarget;
+            mTarget = rhs.mTarget;
+            if (mTarget) mRefs.store(++rhs.mRefs);
+            else mRefs.store(0);
+        }
+    
+    public:
+        // access to object
+        ABE_INLINE  TYPE*       operator->()       { return mTarget;    }
+        ABE_INLINE  const TYPE* operator->() const { return mTarget;    }
+
+        ABE_INLINE  TYPE&       operator*()        { return *mTarget;   }
+        ABE_INLINE  const TYPE& operator*() const  { return *mTarget;   }
+    
+        // export object to c code.
+        ABE_INLINE  TYPE *      get() const        { return mTarget;    }
+    
+    private:
+        TYPE *          mTarget;
+        Atomic<UInt32>  mRefs;
 };
 
 ///////////////////////////////////////////////////////////////////////////

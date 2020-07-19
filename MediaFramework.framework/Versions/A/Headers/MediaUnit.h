@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2016, Chen Fang <mtdcy.chen@gmail.com>
+ * Copyright (c) 2020, Chen Fang <mtdcy.chen@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,21 +32,21 @@
 //          1. 20200701     initial version
 //
 
-#ifndef _MEDIA_UNIT_H
-#define _MEDIA_UNIT_H 
+#ifndef MFWK_MEDIA_UNIT_H
+#define MFWK_MEDIA_UNIT_H 
 
 #include <MediaFramework/MediaFrame.h>
 
 __BEGIN_DECLS
 
 enum {
-    kMediaUnitProcessInplace            = (1<<0),   // inplace process
+    kMediaUnitProcessInplace            = (1<<0),   ///< inplace process
     kMediaUnitProcessVariableSamples    = (1<<1),   ///< sample count change
 };
 typedef UInt32 eMediaUnitFlags;
 
 typedef union MediaFormat {
-    UInt32        format;
+    UInt32          format;
     AudioFormat     audio;
     ImageFormat     video;
     ImageFormat     image;
@@ -58,8 +58,8 @@ typedef struct MediaUnit {
     const Char *            name;       ///< hunam readable string, DEBUGGING!
     const eMediaUnitFlags   flags;      ///< media unit flags
 
-    const UInt32 *        iformats;   ///< supported input format list
-    const UInt32 *        oformats;   ///< supported output format list
+    const UInt32 *          iformats;   ///< supported input format list
+    const UInt32 *          oformats;   ///< supported output format list
 
     /**
      * alloc/dealloc a media unit context
@@ -99,10 +99,10 @@ typedef struct MediaUnit {
 __END_DECLS
 
 #ifdef __cplusplus
-__BEGIN_NAMESPACE_MPX
+__BEGIN_NAMESPACE_MFWK
 
 
-__END_NAMESPACE_MPX
+__END_NAMESPACE_MFWK
 #endif // __cplusplus 
 
-#endif // _MEDIA_UNIT_H 
+#endif // MFWK_MEDIA_UNIT_H 

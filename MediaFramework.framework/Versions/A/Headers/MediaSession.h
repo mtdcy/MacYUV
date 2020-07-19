@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2016, Chen Fang <mtdcy.chen@gmail.com>
+ * Copyright (c) 2020, Chen Fang <mtdcy.chen@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,8 +34,8 @@
  *
  */
 
-#ifndef _MPX_MEDIA_SESSION_H
-#define _MPX_MEDIA_SESSION_H
+#ifndef MFWK_MEDIA_SESSION_H
+#define MFWK_MEDIA_SESSION_H
 
 #include <MediaFramework/MediaTypes.h>
 #include <MediaFramework/MediaFrame.h>
@@ -49,7 +49,7 @@ enum {
 __END_DECLS
 
 #ifdef __cplusplus
-__BEGIN_NAMESPACE_MPX
+__BEGIN_NAMESPACE_MFWK
 
 /**
  * For choose tracks
@@ -102,12 +102,7 @@ class API_EXPORT IMediaSession : public SharedObject {
     public:
         IMediaSession(const sp<Looper>& lp) : mDispatch(new DispatchQueue(lp)) { }
 
-        virtual ~IMediaSession() { }
-
     protected:
-        virtual void onFirstRetain();   //> onInit()
-        virtual void onLastRetain();    //> onRelease()
-
         // these routine always run inside looper
         struct InitJob;
         struct ReleaseJob;
@@ -116,10 +111,10 @@ class API_EXPORT IMediaSession : public SharedObject {
 
         sp<DispatchQueue> mDispatch;
 
-        DISALLOW_EVILS(IMediaSession);
+        OBJECT_TAIL(IMediaSession);
 };
 
-__END_NAMESPACE_MPX
+__END_NAMESPACE_MFWK
 #endif // __cplusplus
 
-#endif // _MPX_MEDIA_SESSION_H
+#endif // MFWK_MEDIA_SESSION_H

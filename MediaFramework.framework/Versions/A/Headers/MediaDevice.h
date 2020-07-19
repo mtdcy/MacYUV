@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2016, Chen Fang <mtdcy.chen@gmail.com>
+ * Copyright (c) 2020, Chen Fang <mtdcy.chen@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,8 +32,8 @@
 //          1. 20200630     initial version
 //
 
-#ifndef _MEDIA_MODULES_DEVICE_H
-#define _MEDIA_MODULES_DEVICE_H
+#ifndef MFWK_MEDIA_DEVICE_H
+#define MFWK_MEDIA_DEVICE_H
 
 #include <MediaFramework/MediaTypes.h>
 #include <MediaFramework/MediaFrame.h>
@@ -43,33 +43,33 @@
  *  audio track formats:
  *   kKeyFormat:        eAudioCodec     [*] audio codec
  *   kKeyType:          eCodecType      [ ] codec type, default:kCodecTypeAudio
- *   kKeyChannels:      UInt32        [*] audio channels
- *   kKeySampleRate:    UInt32        [*] audio sample rate
- *   kKeyChannelMap:    UInt32        [ ] audio channel map
+ *   kKeyChannels:      UInt32          [*] audio channels
+ *   kKeySampleRate:    UInt32          [*] audio sample rate
+ *   kKeyChannelMap:    UInt32          [ ] audio channel map
  *   kKeyESDS:          sp<Buffer>      [ ] audio magic data
  *
  *  audio sample formats:
  *   kKeyFormat:        eSampleFormat   [*] sample format
  *   kKeyType:          eCodecType      [ ] codec type, default:kCodecTypeAudio
- *   kKeyChannels:      UInt32        [*] audio channels
- *   kKeySampleRate:    UInt32        [*] audio sample rate
+ *   kKeyChannels:      UInt32          [*] audio channels
+ *   kKeySampleRate:    UInt32          [*] audio sample rate
  *
  *  video track formats:
  *   kKeyFormat:        eVideoCodec     [*] video codec
  *   kKeyType:          eCodecType      [*] codec type, default:kCodecTypeVideo
- *   kKeyWidth:         UInt32        [*] video width
- *   kKeyHeight:        UInt32        [*] video height
+ *   kKeyWidth:         UInt32          [*] video width
+ *   kKeyHeight:        UInt32          [*] video height
  *   kKeyavcC:          sp<Buffer>      [ ] h264 avcC data
  *   kKeyhvcC:          sp<Buffer>      [ ] hevc hvcC data
  *
  *  video pixel formats:
  *   kKeyFormat:        ePixelFormat    [*] pixel format
  *   kKeyType:          eCodecType      [*] codec type, default:kCodecTypeVideo   
- *   kKeyWidth:         UInt32        [*] video width
- *   kKeyHeight:        UInt32        [*] video height
+ *   kKeyWidth:         UInt32          [*] video width
+ *   kKeyHeight:        UInt32          [*] video height
  *
  *  common track formats:
- *   kKeyBitrate:       UInt32        [ ] bit rate
+ *   kKeyBitrate:       UInt32          [ ] bit rate
  */
 
 /**
@@ -81,20 +81,20 @@
  *
  *  output formats:
  *   kKeyFormat:        eFileFormat     [*] file format
- *   kKeyDuration:      Int64         [ ] file duration in us
- *   kKeyBitrate:       UInt32        [ ] bit rate
+ *   kKeyDuration:      Int64           [ ] file duration in us
+ *   kKeyBitrate:       UInt32          [ ] bit rate
  *   kKeyMetaData:      sp<Message>     [ ] file meta data
- *   kKeyCount:         UInt32        [ ] track count, default:1
+ *   kKeyCount:         UInt32          [ ] track count, default:1
  *   kKeyTrack + i:     sp<Message>     [*] audio/video/subtitle track format
  *
  *  configure options:
- *   kKeySeek:          Int64         [ ] perform seek
- *   kKeyTracks:        UInt32        [ ] perform track select based on track mask
+ *   kKeySeek:          Int64           [ ] perform seek
+ *   kKeyTracks:        UInt32          [ ] perform track select based on track mask
  *
  * Codec Device:
  *  input formats:
  *   ... audio/video track formats
- *   kKeyRequestFormat: UInt32        [ ] track request format
+ *   kKeyRequestFormat: UInt32          [ ] track request format
  *
  *  input options:
  *   kKeyMode:          eModeType       [ ] codec mode
@@ -111,7 +111,7 @@
  *
  *  output formats:
  *   ... sample formats/pixel formats
- *   kKeyLatency:       Int64         [ ] device push latency in us
+ *   kKeyLatency:       Int64           [ ] device push latency in us
  *   kKeyMode:          eBlockModeType  [ ] device push mode, default:kModeBlock
  *
  *  configure options:
@@ -225,7 +225,7 @@ typedef UInt32 eDeviceName;
 __END_DECLS
 
 #ifdef __cplusplus
-__BEGIN_NAMESPACE_MPX
+__BEGIN_NAMESPACE_MFWK
 
 class API_EXPORT MediaDevice : public SharedObject {
     public:
@@ -274,13 +274,12 @@ class API_EXPORT MediaDevice : public SharedObject {
         virtual MediaError      reset()                     = 0;
 
     protected:
-        MediaDevice() : SharedObject() { }
-        virtual ~MediaDevice() { }
+        MediaDevice(UInt32 id = FOURCC('?mdv')) : SharedObject(id) { }
 
-        DISALLOW_EVILS(MediaDevice);
+        OBJECT_TAIL(MediaDevice);
 };
 
-__END_NAMESPACE_MPX
+__END_NAMESPACE_MFWK
 #endif
 
-#endif // _MEDIA_MODULES_DEVICE_H
+#endif // MFWK_MEDIA_DEVICE_H

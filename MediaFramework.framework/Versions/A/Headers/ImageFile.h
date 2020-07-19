@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2016, Chen Fang <mtdcy.chen@gmail.com>
+ * Copyright (c) 2020, Chen Fang <mtdcy.chen@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,13 +32,13 @@
 //          1. 20160701     initial version
 //
 
-#ifndef _MEDIA_MODULES_IMAGE_FILE_H
-#define _MEDIA_MODULES_IMAGE_FILE_H
+#ifndef MFWK_IMAGE_FILE_H
+#define MFWK_IMAGE_FILE_H
 
 #include <MediaFramework/MediaTypes.h>
 
 #ifdef __cplusplus
-__BEGIN_NAMESPACE_MPX
+__BEGIN_NAMESPACE_MFWK
 
 struct API_EXPORT ImageFile : public SharedObject {
     ImageFile() : SharedObject() { }
@@ -61,7 +61,7 @@ struct API_EXPORT ImageFile : public SharedObject {
     virtual MediaError writeImage(const sp<MediaFrame>&) = 0;
 };
 
-__END_NAMESPACE_MPX
+__END_NAMESPACE_MFWK
 #endif // __cplusplus
 
-#endif // _MEDIA_MODULES_IMAGE_FILE_H
+#endif // MFWK_IMAGE_FILE_H

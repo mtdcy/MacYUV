@@ -12,7 +12,11 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     var lastWindow : NSWindow?
+    #if RELEASE
     let usingSystemLog = true
+    #else
+    let usingSystemLog = false
+    #endif
     
     override init() {
         super.init()
