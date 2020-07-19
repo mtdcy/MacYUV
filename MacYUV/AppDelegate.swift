@@ -12,23 +12,18 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     var lastWindow : NSWindow?
-    #if RELEASE
-    let usingSystemLog = true
-    #else
-    let usingSystemLog = false
-    #endif
     
     override init() {
         super.init()
         NSLog("On Application init")
-        if (usingSystemLog) {
-            // setup log callback
-            // https://originware.com/blog/?p=265
-            LogSetCallback { (line : UnsafePointer<Int8>?) in
-                // print won't send to syslog
-                NSLog(String.init(cString: line!))
-            }
+        #if RELEASE
+        // setup log callback
+        // https://originware.com/blog/?p=265
+        LogSetCallback { (line : UnsafePointer<Int8>?) in
+            // print won't send to syslog
+            NSLog(String.init(cString: line!))
         }
+        #endif
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -51,6 +46,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     public func openFile(url: String?) -> Void {
+        #if LITE
+        if (NSApplication.shared.mainWindow != nil) {
+            let viewController = NSApplication.shared.mainWindow!.contentViewController as! ViewController
+            viewController.openFile(url: url!)
+            return
+        }
+        #endif
+        
         let storyBoard = NSStoryboard.init(name: NSStoryboard.Name("Main"), bundle: Bundle.main)
         let windowController = storyBoard.instantiateController(withIdentifier:  NSStoryboard.SceneIdentifier("ImageWindowController")) as! NSWindowController
         let viewController = storyBoard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier("ImageViewController")) as! ViewController
