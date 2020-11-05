@@ -163,8 +163,8 @@ class ViewController: NSViewController {
                 infoText.isHidden = true
             } else {
                 infoText.isHidden = false
-                infoText.stringValue = newValue
             }
+            infoText.stringValue = newValue
         }
     }
     
@@ -383,6 +383,12 @@ class ViewController: NSViewController {
         }
         
         statusText = imageView.drawFrame(frame: output!)
+        
+        // show frame number
+        if (numFrames > 1 && statusText == "") {
+            statusText = "frames: " + String(index + 1) + "/" + String(numFrames)
+        }
+        
         SharedObjectRelease(image)
         image = nil
     }
@@ -499,7 +505,7 @@ class ViewController: NSViewController {
     
     var numFrames : Int64 {
         get {
-            return Int64(frameSlider.maxValue)
+            return Int64(frameSlider.maxValue) + 1
         }
         set {
             frameSlider.numberOfTickMarks = Swift.Int(newValue) - 1
@@ -619,6 +625,10 @@ class ViewController: NSViewController {
         if (special == NSEvent.SpecialKey.rightArrow || special == NSEvent.SpecialKey.leftArrow) {
             var index = frameSlider.intValue
             index += special == NSEvent.SpecialKey.rightArrow ? +1 : -1
+            guard index >= 0 && index < numFrames else {
+                NSLog("out of range")
+                return
+            }
             frameSlider.intValue = index
             drawImage(index: index)
         }
