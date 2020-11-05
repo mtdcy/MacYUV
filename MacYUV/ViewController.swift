@@ -512,6 +512,7 @@ class ViewController: NSViewController {
             frameSlider.minValue = 0
             frameSlider.maxValue = Double(newValue - 1)
             frameSlider.intValue = 0
+            frameSlider.numberOfTickMarks = Swift.Int(newValue)
             if (newValue <= 1) {
                 frameSlider.isHidden = true
             } else {
