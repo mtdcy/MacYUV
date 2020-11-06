@@ -150,7 +150,6 @@ class ImageView: NSImageView {
         // error: unrecognized selector sent to instance. WHY?
         //imageView.provideImageData(UnsafeMutableRawPointer.init(data!), bytesPerRow: Int(outputFormat.width * 4), origin: Int(outputFormat.rect.x), Int(outputFormat.rect.y), size: size, Int(outputFormat.height), userInfo: self)
                 
-        SharedObjectRelease(frame)
         NSLog("drawFrame complete")
         return ""
     }

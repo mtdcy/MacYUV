@@ -383,6 +383,7 @@ class ViewController: NSViewController {
         }
         
         statusText = imageView.drawFrame(frame: output!)
+        SharedObjectRelease(output)
         
         // show frame number
         if (numFrames > 1 && statusText == "") {
