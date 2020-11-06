@@ -288,6 +288,7 @@ class ViewController: NSViewController {
         }
     }
     
+    // this is the key to isolate ui and data
     var imageFormat : ImageFormat {
         get {
             let rect = ImageFormat.__Unnamed_struct_rect.init(x: isRectEnabled ? leftText.intValue : 0,
@@ -313,86 +314,121 @@ class ViewController: NSViewController {
         }
     }
     
-    var imageLength : Int32 {
-        let descriptor : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(isYUV ? yuvFormat : rgbFormat)
-        return (widthText.intValue * heightText.intValue * Int32(descriptor.pointee.bpp)) / 8
+    var imageBytes : Int32 {
+        get {
+            let descriptor = GetPixelFormatDescriptor(imageFormat.format)
+            return (imageFormat.width * imageFormat.height * Int32(descriptor!.pointee.bpp)) / 8
+        }
+    }
+    
+    var numFrames : Int64 {
+        get {
+            guard imageBuffer != nil else {
+                // no files opened
+                return 1
+            }
+            let dataLength = BufferObjectGetCapacity(imageBuffer)
+            guard dataLength >= imageBytes else {
+                return 1
+            }
+            return dataLength / Int64(imageBytes)
+        }
+    }
+    
+    func prepareImage(index: Int32) -> (MediaFrameRef?, String) {
+//        if imageFormat.width != imageFormat.rect.x + imageFormat.rect.w ||
+//            imageFormat.height != imageFormat.rect.y + imageFormat.rect.h {
+//            return (nil, "bad image display values")
+//        }
+        
+        BufferObjectResetBytes(imageBuffer)
+        if (index > 0) {
+            BufferObjectSkipBytes(imageBuffer, Int64(imageBytes * index))
+        }
+        let imageData = BufferObjectReadBytes(imageBuffer, UInt32(imageBytes))
+        guard imageData != nil else {
+            return (nil, "read image data failed. bad file?")
+        }
+        
+        let bytes = BufferObjectGetDataLength(imageData)
+        guard bytes == imageBytes  else {
+            SharedObjectRelease(imageData)
+            return (nil, "not enough data, " + String(bytes) + "/" + String(imageBytes))
+        }
+        
+        //var format = imageFormat
+        let originImage = MediaFrameCreateWithImageBuffer(&imageFormat, imageData)
+        SharedObjectRelease(imageData)
+        
+        guard originImage != nil else {
+            return (nil, "prepare image failed, bad format?")
+        }
+        
+        // do color convert or crop
+        if imageFormat.format != imageView.pixelFormat ||
+            imageFormat.rect.x != 0 || imageFormat.rect.y != 0 {
+            var outputFormat = ImageFormat.init()
+            outputFormat.format     = imageView.pixelFormat
+            outputFormat.width      = imageFormat.rect.w
+            outputFormat.height     = imageFormat.rect.h
+            outputFormat.rect.x     = 0
+            outputFormat.rect.y     = 0
+            outputFormat.rect.w     = outputFormat.width
+            outputFormat.rect.h     = outputFormat.height
+            
+            let cc : MediaDeviceRef? = ColorConverterCreate(&imageFormat, &outputFormat, nil)
+            guard cc != nil else {
+                return (nil, "create color converter failed.")
+            }
+            
+            MediaDevicePush(cc, originImage)
+            SharedObjectRelease(originImage)
+            
+            let outputImage = MediaDevicePull(cc)
+            SharedObjectRelease(cc)
+            
+            guard outputImage != nil else {
+                return (nil, "color convert failed.")
+            }
+            return (outputImage, "")
+        } else {
+            return (originImage, "")
+        }
     }
     
     func drawImage(index: Int32) {
-        BufferObjectResetBytes(imageBuffer)
-        if (index > 0) {
-            BufferObjectSkipBytes(imageBuffer, Int64(imageLength * index))
-        }
-        var data = BufferObjectReadBytes(imageBuffer, UInt32(imageLength))
-        guard data != nil else {
-            statusText = "read image data failed. bad file ?"
+        let image = prepareImage(index: index)
+        
+        guard image.0 != nil else {
+            statusText = image.1
+            // clear image
+            imageView.drawFrame(frame: nil)
+            statusText = image.1
             return
         }
         
-        var format = imageFormat
-        var image = MediaFrameCreateWithImageBuffer(&format, data)
-        SharedObjectRelease(data)
-        data = nil
-        
-        guard image != nil else {
-            statusText = "create image frame failed."
-            return
-        }
+        let format = MediaFrameGetImageFormat(image.0)!
         
         // force window aspect ratio
         if self.view.isInFullScreenMode == false {
             let frame = self.view.window?.frame
             if frame != nil {
+                let ratio = CGFloat(format.pointee.height) / CGFloat(format.pointee.width)
                 // keep width, change height
-                let size = NSSize.init(width: frame!.width, height: frame!.width * CGFloat(format.rect.h) / CGFloat(format.rect.w))
+                let size = NSSize.init(width: frame!.width, height: frame!.width * ratio)
                 // set aspectRatio will NOT take effect immediately, so setFrame first
                 self.view.window?.aspectRatio = size
                 let rect = NSRect.init(x: frame!.minX, y: frame!.minY, width: size.width, height: size.height)
                 self.view.window?.setFrame(rect, display: true)
             }
         }
-
-        var outputFormat = ImageFormat.init()
-        outputFormat.format     = imageView.pixelFormat
-        outputFormat.width      = format.rect.w
-        outputFormat.height     = format.rect.h
-        outputFormat.rect.x     = 0
-        outputFormat.rect.y     = 0
-        outputFormat.rect.w     = outputFormat.width
-        outputFormat.rect.h     = outputFormat.height
         
-        var output = SharedObjectRetain(image);
-        // do color convertion or cropping
-        if (format.format != outputFormat.format ||
-            format.rect.x != 0 || format.rect.y != 0) {
-            let cc : MediaDeviceRef? = ColorConverterCreate(&format, &outputFormat, nil)
-            guard cc != nil else {
-                statusText = "create color converter failed."
-                return;
-            }
-            
-            MediaDevicePush(cc, output)
-            SharedObjectRelease(output)
-            
-            output = MediaDevicePull(cc)
-            SharedObjectRelease(cc)
-            
-            guard output != nil else {
-                statusText = "color convert failed."
-                return
-            }
-        }
-        
-        statusText = imageView.drawFrame(frame: output!)
-        SharedObjectRelease(output)
+        statusText = imageView.drawFrame(frame: image.0!)
+        SharedObjectRelease(image.0)
         
         // show frame number
         showFrameNumber(num: index + 1, den: Int32(numFrames))
-        
-        SharedObjectRelease(image)
-        image = nil
     }
-    
     
     func showFrameNumber(num : Int32, den : Int32) -> Void {
         if numFrames > 1 {
@@ -421,25 +457,29 @@ class ViewController: NSViewController {
         isUIHidden = false
         
         imageBuffer = BufferObjectCreateWithUrl(url)
-        if (imageBuffer != nil) {
-            let lucky = luckyGuess(size: BufferObjectGetDataLength(imageBuffer))
-            if (lucky != nil) {
-                print("lucky => ", lucky!)
-                
-                widthText.intValue     = Int32(lucky!.0.1)
-                heightText.intValue    = Int32(lucky!.0.2)
-                validateRect(width: widthText.intValue, height: heightText.intValue)
-                
-                // set both yuv & rgb lucky guess
-                if (lucky!.1[1] != kPixelFormatUnknown) {
-                    rgbFormat = lucky!.1[1]
-                }
-                if (lucky!.1[0] != kPixelFormatUnknown) {
-                    yuvFormat = lucky!.1[0]
-                }
-            }
-            onFormatChanged(nil)
+        
+        guard imageBuffer != nil else {
+            statusText = "open \(url) failed"
+            return
         }
+    
+        let lucky = luckyGuess(size: BufferObjectGetDataLength(imageBuffer))
+        if (lucky != nil) {
+            print("lucky => ", lucky!)
+            
+            widthText.intValue     = Int32(lucky!.0.1)
+            heightText.intValue    = Int32(lucky!.0.2)
+            validateRect(width: widthText.intValue, height: heightText.intValue)
+            
+            // set both yuv & rgb lucky guess
+            if (lucky!.1[1] != kPixelFormatUnknown) {
+                rgbFormat = lucky!.1[1]
+            }
+            if (lucky!.1[0] != kPixelFormatUnknown) {
+                yuvFormat = lucky!.1[0]
+            }
+        }
+        onFormatChanged(nil)
     }
     
     func closeFile() {
@@ -453,17 +493,6 @@ class ViewController: NSViewController {
     @IBAction func close(sender : Any?) {
         self.view.window?.performClose(nil)
         //NSApplication.shared.terminate(self)
-    }
-    
-    // move window by background
-    override func mouseDragged(with event: NSEvent) {
-        self.view.window?.performDrag(with: event)
-    }
-    
-    @IBAction func onFormatChanged(_ sender: Any?) {
-        NSLog("onFormatChanged")
-        numFrames = BufferObjectGetDataLength(imageBuffer) / Int64(imageLength)
-        drawImage(index: frameSlider.intValue)
     }
     
     func validateRect(width : Int32, height : Int32) {
@@ -483,6 +512,22 @@ class ViewController: NSViewController {
             }
         }
         // DON'T change values if display rectangle is disabled
+    }
+    
+    @IBAction func onFormatChanged(_ sender: Any?) {
+        NSLog("onFormatChanged")
+        if numFrames > 1 {
+            frameSlider.numberOfTickMarks = Swift.Int(numFrames)
+            frameSlider.minValue = 0
+            frameSlider.maxValue = Double(numFrames - 1)
+            frameSlider.intValue = 0
+            frameSlider.isHidden = isUIHidden
+        } else {
+            frameSlider.isHidden = true
+        }
+        validateRect(width: widthText.intValue, height: heightText.intValue)
+        
+        drawImage(index: frameSlider.intValue)
     }
     
     @IBAction func onRectCheck(_ sender: Any) {
@@ -521,24 +566,6 @@ class ViewController: NSViewController {
         }
     }
     
-    var numFrames : Int64 {
-        get {
-            return Int64(frameSlider.maxValue) + 1
-        }
-        set {
-            frameSlider.numberOfTickMarks = Swift.Int(newValue) - 1
-            frameSlider.minValue = 0
-            frameSlider.maxValue = Double(newValue - 1)
-            frameSlider.intValue = 0
-            frameSlider.numberOfTickMarks = Swift.Int(newValue)
-            if (newValue <= 1) {
-                frameSlider.isHidden = true
-            } else {
-                frameSlider.isHidden = isUIHidden
-            }
-        }
-    }
-    
     @IBAction func onFrameSelect(_ sender: Any?) {
         NSLog("select frame %d", frameSlider.intValue)
         drawImage(index: frameSlider.intValue)
@@ -562,6 +589,11 @@ class ViewController: NSViewController {
         default:
             break
         }
+    }
+    
+    // move window by background
+    override func mouseDragged(with event: NSEvent) {
+        self.view.window?.performDrag(with: event)
     }
     
     override func mouseUp(with event: NSEvent) {
@@ -642,6 +674,10 @@ class ViewController: NSViewController {
     override func keyDown(with event: NSEvent) {
         let special = event.specialKey;
         if (special == NSEvent.SpecialKey.rightArrow || special == NSEvent.SpecialKey.leftArrow) {
+            if numFrames <= 1 {
+                return
+            }
+            
             var index = frameSlider.intValue
             index += special == NSEvent.SpecialKey.rightArrow ? +1 : -1
             guard index >= 0 && index < numFrames else {

@@ -106,7 +106,13 @@ class ImageView: NSImageView {
     }
     
     // return empty string on success, otherwise return error string
-    public func drawFrame(frame: MediaFrameRef) -> String {
+    public func drawFrame(frame: MediaFrameRef?) -> String {
+        // clear image
+        guard frame != nil else {
+            self.image = nil
+            return ""
+        }
+        
         let imageFormat : UnsafeMutablePointer<ImageFormat> = MediaFrameGetImageFormat(frame)
         let descriptor : UnsafePointer<PixelDescriptor> = GetPixelFormatDescriptor(imageFormat.pointee.format)
         
