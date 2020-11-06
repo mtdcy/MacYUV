@@ -27,6 +27,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var rgbItems: NSPopUpButton!
     @IBOutlet weak var infoText: NSTextField!
     @IBOutlet weak var frameSlider: NSSlider!
+    @IBOutlet weak var frameNumberText: NSTextField!
     
     var imageBuffer : BufferObjectRef?
     
@@ -386,12 +387,28 @@ class ViewController: NSViewController {
         SharedObjectRelease(output)
         
         // show frame number
-        if (numFrames > 1 && statusText == "") {
-            statusText = "frames: " + String(index + 1) + "/" + String(numFrames)
-        }
+        showFrameNumber(num: index + 1, den: Int32(numFrames))
         
         SharedObjectRelease(image)
         image = nil
+    }
+    
+    
+    func showFrameNumber(num : Int32, den : Int32) -> Void {
+        if numFrames > 1 {
+            let line = String(num) + "/" + String(den)
+            if isUIHidden {
+                frameNumberText.stringValue = line
+                frameNumberText.isHidden = false
+                // hide after 1s
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.frameNumberText.isHidden = true
+                }
+            }
+            if statusText == "" {
+                statusText = "frames: " + line
+            }
+        }
     }
     
     public func openFile(url : String) -> Void {

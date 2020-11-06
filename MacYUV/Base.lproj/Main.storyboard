@@ -572,6 +572,15 @@
                                 <color key="fillColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <size key="contentViewMargins" width="8" height="8"/>
                             </box>
+                            <textField hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DET-9p-atz">
+                                <rect key="frame" x="-2" y="215" width="804" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES"/>
+                                <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" alignment="center" title="1/1" usesSingleLineMode="YES" id="Ntk-ed-OBO">
+                                    <font key="font" metaFont="system" size="32"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eUM-5X-23T">
                                 <rect key="frame" x="0.0" y="-1" width="800" height="24"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -587,6 +596,7 @@
                         <outlet property="displayHeightText" destination="t9Z-2U-aJ7" id="uBM-Tn-Rpa"/>
                         <outlet property="displayRectButton" destination="aDM-eW-rLy" id="zrn-S7-ZT3"/>
                         <outlet property="displayWidthText" destination="yzJ-UG-kuw" id="Fhs-jX-PZF"/>
+                        <outlet property="frameNumberText" destination="DET-9p-atz" id="yvV-Ke-g2u"/>
                         <outlet property="frameSlider" destination="eUM-5X-23T" id="65r-E3-LmR"/>
                         <outlet property="heightText" destination="Uli-BL-VSg" id="FoM-uP-na1"/>
                         <outlet property="imageView" destination="DVq-3N-Nj6" id="nme-XY-3hv"/>
